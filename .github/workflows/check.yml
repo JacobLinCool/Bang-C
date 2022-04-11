@@ -1,0 +1,24 @@
+name: Pull Request Checker
+
+on:
+    pull_request:
+        branches:
+            - main
+        paths-ignore:
+            - "**/*.md"
+
+jobs:
+    check:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Lint
+              uses: DoozyX/clang-format-lint-action@v0.13
+              with:
+                  clangFormatVersion: 13
+
+            - name: Build
+              run: make -j4
