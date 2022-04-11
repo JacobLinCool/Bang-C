@@ -1,0 +1,25 @@
+Bang:25
+Missed:12
+Beer:6
+Cat Balou:4
+Panic:4
+Duel:3
+General Store:2
+Indians:2
+Stagecoach:2
+Gatling:1
+Saloon:1
+Wells Fargo:1
+
+Jail:3
+Barrel:2
+Dynamite:1
+
+Mustang:2
+appaloosa:1
+
+Schofield:3
+Volcanic:2
+Remington:1
+Rev. Carabine:1
+Winchester:1
