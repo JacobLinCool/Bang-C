@@ -1,0 +1,9 @@
+*
+
+!*.*
+!*/
+!Makefile
+!LICENSE
+
+*.o
+*.exe
