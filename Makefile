@@ -1,10 +1,11 @@
-CC = gcc -I src/includes
 SRC = src
+cc = gcc
 
 all: build
 
 build:
 	@$(CC) -o main $(SRC)/main.c
+	@$(cc) -o main $(src_dir)/main.c
 	@echo "Build complete"
 
 clean:
