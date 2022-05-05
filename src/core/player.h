@@ -6,14 +6,14 @@
 
 void real_player(Game* game, i32 player_id) {
     printf("We didn't implement anything yet, so just enter anything: ");
-    string input = calloc(1024, sizeof(char));
+    char* input = $(calloc(1024, sizeof(char)));
+    scanf("%*[\n]");
     scanf("%[^\n]%*c", input);
-    free(input);
 }
 
 void computer_player(Game* game, i32 player_id) {
-    printf("My name is %s.\n", game->players->data[player_id]->name);
-    printf("I am a computer, I will do nothing.\n");
+    Console.gray("My name is %s.", game->players->data[player_id]->name);
+    Console.gray("I am a computer, I will do nothing.");
 }
 
 #endif  // __CORE_PLAYER_H
