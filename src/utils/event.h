@@ -1,33 +1,33 @@
 #ifndef __UTILS_EVENT_H
 #define __UTILS_EVENT_H
 
-#include "base.h"
-#include "vector.h"
+#include "../third/cimple/all.h"
+#include "../third/uds/vector.h"
 
 typedef void (*Subscriber)(void* data);
 
 // Event publish and subscribe system
 typedef struct {
     /** Publish an event. */
-    void (*publish)(const restrict string event, void* data);
+    void (*publish)(const char* event, void* data);
     /** Publish an event. */
-    void (*emit)(const restrict string event, void* data);
+    void (*emit)(const char* event, void* data);
     /** Subscribe an event. */
-    void (*subscribe)(const restrict string event, Subscriber subscriber);
+    void (*subscribe)(const char* event, Subscriber subscriber);
     /** Subscribe an event. */
-    void (*on)(const restrict string event, Subscriber subscriber);
+    void (*on)(const char* event, Subscriber subscriber);
     /** Unsubscribe an event. */
-    void (*unsubscribe)(const restrict string event, Subscriber subscriber);
+    void (*unsubscribe)(const char* event, Subscriber subscriber);
     /** Unsubscribe an event. */
-    void (*off)(const restrict string event, Subscriber subscriber);
+    void (*off)(const char* event, Subscriber subscriber);
     /** Get the number of subscribers. */
-    i32 (*count)(const restrict string event);
+    i32 (*count)(const char* event);
 } EventUtils;
 
 StructVector(Subscribers, Subscriber, NULL);
 
 typedef struct __Event {
-    string       name;
+    char*        name;
     Subscribers* subscribers;
 } __Event;
 
@@ -37,7 +37,7 @@ __Events* GLOBAL_EVENTS;
 
 void event_init(__Events** events) { *events = create___Events(); }
 
-void __event_publish(const restrict string event, void* data) {
+void __event_publish(const char* event, void* data) {
     if (GLOBAL_EVENTS == NULL) {
         event_init(&GLOBAL_EVENTS);
     }
@@ -52,7 +52,7 @@ void __event_publish(const restrict string event, void* data) {
     }
 }
 
-void __event_subscribe(const restrict string event, Subscriber subscriber) {
+void __event_subscribe(const char* event, Subscriber subscriber) {
     if (GLOBAL_EVENTS == NULL) {
         event_init(&GLOBAL_EVENTS);
     }
@@ -67,13 +67,13 @@ void __event_subscribe(const restrict string event, Subscriber subscriber) {
     }
 
     __Event* new_event = calloc(1, sizeof(__Event));
-    new_event->name = event;
+    new_event->name = strdup(event);
     new_event->subscribers = create_Subscribers();
     new_event->subscribers->push(new_event->subscribers, subscriber);
     GLOBAL_EVENTS->push(GLOBAL_EVENTS, new_event);
 }
 
-void __event_unsubscribe(const restrict string event, Subscriber subscriber) {
+void __event_unsubscribe(const char* event, Subscriber subscriber) {
     if (GLOBAL_EVENTS == NULL) {
         event_init(&GLOBAL_EVENTS);
     }
@@ -86,6 +86,7 @@ void __event_unsubscribe(const restrict string event, Subscriber subscriber) {
                     GLOBAL_EVENTS->data[i]->subscribers->remove(GLOBAL_EVENTS->data[i]->subscribers,
                                                                 j);
                     if (GLOBAL_EVENTS->data[i]->subscribers->size == 0) {
+                        free(GLOBAL_EVENTS->data[i]->name);
                         GLOBAL_EVENTS->remove(GLOBAL_EVENTS, i);
                     }
                 }
@@ -94,7 +95,7 @@ void __event_unsubscribe(const restrict string event, Subscriber subscriber) {
     }
 }
 
-i32 __event_count(const restrict string event) {
+i32 __event_count(const char* event) {
     if (GLOBAL_EVENTS == NULL) {
         event_init(&GLOBAL_EVENTS);
     }
