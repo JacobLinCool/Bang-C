@@ -48,6 +48,7 @@ StructVector(Weapons, Weapon*, NULL);
 
 typedef struct Card {
     char* name;
+    char* priority;  // suit * 100 + number
     void (*use)(Game* game, i32 player_id);
 } Card;
 
