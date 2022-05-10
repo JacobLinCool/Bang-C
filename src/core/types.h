@@ -78,8 +78,7 @@ StructVector(Characters, Character*, NULL);
 
 typedef struct Card {
     CardType type;     /** card id */
-    char*    priority; /** suit * 100 + number */
-    char*    name;     /** card name */
+    u16      priority; /** suit * 100 + number */
 
     void (*use)(Game* game, i32 player_id);
 } Card;
