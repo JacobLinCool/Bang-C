@@ -12,8 +12,6 @@ i32 main() {
     setup_catcher();
     srand(1481);
     Game* game = new_game($(String.format("game-%d", rand() % 1481)));
-    Event.on($(String.format("%s-start", game->name)), (Subscriber)log_game_start);
-    Event.on($(String.format("%s-player-changed", game->name)), (Subscriber)log_player_changed);
 
     char* player_name = $(calloc(1024, sizeof(char)));
     printf("Enter player name: ");
