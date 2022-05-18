@@ -9,5 +9,5 @@
     "editor.formatOnSave": true,
     "files.associations": {
         "*.h": "c"
-    }
+    },
 }
