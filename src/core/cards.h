@@ -8,7 +8,6 @@ Card deck[80] = {{.type = Bang, .priority = 101, .use = NULL},
                  {.type = Bang, .priority = 212, .use = NULL},
                  {.type = Bang, .priority = 213, .use = NULL},
                  {.type = Bang, .priority = 301, .use = NULL},
-                 {.type = Bang, .priority = 301, .use = NULL},
                  {.type = Bang, .priority = 302, .use = NULL},
                  {.type = Bang, .priority = 303, .use = NULL},
                  {.type = Bang, .priority = 304, .use = NULL},
@@ -83,6 +82,6 @@ Card deck[80] = {{.type = Bang, .priority = 101, .use = NULL},
                  {.type = Schofield, .priority = 412, .use = NULL},
                  {.type = Remington, .priority = 413, .use = NULL},
                  {.type = Rev_Carabine, .priority = 401, .use = NULL},
-                 {.type = Winchester, .priority = 108, .use = NULL}}
+                 {.type = Winchester, .priority = 108, .use = NULL}};
 
 #endif  // __CORE_CARD_H
