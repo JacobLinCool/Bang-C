@@ -40,23 +40,23 @@ typedef enum CardType {
     CARD_LOW_BOUND,
     Bang,
     Missed,
-    Beer,
-    Cat_Balou,
-    Panic,
-    Duel,
-    General_Store,
-    Indians,
-    Stagecoach,
     Gatling,
-    Saloon,
+    Indians,
+    Panic,
+    Cat_Balou,
+    Stagecoach,
     Wells_Fargo,
-    Jail,
+    General_Store,
+    Beer,
+    Saloon,
+    Duel,
     Barrel,
-    Dynamite,
+    Scope,
     Mustang,
-    appaloosa,
-    Schofield,
+    Jail,
+    Dynamite,
     Volcanic,
+    Schofield,
     Remington,
     Rev_Carabine,
     Winchester,
@@ -78,8 +78,7 @@ StructVector(Characters, Character*, NULL);
 
 typedef struct Card {
     CardType type;     /** card id */
-    char*    priority; /** suit * 100 + number */
-    char*    name;     /** card name */
+    u16      priority; /** suit * 100 + number 100spade 200heart 300diamond 400club*/
 
     void (*use)(Game* game, i32 player_id);
 } Card;
