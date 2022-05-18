@@ -2,6 +2,10 @@
 #define __CORE_GAME_H
 
 #include "../utils/all.h"
+#include "cards.h"
+#include "characters.h"
+#include "constants.h"
+#include "roles.h"
 #include "types.h"
 
 void game_join(Game *game, const char *name, Agent agent) {
@@ -39,9 +43,18 @@ Game *new_game() {
     game->turn = 0;
     game->finished = false;
     game->deck = create_Cards();
+    for (size_t i = 0; i < CARD_COUNT; i++) {
+        game->deck->push(game->deck, &deck[i]);
+    }
     game->discard = create_Cards();
     game->roles = create_Roles();
+    for (size_t i = 0; i < ROLE_COUNT; i++) {
+        game->roles->push(game->roles, &roles[i]);
+    }
     game->characters = create_Characters();
+    for (size_t i = 0; i < CHARACTER_COUNT; i++) {
+        game->characters->push(game->characters, &chars[i]);
+    }
 
     game->start = game_start;
     game->next = game_next;
