@@ -4,12 +4,6 @@
 #include "../utils/all.h"
 #include "types.h"
 
-Characters* get_characters() {
-    Characters* characters = create_Characters();
-
-    characters->push(characters, NULL);
-}
-
 Character chars[] = {
     {.type = Bart_Cassidy, .health = 4, .skill = NULL},
     {.type = Black_Jack, .health = 4, .skill = NULL},
