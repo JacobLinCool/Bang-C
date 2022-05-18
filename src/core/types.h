@@ -72,6 +72,7 @@ StructVector(Roles, Role*, NULL);
 typedef struct Character {
     CharacterType  type;
     CharacterSkill skill;
+    u8             health;
 } Character;
 
 StructVector(Characters, Character*, NULL);
