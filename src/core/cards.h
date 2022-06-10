@@ -84,4 +84,37 @@ Card deck[80] = {{.type = Bang, .priority = 101, .use = NULL},
                  {.type = Rev_Carabine, .priority = 401, .use = NULL},
                  {.type = Winchester, .priority = 108, .use = NULL}};
 
+i32 distance(Game* game, i32 me_id, i32 enemy_id) {
+    // initial distance (exclude special card)
+    i32 front_dis = 1;
+    while (1) {
+        if ((me_id + front_dis) % game->players->size == enemy_id) break;
+        if (game->players->data[(me_id + front_dis) % game->players->size]->character->health > 0)
+            front_dis++;
+    }
+    i32 back_dis = 1;
+    while (1) {
+        if ((game->players->size + me_id - back_dis) % game->players->size == enemy_id) break;
+        if (game->players->data[(game->players->size + me_id - back_dis) % game->players->size]
+                ->character->health > 0)
+            back_dis++;
+    }
+    i32 special_card_dis = ((game->players->data[enemy_id]->horse != NULL) -
+                            (game->players->data[me_id]->scope != NULL));
+    return special_card_dis + (front_dis < back_dis ? front_dis : back_dis);
+}
+bool bang(Game* game, i32 me_id, i32 enemy_id) {
+    // enemy died?
+    if (game->players->data[enemy_id]->character->health <= 0) return true;
+    // calculate distance between me and enemy
+    i32 enemy_distance = distance(game, me_id, enemy_id);
+    // my weapon distance
+    i32 weapon_distance = 1;
+    if (game->players->data[me_id]->weapon != NULL)
+        weapon_distance += game->players->data[me_id]->weapon->type - Volcanic;
+    // whether my weapon can reach the enemy
+    if (weapon_distance < enemy_distance) return true;
+    // Todo: switch to enemy, ask if he want to use the card
+    return 0;
+}
 #endif  // __CORE_CARD_H

@@ -94,6 +94,7 @@ typedef struct Player {
     Card*      weapon;    /** weapon, NULL if no weapon */
     Card*      barrel;    /** barrel, NULL if no barrel */
     Card*      horse;     /** horse, NULL if no horse */
+    Card*      scope;     /** scope, NULL if no scope */
     Card*      jail;      /** jail, NULL if no jail */
     Card*      bomb;      /** bomb, NULL if no bomb */
     Cards*     hands;     /** cards in hand */
