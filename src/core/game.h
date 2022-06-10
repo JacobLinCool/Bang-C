@@ -47,6 +47,12 @@ void game_next(Game *game) {
     player->play(game, game->turn % game->players->size);
 }
 
+// detect whether the game is end or not.
+bool end_of_game(Game *game) {
+    // Todo:
+    return 0;
+}
+
 Game *new_game() {
     Game *game = $(calloc(1, sizeof(Game)));
 
