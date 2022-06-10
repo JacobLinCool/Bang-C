@@ -5,6 +5,7 @@
 #include "cards.h"
 #include "characters.h"
 #include "constants.h"
+#include "player.h"
 #include "roles.h"
 #include "types.h"
 

@@ -2,6 +2,7 @@
 #define __CORE_PLAYER_H
 #define FAIL 1
 #include "../utils/all.h"
+#include "game.h"
 #include "types.h"
 
 void real_player(Game* game, i32 player_id) {
