@@ -17,6 +17,8 @@ void computer_player(Game* game, i32 player_id) {
     Console.gray("I am a computer, I will do nothing.");
 }
 
+bool draw_from_deck(Game* game, i32 me_id, i32 time);  // tmp
+bool end_of_game(Game* game);                          // tmp
 /*
 If no me_id, enter -1
 Dangerous! use carefully, it let a player die, regardless he has hp or not.

@@ -142,7 +142,7 @@ bool bang(Game* game, i32 me_id, i32 enemy_id) {
     if (weapon_distance < enemy_distance) return FAIL;
     // switch to enemy, ask if he want to use the card
     // request(game: Game, target: Player, card: CardID): boolean
-    if (request(game, enemy_id, Missed)) return 0;
+    // if (request(game, enemy_id, Missed)) return 0;
     // Todo: attack
     if (attack_player(game, me_id, enemy_id)) return FAIL;
     return 0;
