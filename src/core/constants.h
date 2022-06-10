@@ -3,5 +3,6 @@
 
 #define ROLE_COUNT 4
 #define CHARACTER_COUNT 16
+#define CARD_COUNT 80
 
 #endif  // __CORE_CONSTANTS_H
