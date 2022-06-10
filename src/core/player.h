@@ -25,7 +25,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
     // use beer
     // if request() execute the card, then do nothing in if().
-    if (request(game, enemy_id, Beer)) return 0;
+    // if (request(game, enemy_id, Beer)) return 0;
 
     // shows his role card
     // View layer Todo: call show(Game* game, i32 player_id)

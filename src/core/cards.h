@@ -2,6 +2,7 @@
 #define __CORE_CARD_H
 #define FAIL 1
 #include "../utils/all.h"
+#include "player.h"
 #include "types.h"
 
 Card deck[80] = {{.type = Bang, .priority = 101, .use = NULL},
@@ -161,7 +162,7 @@ bool panic(Game* game, i32 me_id, i32 enemy_id) {
 bool beer(Game* game, i32 me_id) {
     if (game->players->size <= 2) return FAIL;
     if (game->players->data[me_id]->hp == game->players->data[me_id]->character->health +
-                                              (game->players->data[me_id]->role == Sheriff))
+                                              (game->players->data[me_id]->role->type == Sheriff))
         return FAIL;
     game->players->data[me_id]->hp++;
     return 0;
