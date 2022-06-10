@@ -106,12 +106,12 @@ bool draw_from_deck(Game* game, i32 me_id, i32 time) {
     }
     return 0;
 }
-
 i32 distance(Game* game, i32 me_id, i32 enemy_id) {
     // initial distance (exclude special card)
     i32 front_dis = 1;
     while (1) {
         if ((me_id + front_dis) % game->players->size == enemy_id) break;
+
         if (game->players->data[(me_id + front_dis) % game->players->size]->hp > 0) front_dis++;
     }
     i32 back_dis = 1;
@@ -129,6 +129,7 @@ i32 distance(Game* game, i32 me_id, i32 enemy_id) {
 bool bang(Game* game, i32 me_id, i32 enemy_id) {
     // enemy died?
     if (game->players->data[enemy_id]->hp <= 0) return FAIL;
+
     // calculate distance between me and enemy
     i32 enemy_distance = distance(game, me_id, enemy_id);
     // my weapon distance
@@ -136,6 +137,7 @@ bool bang(Game* game, i32 me_id, i32 enemy_id) {
     if (game->players->data[me_id]->weapon != NULL)
         weapon_distance += game->players->data[me_id]->weapon->type - Volcanic;
     // whether my weapon can reach the enemy
+
     if (weapon_distance < enemy_distance) return FAIL;
     // switch to enemy, ask if he want to use the card
     // request(game: Game, target: Player, card: CardID): boolean
