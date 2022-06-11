@@ -3,6 +3,7 @@
 #define FAIL 0
 #define SUCCESS 1
 #include "../utils/all.h"
+#include "cards.h"
 #include "game.h"
 #include "types.h"
 
