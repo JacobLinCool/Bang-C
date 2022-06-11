@@ -21,11 +21,11 @@ void game_join(Game *game, const char *name, Agent agent) {
 }
 
 void game_start(Game *game) {
-    // TODO: shuffle cards, roles, characters
+    // shuffle cards, roles, characters
     VectorShuffle(game->deck);
     VectorShuffle(game->roles);
     VectorShuffle(game->characters);
-    // TODO: assign card, role, character to players
+    // assign card, role, character to players
     for (int i = 0; i < game->players->size; i++) {
         Player *nowPlayer = game->players->data[i];
         for (int j = 0; j < nowPlayer->bullet; j++) {

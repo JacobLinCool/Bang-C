@@ -17,9 +17,10 @@ void computer_player(Game* game, i32 player_id) {
     Console.gray("I am a computer, I will do nothing.");
 }
 
-bool draw_from_deck(Game* game, i32 me_id, i32 time);  // tmp
-bool end_of_game(Game* game);                          // tmp
+bool player_draw_deck(Game* game, i32 me_id, i32 time);  // tmp
+bool end_of_game(Game* game);                            // tmp
 /*
+Todo: request
 If no me_id, enter -1
 Dangerous! use carefully, it let a player die, regardless he has hp or not.
 Contain beer request.
@@ -34,7 +35,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     // View layer Todo: call show(Game* game, i32 player_id)
 
     // END OF THE GAME detection
-    if (end_of_game(game)) return 0;
+    if (end_of_game(game)) return SUCCESS;
 
     // discard all cards
     Cards* add_card = game->discard;
@@ -49,7 +50,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     add_card->push(add_card, enemy->bomb);
 
     // Penalties and Rewards
-    if (me_id == -1) return 0;
+    if (me_id == -1) return SUCCESS;
     Player* me = game->players->data[me_id];
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
@@ -62,9 +63,9 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
         add_card->push(add_card, me->jail);
         add_card->push(add_card, me->bomb);
     } else if (enemy->role->type == Criminal) {
-        draw_from_deck(game, me_id, 3);
+        player_draw_deck(game, me_id, 3);
     }
-    return 0;
+    return SUCCESS;
 }
 
 // If no me_id, enter -1
@@ -79,7 +80,7 @@ bool attack_player(Game* game, i32 me_id, i32 player_id) {
         game->players->data[player_id]->character->skill(game, player_id);
     }
 
-    if (game->players->data[player_id]->hp != 0) return 0;
+    if (game->players->data[player_id]->hp != 0) return SUCCESS;
 
     // dead
     return died_player(game, me_id, player_id);
@@ -97,6 +98,15 @@ bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
         game->players->data[enemy_id]->hands->data[me_choose - 1]);
     game->players->data[enemy_id]->hands->remove(game->players->data[enemy_id]->hands,
                                                  me_choose - 1);
-    return 0;
+    return SUCCESS;
+}
+
+// draw many cards to hands
+bool player_draw_deck(Game* game, i32 me_id, i32 time) {
+    Player* me = game->players->data[me_id];
+    while (time--) {
+        me->hands->push(me->hands, draw_one_deck(game));
+    }
+    return SUCCESS;
 }
 #endif  // __CORE_PLAYER_H

@@ -1,112 +1,27 @@
 #ifndef __CORE_CARD_H
 #define __CORE_CARD_H
-#define FAIL 1
+#define FAIL 0
+#define SUCCESS 1
 #include "../utils/all.h"
 #include "player.h"
 #include "types.h"
-
-Card deck[80] = {{.type = Bang, .priority = 101, .use = NULL},
-                 {.type = Bang, .priority = 201, .use = NULL},
-                 {.type = Bang, .priority = 212, .use = NULL},
-                 {.type = Bang, .priority = 213, .use = NULL},
-                 {.type = Bang, .priority = 301, .use = NULL},
-                 {.type = Bang, .priority = 302, .use = NULL},
-                 {.type = Bang, .priority = 303, .use = NULL},
-                 {.type = Bang, .priority = 304, .use = NULL},
-                 {.type = Bang, .priority = 305, .use = NULL},
-                 {.type = Bang, .priority = 306, .use = NULL},
-                 {.type = Bang, .priority = 307, .use = NULL},
-                 {.type = Bang, .priority = 308, .use = NULL},
-                 {.type = Bang, .priority = 309, .use = NULL},
-                 {.type = Bang, .priority = 310, .use = NULL},
-                 {.type = Bang, .priority = 311, .use = NULL},
-                 {.type = Bang, .priority = 312, .use = NULL},
-                 {.type = Bang, .priority = 313, .use = NULL},
-                 {.type = Bang, .priority = 402, .use = NULL},
-                 {.type = Bang, .priority = 403, .use = NULL},
-                 {.type = Bang, .priority = 404, .use = NULL},
-                 {.type = Bang, .priority = 405, .use = NULL},
-                 {.type = Bang, .priority = 406, .use = NULL},
-                 {.type = Bang, .priority = 407, .use = NULL},
-                 {.type = Bang, .priority = 408, .use = NULL},
-                 {.type = Bang, .priority = 409, .use = NULL},
-                 {.type = Missed, .priority = 102, .use = NULL},
-                 {.type = Missed, .priority = 103, .use = NULL},
-                 {.type = Missed, .priority = 104, .use = NULL},
-                 {.type = Missed, .priority = 105, .use = NULL},
-                 {.type = Missed, .priority = 106, .use = NULL},
-                 {.type = Missed, .priority = 107, .use = NULL},
-                 {.type = Missed, .priority = 108, .use = NULL},
-                 {.type = Missed, .priority = 401, .use = NULL},
-                 {.type = Missed, .priority = 410, .use = NULL},
-                 {.type = Missed, .priority = 411, .use = NULL},
-                 {.type = Missed, .priority = 412, .use = NULL},
-                 {.type = Missed, .priority = 413, .use = NULL},
-                 {.type = Gatling, .priority = 210, .use = NULL},
-                 {.type = Indians, .priority = 301, .use = NULL},
-                 {.type = Indians, .priority = 313, .use = NULL},
-                 {.type = Panic, .priority = 201, .use = NULL},
-                 {.type = Panic, .priority = 211, .use = NULL},
-                 {.type = Panic, .priority = 212, .use = NULL},
-                 {.type = Panic, .priority = 308, .use = NULL},
-                 {.type = Cat_Balou, .priority = 213, .use = NULL},
-                 {.type = Cat_Balou, .priority = 309, .use = NULL},
-                 {.type = Cat_Balou, .priority = 310, .use = NULL},
-                 {.type = Cat_Balou, .priority = 311, .use = NULL},
-                 {.type = Stagecoach, .priority = 109, .use = NULL},
-                 {.type = Stagecoach, .priority = 109, .use = NULL},
-                 {.type = Wells_Fargo, .priority = 203, .use = NULL},
-                 {.type = General_Store, .priority = 112, .use = NULL},
-                 {.type = General_Store, .priority = 409, .use = NULL},
-                 {.type = Beer, .priority = 206, .use = NULL},
-                 {.type = Beer, .priority = 207, .use = NULL},
-                 {.type = Beer, .priority = 208, .use = NULL},
-                 {.type = Beer, .priority = 209, .use = NULL},
-                 {.type = Beer, .priority = 210, .use = NULL},
-                 {.type = Beer, .priority = 211, .use = NULL},
-                 {.type = Saloon, .priority = 205, .use = NULL},
-                 {.type = Duel, .priority = 111, .use = NULL},
-                 {.type = Duel, .priority = 312, .use = NULL},
-                 {.type = Duel, .priority = 408, .use = NULL},
-                 {.type = Barrel, .priority = 112, .use = NULL},
-                 {.type = Barrel, .priority = 113, .use = NULL},
-                 {.type = Scope, .priority = 101, .use = NULL},
-                 {.type = Mustang, .priority = 208, .use = NULL},
-                 {.type = Mustang, .priority = 209, .use = NULL},
-                 {.type = Jail, .priority = 110, .use = NULL},
-                 {.type = Jail, .priority = 111, .use = NULL},
-                 {.type = Jail, .priority = 204, .use = NULL},
-                 {.type = Dynamite, .priority = 202, .use = NULL},
-                 {.type = Volcanic, .priority = 110, .use = NULL},
-                 {.type = Volcanic, .priority = 410, .use = NULL},
-                 {.type = Schofield, .priority = 113, .use = NULL},
-                 {.type = Schofield, .priority = 411, .use = NULL},
-                 {.type = Schofield, .priority = 412, .use = NULL},
-                 {.type = Remington, .priority = 413, .use = NULL},
-                 {.type = Rev_Carabine, .priority = 401, .use = NULL},
-                 {.type = Winchester, .priority = 108, .use = NULL}};
 
 // draw a card
 Card* draw_one_deck(Game* game) {
     if (game->deck->size == 0) {
         game->deck->concat(game->deck, game->discard);
+        VectorShuffle(game->deck);
         game->discard->clear;
     }
     Card* top_card = game->deck->pop(game->deck);
     if (game->deck->size == 0) {
         game->deck->concat(game->deck, game->discard);
+        VectorShuffle(game->deck);
         game->discard->clear;
     }
     return top_card;
 }
-// draw many cards to hands
-bool draw_from_deck(Game* game, i32 me_id, i32 time) {
-    Player* me = game->players->data[me_id];
-    while (time--) {
-        me->hands->push(me->hands, draw_one_deck(game));
-    }
-    return 0;
-}
+
 i32 distance(Game* game, i32 me_id, i32 enemy_id) {
     // initial distance (exclude special card)
     i32 front_dis = 1;
@@ -127,7 +42,10 @@ i32 distance(Game* game, i32 me_id, i32 enemy_id) {
     return special_card_dis + (front_dis < back_dis ? front_dis : back_dis);
 }
 
+// Todo: bang can only use once, request
 bool bang(Game* game, i32 me_id, i32 enemy_id) {
+    // is enemy = me?
+    if (me_id == enemy_id) return FAIL;
     // enemy died?
     if (game->players->data[enemy_id]->hp <= 0) return FAIL;
 
@@ -143,12 +61,30 @@ bool bang(Game* game, i32 me_id, i32 enemy_id) {
     // switch to enemy, ask if he want to use the card
     // request(game: Game, target: Player, card: CardID): boolean
     // if (request(game, enemy_id, Missed)) return 0;
-    // Todo: attack
-    if (attack_player(game, me_id, enemy_id)) return FAIL;
-    return 0;
+    return attack_player(game, me_id, enemy_id);
+}
+
+bool gatling(Game* game, i32 me_id) {
+    for (int i = 0; i < game->players->size; i++) {
+        if (game->players->data[i]->hp <= 0 || me_id == i) continue;
+        bang(game, me_id, i);
+    }
+    return SUCCESS;
+}
+
+// Todo: request
+bool indians(Game* game, i32 me_id) {
+    for (int i = 0; i < game->players->size; i++) {
+        if (game->players->data[i]->hp <= 0 || me_id == i) continue;
+        // if(request(game, i, Bang))continue;
+        attack_player(game, me_id, i);
+    }
+    return SUCCESS;
 }
 
 bool panic(Game* game, i32 me_id, i32 enemy_id) {
+    // is enemy = me?
+    if (me_id == enemy_id) return FAIL;
     // enemy died?
     if (game->players->data[enemy_id]->hp <= 0) return FAIL;
     // calculate distance between me and enemy
@@ -156,7 +92,17 @@ bool panic(Game* game, i32 me_id, i32 enemy_id) {
     if (enemy_distance > 1) return FAIL;
     // Todo: draw a card from the enemy
     draw_from_player(game, me_id, enemy_id);
-    return 0;
+    return SUCCESS;
+}
+
+bool stagecoach(Game* game, i32 me_id) {
+    player_draw_deck(game, me_id, 2);
+    return SUCCESS;
+}
+
+bool wells_fargo(Game* game, i32 me_id) {
+    player_draw_deck(game, me_id, 3);
+    return SUCCESS;
 }
 
 bool beer(Game* game, i32 me_id) {
@@ -165,6 +111,14 @@ bool beer(Game* game, i32 me_id) {
                                               (game->players->data[me_id]->role->type == Sheriff))
         return FAIL;
     game->players->data[me_id]->hp++;
-    return 0;
+    return SUCCESS;
+}
+
+bool saloon(Game* game, i32 me_id) {
+    for (int i = 0; i < game->players->size; i++) {
+        if (game->players->data[i]->hp <= 0) continue;
+        beer(game, i);
+    }
+    return SUCCESS;
 }
 #endif  // __CORE_CARD_H
