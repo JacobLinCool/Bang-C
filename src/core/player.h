@@ -1,6 +1,7 @@
 #ifndef __CORE_PLAYER_H
 #define __CORE_PLAYER_H
-#define FAIL 1
+#define FAIL 0
+#define SUCCESS 1
 #include "../utils/all.h"
 #include "game.h"
 #include "types.h"
@@ -102,11 +103,12 @@ bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
 }
 
 // draw many cards to hands
-bool player_draw_deck(Game* game, i32 me_id, i32 time) {
-    Player* me = game->players->data[me_id];
-    while (time--) {
-        me->hands->push(me->hands, draw_one_deck(game));
+Card* draw_one_deck(Game* game);
+bool  player_draw_deck(Game* game, i32 me_id, i32 time) {
+     Player* me = game->players->data[me_id];
+     while (time--) {
+         me->hands->push(me->hands, draw_one_deck(game));
     }
-    return SUCCESS;
+     return SUCCESS;
 }
 #endif  // __CORE_PLAYER_H
