@@ -62,6 +62,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
 
 // If no me_id, enter -1
 void attack_player(Game* game, i32 me_id, i32 player_id) {
+    if (game->players->data[player_id]->hp <= 0) return;  // avoid mustang_judge error
     // decrease player's hp
     game->players->data[player_id]->hp--;
     // use character ablity(if valid)
@@ -224,11 +225,37 @@ bool mustang(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
+bool mustang_judge(Game* game, i32 me_id) {
+    Player* me = game->players->data[me_id];
+    if (judge(game, me_id, 102, 109)) {
+        game->discard->push(game->discard, me->mustang);
+        me->mustang = NULL;
+        attack_player(game, -1, me_id);
+        attack_player(game, -1, me_id);
+        attack_player(game, -1, me_id);
+    } else {
+        i32 left_player_id = (me_id + 1) % game->players->size;
+        while (game->players->data[left_player_id]->hp <= 0) {
+            left_player_id = (left_player_id + 1) % game->players->size;
+        }
+        game->players->data[left_player_id]->mustang = me->mustang;
+        me->mustang = NULL;
+    }
+    return SUCCESS;
+}
+
 bool jail(Game* game, i32 me_id) {
     i32 enemy_id;  //= choose_enemy(); View Todo
     if (game->players->data[enemy_id]->hp <= 0) return FAIL;
     if (game->players->data[enemy_id]->role->type == Sheriff) return FAIL;
     return SUCCESS;
+}
+
+bool jail_judge(Game* game, i32 me_id) {
+    game->discard->push(game->discard, game->players->data[me_id]->jail);
+    game->players->data[me_id]->jail = NULL;
+    if (judge(game, me_id, 201, 213)) return SUCCESS;  // SUCCESS escapes from jail
+    return FAIL;                                       // FAIL escapes from jail
 }
 
 bool dynamite(Game* game, i32 me_id) {
@@ -301,7 +328,7 @@ Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: re
                 {.type = Gatling, .priority = 210, .use = gatling},
                 {.type = Indians, .priority = 301, .use = NULL},
                 {.type = Indians, .priority = 313, .use = NULL},
-                {.type = Panic, .priority = 201, .use = NULL},
+                {.type = Panic, .priority = 201, .use = NULL},  //= choose_enemy(); View Todo
                 {.type = Panic, .priority = 211, .use = NULL},
                 {.type = Panic, .priority = 212, .use = NULL},
                 {.type = Panic, .priority = 308, .use = NULL},
@@ -329,9 +356,9 @@ Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: re
                 {.type = Scope, .priority = 101, .use = scope},
                 {.type = Mustang, .priority = 208, .use = mustang},
                 {.type = Mustang, .priority = 209, .use = mustang},
-                {.type = Jail, .priority = 110, .use = NULL},
-                {.type = Jail, .priority = 111, .use = NULL},
-                {.type = Jail, .priority = 204, .use = NULL},
+                {.type = Jail, .priority = 110, .use = jail},
+                {.type = Jail, .priority = 111, .use = jail},
+                {.type = Jail, .priority = 204, .use = jail},
                 {.type = Dynamite, .priority = 202, .use = dynamite},
                 {.type = Volcanic, .priority = 110, .use = volcanic},
                 {.type = Volcanic, .priority = 410, .use = volcanic},
