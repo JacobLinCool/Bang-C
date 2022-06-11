@@ -45,5 +45,6 @@ setup:
 	curl -s -o $(third_dir)/cimple/file.h $(cimple_remote)/file.h
 	curl -s -o $(third_dir)/cimple/string.h $(cimple_remote)/string.h
 	curl -s -o $(third_dir)/cimple/timing.h $(cimple_remote)/timing.h
+	curl -s -o $(third_dir)/cimple/options.h $(cimple_remote)/options.h
 
 .PHONY: all build clean test force
