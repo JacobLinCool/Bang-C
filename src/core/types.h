@@ -1,37 +1,39 @@
 #ifndef __CORE_TYPES_H
 #define __CORE_TYPES_H
 
+#include "../third/cimple/all.h"
 #include "../utils/all.h"
+#include "cards.h"
 
 typedef struct Game Game;
 typedef void (*CharacterSkill)(Game* game, i32 player_id);
 
 typedef enum RoleType {
     ROLE__LOW_BOUND,
-    Sheriff,   //警長
-    Deputy,    //副警長
-    Criminal,  //歹徒
-    Traitor,   //叛徒
+    Sheriff,   // 警長
+    Deputy,    // 副警長
+    Criminal,  // 歹徒
+    Traitor,   // 叛徒
     ROLE__HIGH_BOUND
 } RoleType;
 
 typedef enum CharacterType {
     CHARACTER_LOW_BOUND,
-    Bart_Cassidy,  //巴特
+    Bart_Cassidy,  // In Progress(Takala)
     Black_Jack,
     Calamity_Janet,
-    El_Gringo,
+    El_Gringo,  // Done
     Jesse_Jones,
-    Jourdonnais,
+    Jourdonnais,  // Done
     Kit_Carlson,
-    Lucky_Duke,
-    Paul_Regret,
+    Lucky_Duke,   // Done
+    Paul_Regret,  // Done
     Pedro_Ramirez,
-    Rose_Doolan,
-    Sid_Ketchum,
-    Slab_the_Killer,
+    Rose_Doolan,      // Done
+    Sid_Ketchum,      // Done, Todo: request
+    Slab_the_Killer,  // Done
     Suzy_Lafayette,
-    Vulture_Sam,
+    Vulture_Sam,  // Done
     Willy_the_Kid,
     CHARACTER_HIGH_BOUND,
 } CharacterType;
@@ -78,10 +80,11 @@ typedef struct Character {
 StructVector(Characters, Character*, NULL);
 
 typedef struct Card {
-    CardType type;     /** card id */
-    u16      priority; /** suit * 100 + number 100spade 200heart 300diamond 400club*/
+    CardType type; /** card id */
+    /** priority = suit * 100 + number; 100: spade 200: heart 300: diamond 400: club */
+    u16 priority;
 
-    void (*use)(Game* game, i32 player_id);
+    bool (*use)(Game* game, i32 player_id);
 } Card;
 
 StructVector(Cards, Card*, NULL);
@@ -94,10 +97,10 @@ typedef struct Player {
     Character* character; /** player character */
     Card*      weapon;    /** weapon, NULL if no weapon */
     Card*      barrel;    /** barrel, NULL if no barrel */
-    Card*      horse;     /** horse, NULL if no horse */
+    Card*      mustang;   /** horse, NULL if no mustang */
     Card*      scope;     /** scope, NULL if no scope */
     Card*      jail;      /** jail, NULL if no jail */
-    Card*      bomb;      /** bomb, NULL if no bomb */
+    Card*      dynamite;  /** bomb, NULL if no dynamite */
     Cards*     hands;     /** cards in hand */
 
     void (*play)(Game* game, i32 player_id);
@@ -144,85 +147,30 @@ typedef struct EventPayload {
 
 } EventPayload;
 
-Card deck[80] = {{.type = Bang, .priority = 101, .use = NULL},  // Todo: request
-                 {.type = Bang, .priority = 201, .use = NULL},
-                 {.type = Bang, .priority = 212, .use = NULL},
-                 {.type = Bang, .priority = 213, .use = NULL},
-                 {.type = Bang, .priority = 301, .use = NULL},
-                 {.type = Bang, .priority = 302, .use = NULL},
-                 {.type = Bang, .priority = 303, .use = NULL},
-                 {.type = Bang, .priority = 304, .use = NULL},
-                 {.type = Bang, .priority = 305, .use = NULL},
-                 {.type = Bang, .priority = 306, .use = NULL},
-                 {.type = Bang, .priority = 307, .use = NULL},
-                 {.type = Bang, .priority = 308, .use = NULL},
-                 {.type = Bang, .priority = 309, .use = NULL},
-                 {.type = Bang, .priority = 310, .use = NULL},
-                 {.type = Bang, .priority = 311, .use = NULL},
-                 {.type = Bang, .priority = 312, .use = NULL},
-                 {.type = Bang, .priority = 313, .use = NULL},
-                 {.type = Bang, .priority = 402, .use = NULL},
-                 {.type = Bang, .priority = 403, .use = NULL},
-                 {.type = Bang, .priority = 404, .use = NULL},
-                 {.type = Bang, .priority = 405, .use = NULL},
-                 {.type = Bang, .priority = 406, .use = NULL},
-                 {.type = Bang, .priority = 407, .use = NULL},
-                 {.type = Bang, .priority = 408, .use = NULL},
-                 {.type = Bang, .priority = 409, .use = NULL},
-                 {.type = Missed, .priority = 102, .use = NULL},
-                 {.type = Missed, .priority = 103, .use = NULL},
-                 {.type = Missed, .priority = 104, .use = NULL},
-                 {.type = Missed, .priority = 105, .use = NULL},
-                 {.type = Missed, .priority = 106, .use = NULL},
-                 {.type = Missed, .priority = 107, .use = NULL},
-                 {.type = Missed, .priority = 108, .use = NULL},
-                 {.type = Missed, .priority = 401, .use = NULL},
-                 {.type = Missed, .priority = 410, .use = NULL},
-                 {.type = Missed, .priority = 411, .use = NULL},
-                 {.type = Missed, .priority = 412, .use = NULL},
-                 {.type = Missed, .priority = 413, .use = NULL},
-                 {.type = Gatling, .priority = 210, .use = NULL},  // Done
-                 {.type = Indians, .priority = 301, .use = NULL},  // Todo: request
-                 {.type = Indians, .priority = 313, .use = NULL},
-                 {.type = Panic, .priority = 201, .use = NULL},  // Done
-                 {.type = Panic, .priority = 211, .use = NULL},
-                 {.type = Panic, .priority = 212, .use = NULL},
-                 {.type = Panic, .priority = 308, .use = NULL},
-                 {.type = Cat_Balou, .priority = 213, .use = NULL},  // Request Question
-                 {.type = Cat_Balou, .priority = 309, .use = NULL},
-                 {.type = Cat_Balou, .priority = 310, .use = NULL},
-                 {.type = Cat_Balou, .priority = 311, .use = NULL},
-                 {.type = Stagecoach, .priority = 109, .use = NULL},  // Done
-                 {.type = Stagecoach, .priority = 109, .use = NULL},
-                 {.type = Wells_Fargo, .priority = 203, .use = NULL},    // Done
-                 {.type = General_Store, .priority = 112, .use = NULL},  // To be discussed
-                 {.type = General_Store, .priority = 409, .use = NULL},
-                 {.type = Beer, .priority = 206, .use = NULL},  // Done
-                 {.type = Beer, .priority = 207, .use = NULL},
-                 {.type = Beer, .priority = 208, .use = NULL},
-                 {.type = Beer, .priority = 209, .use = NULL},
-                 {.type = Beer, .priority = 210, .use = NULL},
-                 {.type = Beer, .priority = 211, .use = NULL},
-                 {.type = Saloon, .priority = 205, .use = NULL},
-                 {.type = Duel, .priority = 111, .use = NULL},
-                 {.type = Duel, .priority = 312, .use = NULL},
-                 {.type = Duel, .priority = 408, .use = NULL},
-                 {.type = Barrel, .priority = 112, .use = NULL},
-                 {.type = Barrel, .priority = 113, .use = NULL},
-                 {.type = Scope, .priority = 101, .use = NULL},
-                 {.type = Mustang, .priority = 208, .use = NULL},
-                 {.type = Mustang, .priority = 209, .use = NULL},
-                 {.type = Jail, .priority = 110, .use = NULL},
-                 {.type = Jail, .priority = 111, .use = NULL},
-                 {.type = Jail, .priority = 204, .use = NULL},
-                 {.type = Dynamite, .priority = 202, .use = NULL},
-                 {.type = Volcanic, .priority = 110, .use = NULL},
-                 {.type = Volcanic, .priority = 410, .use = NULL},
-                 {.type = Schofield, .priority = 113, .use = NULL},
-                 {.type = Schofield, .priority = 411, .use = NULL},
-                 {.type = Schofield, .priority = 412, .use = NULL},
-                 {.type = Remington, .priority = 413, .use = NULL},
-                 {.type = Rev_Carabine, .priority = 401, .use = NULL},
-                 {.type = Winchester, .priority = 108, .use = NULL}};
+Role roles[] = {
+    {.type = Sheriff},
+    {.type = Deputy},
+    {.type = Criminal},
+    {.type = Traitor},
+};
+
+Character chars[] = {
+    {.type = Bart_Cassidy, .health = 4, .skill = NULL},
+    {.type = Black_Jack, .health = 4, .skill = NULL},
+    {.type = Calamity_Janet, .health = 4, .skill = NULL},
+    {.type = El_Gringo, .health = 3, .skill = NULL},
+    {.type = Jesse_Jones, .health = 4, .skill = NULL},
+    {.type = Jourdonnais, .health = 4, .skill = NULL},
+    {.type = Kit_Carlson, .health = 4, .skill = NULL},
+    {.type = Lucky_Duke, .health = 4, .skill = NULL},
+    {.type = Paul_Regret, .health = 3, .skill = NULL},
+    {.type = Pedro_Ramirez, .health = 4, .skill = NULL},
+    {.type = Rose_Doolan, .health = 4, .skill = NULL},
+    {.type = Sid_Ketchum, .health = 4, .skill = NULL},
+    {.type = Slab_the_Killer, .health = 4, .skill = NULL},
+    {.type = Suzy_Lafayette, .health = 4, .skill = NULL},
+    {.type = Vulture_Sam, .health = 4, .skill = NULL},
+    {.type = Willy_the_Kid, .health = 4, .skill = NULL},
+};
 
 #endif  // __CORE_TYPES_H

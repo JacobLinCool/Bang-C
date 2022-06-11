@@ -48,12 +48,6 @@ void game_next(Game *game) {
     player->play(game, game->turn % game->players->size);
 }
 
-// detect whether the game is end or not.
-bool end_of_game(Game *game) {
-    // Todo:
-    return 0;
-}
-
 Game *new_game() {
     Game *game = $(calloc(1, sizeof(Game)));
 
@@ -62,7 +56,7 @@ Game *new_game() {
     game->finished = false;
     game->deck = create_Cards();
     for (size_t i = 0; i < CARD_COUNT; i++) {
-        game->deck->push(game->deck, &deck[i]);
+        game->deck->push(game->deck, &decks[i]);
     }
     game->discard = create_Cards();
     game->roles = create_Roles();
