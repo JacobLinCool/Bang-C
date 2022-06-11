@@ -13,30 +13,17 @@ Card* draw_one_deck(Game* game) {
     if (game->deck->size == 0) {
         game->deck->concat(game->deck, game->discard);
         VectorShuffle(game->deck);
-        game->discard->clear;
+        game->discard->clear(game->discard);
     }
     Card* top_card = game->deck->pop(game->deck);
     if (game->deck->size == 0) {
         game->deck->concat(game->deck, game->discard);
         VectorShuffle(game->deck);
-        game->discard->clear;
+        game->discard->clear(game->discard);
     }
     return top_card;
 }
 
-// draw a card
-Card* draw_one_deck(Game* game) {
-    if (game->deck->size == 0) {
-        game->deck->concat(game->deck, game->discard);
-        game->discard->clear;
-    }
-    Card* top_card = game->deck->pop(game->deck);
-    if (game->deck->size == 0) {
-        game->deck->concat(game->deck, game->discard);
-        game->discard->clear;
-    }
-    return top_card;
-}
 // draw many cards to hands
 bool draw_from_deck(Game* game, i32 me_id, i32 time) {
     Player* me = game->players->data[me_id];
@@ -64,7 +51,6 @@ i32 distance(Game* game, i32 me_id, i32 enemy_id) {
                             (game->players->data[me_id]->scope != NULL));
     return special_card_dis + (front_dis < back_dis ? front_dis : back_dis);
 }
-
 
 // Todo: bang can only use once, request
 bool bang(Game* game, i32 me_id, i32 enemy_id) {

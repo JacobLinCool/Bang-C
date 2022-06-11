@@ -103,13 +103,13 @@ bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
     return SUCCESS;
 }
 
-// draw many cards to hands
 Card* draw_one_deck(Game* game);
-bool  player_draw_deck(Game* game, i32 me_id, i32 time) {
-     Player* me = game->players->data[me_id];
-     while (time--) {
-         me->hands->push(me->hands, draw_one_deck(game));
+
+bool player_draw_deck(Game* game, i32 me_id, i32 time) {
+    Player* me = game->players->data[me_id];
+    while (time--) {
+        me->hands->push(me->hands, draw_one_deck(game));
     }
-     return SUCCESS;
+    return SUCCESS;
 }
 #endif  // __CORE_PLAYER_H
