@@ -8,16 +8,16 @@ typedef void (*CharacterSkill)(Game* game, i32 player_id);
 
 typedef enum RoleType {
     ROLE__LOW_BOUND,
-    Sheriff,
-    Deputy,
-    Criminal,
-    Traitor,
+    Sheriff,   //警長
+    Deputy,    //副警長
+    Criminal,  //歹徒
+    Traitor,   //叛徒
     ROLE__HIGH_BOUND
 } RoleType;
 
 typedef enum CharacterType {
     CHARACTER_LOW_BOUND,
-    Bart_Cassidy,
+    Bart_Cassidy,  //巴特
     Black_Jack,
     Calamity_Janet,
     El_Gringo,
@@ -89,6 +89,7 @@ StructVector(Cards, Card*, NULL);
 typedef struct Player {
     char*      name;      /** player name, customizable */
     i8         bullet;    /** bullet count, equal to hp and max number of cards in hand */
+    i8         hp;        /** player hp, default is character hp + role additional hp*/
     Role*      role;      /** player role, 4 types of roles */
     Character* character; /** player character */
     Card*      weapon;    /** weapon, NULL if no weapon */

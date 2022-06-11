@@ -5,6 +5,7 @@
 #include "cards.h"
 #include "characters.h"
 #include "constants.h"
+#include "player.h"
 #include "roles.h"
 #include "types.h"
 
@@ -45,6 +46,12 @@ void game_next(Game *game) {
                }){game, player});
     // TODO: get new card
     player->play(game, game->turn % game->players->size);
+}
+
+// detect whether the game is end or not.
+bool end_of_game(Game *game) {
+    // Todo:
+    return 0;
 }
 
 Game *new_game() {
