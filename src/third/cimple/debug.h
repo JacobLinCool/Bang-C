@@ -2,8 +2,8 @@
  * @file debug.h
  * @author JacobLinCool <hi@jacoblin.cool> (github.com/JacobLinCool)
  * @brief The debug header file of Cimple Lib.
- * @version 3.0.0
- * @date 2022-02-28
+ * @version
+ * @date
  *
  * @copyright Copyright (c) 2022 JacobLinCool (MIT License)
  * @see https://github.com/JacobLinCool/Cimple-Lib

@@ -2,8 +2,8 @@
  * @file buffer.h
  * @author JacobLinCool <hi@jacoblin.cool> (github.com/JacobLinCool)
  * @brief The buffer header file of Cimple Lib.
- * @version 3.0.0
- * @date 2022-05-03
+ * @version
+ * @date
  *
  * @copyright Copyright (c) 2022 JacobLinCool (MIT License)
  * @see https://github.com/JacobLinCool/Cimple-Lib
@@ -106,8 +106,8 @@ void* __buffer_to_big(const void* buffer, size_t size) {
     for (size_t b = 0; b < blocks; b++) {
         size_t len = b == blocks - 1 ? 8 - padding : 8;
         for (size_t i = 0; i < len; i++) {
-            size_t pos = size - 1 - b * 8 - (7 - i) + (b == blocks - 1 ? padding : 0);
-            if (pos < size && pos >= 0) {
+            int64_t pos = size - 1 - b * 8 - (7 - i) + (b == blocks - 1 ? padding : 0);
+            if (pos < (int64_t)size && pos >= 0) {
                 __buffer_set_bit(big, pos, __buffer_get_bit(buffer, b * 8 + i));
             }
         }
@@ -128,7 +128,7 @@ void* __buffer_to_little(const void* buffer, size_t size) {
         size_t len = b == blocks - 1 ? 8 - padding : 8;
         for (size_t i = 0; i < len; i++) {
             size_t pos = b * 8 + i;
-            if (pos < size && pos >= 0) {
+            if (pos < size) {
                 __buffer_set_bit(little, pos,
                                  __buffer_get_bit(buffer, size - 1 - b * 8 - (7 - i) +
                                                               (b == blocks - 1 ? padding : 0)));

@@ -2,8 +2,8 @@
  * @file file.h
  * @author JacobLinCool <hi@jacoblin.cool> (github.com/JacobLinCool)
  * @brief The file header file of Cimple Lib.
- * @version 3.0.0
- * @date 2022-05-01
+ * @version
+ * @date
  *
  * @copyright Copyright (c) 2022 JacobLinCool (MIT License)
  * @see https://github.com/JacobLinCool/Cimple-Lib
@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* __file_read(const char* path) {
+uint8_t* __file_read(const char* path) {
     CHECK_NULL(path);
 
     FILE* file = fopen(path, "r");
@@ -46,34 +46,34 @@ char* __file_read(const char* path) {
     else
         rewind(file);
 
-    char* content = calloc(size + 1, sizeof(char));
-    fread(content, sizeof(char), size, file);
+    uint8_t* content = calloc(size + 1, sizeof(uint8_t));
+    fread(content, sizeof(uint8_t), size, file);
     fclose(file);
 
     return content;
 }
 
-uint64_t __file_write(const char* path, const char* content) {
+uint64_t __file_write(const char* path, const uint8_t* content, uint64_t size) {
     CHECK_NULL(path);
     CHECK_NULL(content);
 
     FILE* file = fopen(path, "w");
     if (file == NULL) return false;
 
-    uint64_t wrote = fwrite(content, sizeof(char), strlen(content), file);
+    uint64_t wrote = fwrite(content, sizeof(uint8_t), size, file);
     fclose(file);
 
     return wrote;
 }
 
-uint64_t __file_append(const char* path, const char* content) {
+uint64_t __file_append(const char* path, const uint8_t* content, uint64_t size) {
     CHECK_NULL(path);
     CHECK_NULL(content);
 
     FILE* file = fopen(path, "a");
     if (file == NULL) return false;
 
-    uint64_t wrote = fwrite(content, sizeof(char), strlen(content), file);
+    uint64_t wrote = fwrite(content, sizeof(uint8_t), size, file);
     fclose(file);
 
     return wrote;
@@ -86,28 +86,30 @@ bool __file_remove(const char* path) {
 
 struct {
     /**
-     * @brief Read a text file. (UTF-8, ASCII)
+     * @brief Read a file. If there is a BOM, remove it.
      *
      * @param path The path of the file.
-     * @return char* The content of the file.
+     * @return uint8_t* The content of the file.
      */
-    char* (*read)(const char* path);
+    uint8_t* (*read)(const char* path);
     /**
-     * @brief Write a text file. (ASCII)
+     * @brief Write a file.
      *
      * @param path The path of the file.
      * @param content The content of the file.
+     * @param size The size of the content.
      * @return uint64_t The number of bytes wrote.
      */
-    uint64_t (*write)(const char* path, const char* content);
+    uint64_t (*write)(const char* path, const uint8_t* content, uint64_t size);
     /**
-     * @brief Append a text file. (ASCII)
+     * @brief Append a text file.
      *
      * @param path The path of the file.
      * @param content The content of the file.
+     * @param size The size of the content.
      * @return uint64_t The number of bytes wrote.
      */
-    uint64_t (*append)(const char* path, const char* content);
+    uint64_t (*append)(const char* path, const uint8_t* content, uint64_t size);
     /**
      * @brief Remove a file.
      *
