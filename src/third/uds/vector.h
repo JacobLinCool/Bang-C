@@ -41,15 +41,15 @@
     } _name;                                                                                       \
     _name* create_##_name();                                                                       \
     void   insert_##_name(_name* vector, size_t _idx, _type val) {                                 \
-        if (vector->size == vector->capacity) {                                                  \
-            vector->capacity <<= 1;                                                              \
-            vector->data = realloc(vector->data, vector->capacity * sizeof(_type));              \
+          if (vector->size == vector->capacity) {                                                  \
+              vector->capacity <<= 1;                                                              \
+              vector->data = realloc(vector->data, vector->capacity * sizeof(_type));              \
         }                                                                                        \
-        for (size_t i = vector->size; i > _idx; i--) {                                           \
-            vector->data[i] = vector->data[i - 1];                                               \
+          for (size_t i = vector->size; i > _idx; i--) {                                           \
+              vector->data[i] = vector->data[i - 1];                                               \
         }                                                                                        \
-        vector->data[_idx] = val;                                                                \
-        vector->size++;                                                                          \
+          vector->data[_idx] = val;                                                                \
+          vector->size++;                                                                          \
     }                                                                                              \
     _type remove_##_name(_name* vector, size_t _idx) {                                             \
         if (_idx >= vector->size || _idx < 0) {                                                    \
@@ -82,8 +82,8 @@
     _type front_##_name(_name* vector) { return get_##_name(vector, 0); }                          \
     void  clear_##_name(_name* vector) { vector->size = 0; }                                       \
     void  free_##_name(_name* vector) {                                                            \
-        free(vector->data);                                                                       \
-        free(vector);                                                                             \
+         free(vector->data);                                                                       \
+         free(vector);                                                                             \
     }                                                                                              \
     void resize_##_name(_name* vector, size_t size) {                                              \
         vector->data = realloc(vector->data, size * sizeof(_type));                                \

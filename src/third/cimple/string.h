@@ -2,8 +2,8 @@
  * @file string.h
  * @author JacobLinCool <hi@jacoblin.cool> (github.com/JacobLinCool)
  * @brief The string header file of Cimple Lib.
- * @version 3.0.0
- * @date 2022-02-25
+ * @version
+ * @date
  *
  * @copyright Copyright (c) 2022 JacobLinCool (MIT License)
  * @see https://github.com/JacobLinCool/Cimple-Lib
@@ -59,13 +59,13 @@ char* __String_trim(const char* string, const char* charset) {
     return trimmed;
 }
 
-char* __String_substring(const char* string, size_t start, size_t end) {
+char* __String_substring(const char* string, int64_t start, int64_t end) {
     CHECK_NULL(string);
-    size_t length = strlen(string);
+    int64_t length = strlen(string);
+    if (start < 0) start = length + start < 0 ? 0 : length + start;
+    if (end < 0) end = length + end < 0 ? 0 : length + end;
     if (start > length) start = length;
     if (end > length) end = length;
-    if (start < 0) start = 0;
-    if (end < 0) end = 0;
     if (start > end) {
         size_t temp = start;
         start = end;
@@ -250,7 +250,7 @@ struct {
     /**
      * Extract a substring from a string and returns the new string.
      */
-    char* (*substring)(const char* string, size_t start, size_t end);
+    char* (*substring)(const char* string, int64_t start, int64_t end);
     /**
      * Search for a substring in a string and returns the index of occurrences, with size `count`.
      */
