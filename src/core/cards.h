@@ -11,15 +11,17 @@
 // draw a card
 Card* draw_one_deck(Game* game) {
     if (game->deck->size == 0) {
-        game->deck->concat(game->deck, game->discard);
-        VectorShuffle(game->deck);
-        game->discard->clear(game->discard);
+        Cards* deck = game->deck->concat(game->deck, game->discard);
+        game->deck->free(game->deck), game->discard->clear(game->discard);
+        deck->shuffle(deck);
+        game->deck = deck;
     }
     Card* top_card = game->deck->pop(game->deck);
     if (game->deck->size == 0) {
-        game->deck->concat(game->deck, game->discard);
-        VectorShuffle(game->deck);
-        game->discard->clear(game->discard);
+        Cards* deck = game->deck->concat(game->deck, game->discard);
+        game->deck->free(game->deck), game->discard->clear(game->discard);
+        deck->shuffle(deck);
+        game->deck = deck;
     }
     return top_card;
 }
