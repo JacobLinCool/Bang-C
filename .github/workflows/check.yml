@@ -19,6 +19,7 @@ jobs:
               uses: DoozyX/clang-format-lint-action@v0.13
               with:
                   clangFormatVersion: 13
+                  exclude: ./src/third/*
 
             - name: Build
               run: make -j4
