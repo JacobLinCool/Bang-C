@@ -114,7 +114,8 @@ void game_next(Game *game) {
             continue;
         }
         // (b)brown card
-        if (select_card->use == SUCCESS) game->discard->push(game->discard, select_card);
+        if (select_card->use(game, player->id) == SUCCESS)
+            game->discard->push(game->discard, select_card);
 
         // 3.check if someone died(only brown card used)
         for (int i = 0; i < game->players->size; i++) {
