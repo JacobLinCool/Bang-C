@@ -33,3 +33,5 @@ Also, the config file parser should be implemented here.
 ## References
 
 - [Bang! (card game) - Wikipedia](https://en.wikipedia.org/wiki/Bang!_(card_game))
+
+We Love GitHub!
