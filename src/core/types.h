@@ -9,12 +9,12 @@ typedef struct Game Game;
 typedef void (*CharacterSkill)(Game* game, i32 player_id);
 
 typedef enum RoleType {
-    ROLE__LOW_BOUND,
+    ROLE_LOW_BOUND,
     Sheriff,   // 警長
     Deputy,    // 副警長
     Criminal,  // 歹徒
     Traitor,   // 叛徒
-    ROLE__HIGH_BOUND
+    ROLE_HIGH_BOUND
 } RoleType;
 
 typedef enum CharacterType {
@@ -117,6 +117,11 @@ typedef struct Player {
      * @return the card if success, NULL if failed.
      */
     Card* (*request)(Game* game, i32 player_id);
+    /**
+     * @brief Take a card from player's hand or equipment.
+     * @return the card if success, NULL if failed.
+     */
+    Card* (*take)(Game* game, i32 player_id, i32 target_id);
 } Player;
 
 StructVector(Players, Player*, NULL);
