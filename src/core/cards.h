@@ -289,6 +289,22 @@ bool winchester(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
+bool general_store(Game* game, i32 me_id) {
+    Cards* set = create_Cards();
+    for (int i = 0; i < game->players->size; i++) {
+        if (game->players->get(game->players, i)->hp <= 0) continue;
+        set->push(set, get_deck_top(game));
+    }
+
+    for (int i = 0; i < game->players->size; i++) {
+        int     id = (me_id + i) % game->players->size;
+        Player* player = game->players->get(game->players, id);
+        if (player->hp > 0) player->select(game, id, set);
+    }
+
+    return SUCCESS;
+}
+
 Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: request
                 {.type = Bang, .priority = 201, .use = bang},
                 {.type = Bang, .priority = 212, .use = bang},
@@ -340,8 +356,8 @@ Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: re
                 {.type = Stagecoach, .priority = 109, .use = stagecoach},
                 {.type = Stagecoach, .priority = 109, .use = stagecoach},
                 {.type = Wells_Fargo, .priority = 203, .use = wells_fargo},
-                {.type = General_Store, .priority = 112, .use = NULL},
-                {.type = General_Store, .priority = 409, .use = NULL},
+                {.type = General_Store, .priority = 112, .use = general_store},
+                {.type = General_Store, .priority = 409, .use = general_store},
                 {.type = Beer, .priority = 206, .use = beer},
                 {.type = Beer, .priority = 207, .use = beer},
                 {.type = Beer, .priority = 208, .use = beer},
