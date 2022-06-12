@@ -260,7 +260,8 @@ bool duel(Game* game, i32 me_id) {
             if (card->type == Bang) {
                 game->discard->push(game->discard, card);
             } else {
-                game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
+                game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands,
+                                                           card);
             }
         }
         if (duel_finish) break;
