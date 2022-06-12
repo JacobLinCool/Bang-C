@@ -120,17 +120,20 @@ bool judge(Game* game, i32 me_id, i32 lower, i32 higher) {
 
 // Why not just draw from the first card? It's for FUN!
 bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
-    // player died?
-    if (game->players->data[enemy_id]->hp <= 0) return FAIL;
+    Player* me = game->players->data[me_id];
+    Player* enemy = game->players->data[enemy_id];
+    if (enemy->hp <= 0) return FAIL;
 
-    i8 total_card = game->players->data[enemy_id]->hands->size;
+    i8 total_card = enemy->hands->size;
     if (total_card == 0) return SUCCESS;
-    i8 me_choose;  //=func(game,me_id,total_card) View layer Todo: call function
-    game->players->data[me_id]->hands->push(
-        game->players->data[me_id]->hands,
-        game->players->data[enemy_id]->hands->data[me_choose - 1]);
-    game->players->data[enemy_id]->hands->remove(game->players->data[enemy_id]->hands,
-                                                 me_choose - 1);
+
+    Card* selected = NULL;
+    while (!selected) {
+        selected = me->take(game, me_id, enemy_id);
+    }
+
+    me->hands->push(me->hands, selected);
+
     return SUCCESS;
 }
 
