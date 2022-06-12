@@ -10,7 +10,7 @@
 i32 __get_player_hp(Game* game, i32 id) {return game->player->data[i]->hp;}
 
 //choose enemy, if not vaild people, return -1
-i32 choose_enemy(Game* game, i32 me_id) {
+i32 player_choose_enemy(Game* game, i32 me_id) {
     i32 enemy_id;
     i32 plyaer_size = game->player->size;
     printf("Choose enemy: \n");
