@@ -7,15 +7,20 @@
 #include "types.h"
 #include "utils.h"
 
-bool died_player(Game* game, i32 me_id, i32 enemy_id) {
+void died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
-    if (enemy->hp > 0) return SUCCESS;
-    // use beer
-    // if request() execute the card, then do nothing in if().
-    // if (request(game, enemy_id, Beer)) return FAIL;
+    if (enemy->hp > 0) return;
 
-    // shows his role card
-    // View layer Todo: call show(Game* game, i32 player_id)
+    while (1) {
+        Card* card = enemy->request(game, enemy_id);
+        if (card == NULL) break;
+        if (card->type == Beer) {
+            game->discard->push(game->discard, card);
+            return;
+        }
+    }
+
+    printf("Died player(%s) role is %s\n", enemy->name, role_name[enemy->role->type]);
 
     // END OF THE GAME detection
     // find Criminal, Traitor.
@@ -28,7 +33,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
         game->finished = true;
     }
 
-    if (game->finished) return SUCCESS;
+    if (game->finished) return;
 
     // discard all cards
     Cards* discard_card = game->discard;
@@ -43,7 +48,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (NULL != enemy->dynamite) discard_card->push(discard_card, enemy->dynamite);
 
     // Penalties and Rewards
-    if (me_id == enemy_id) return SUCCESS;
+    if (me_id == enemy_id) return;
     Player* me = game->players->data[me_id];
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
@@ -58,7 +63,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     } else if (enemy->role->type == Criminal) {
         player_draw_deck(game, me_id, 3);
     }
-    return SUCCESS;
+    return;
 }
 
 // If no me_id, me_id = player_id
@@ -75,8 +80,6 @@ void attack_player(Game* game, i32 me_id, i32 player_id) {
             game->players->data[player_id]->character->skill(game, player_id);
         }
     }
-
-    if (game->players->data[player_id]->hp != 0) return;
 
     // dead
     died_player(game, me_id, player_id);
@@ -95,15 +98,43 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     }
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
-    /*
-    while(request(game, enemy_id, Missed)){
-        missed_total++;
-        if(missed_total>=1+(game->players->data[me_id]->character->type == Slab_the_Killer))
+
+    while (1) {
+        Card* card = enemy->request(game, enemy_id);
+        if (card == NULL) break;
+        if (card->type == Missed) {
+            game->discard->push(game->discard, card);
             return;
+        }
     }
-    */
     attack_player(game, me_id, enemy_id);
     return;
+}
+
+bool dynamite_judge(Game* game, i32 me_id) {
+    Player* me = game->players->data[me_id];
+    if (judge(game, me_id, 102, 109)) {
+        game->discard->push(game->discard, me->dynamite);
+        me->dynamite = NULL;
+        attack_player(game, -1, me_id);
+        attack_player(game, -1, me_id);
+        attack_player(game, -1, me_id);
+    } else {
+        i32 left_player_id = (me_id + 1) % game->players->size;
+        while (game->players->data[left_player_id]->hp <= 0) {
+            left_player_id = (left_player_id + 1) % game->players->size;
+        }
+        game->players->data[left_player_id]->mustang = me->mustang;
+        me->mustang = NULL;
+    }
+    return SUCCESS;
+}
+
+bool jail_judge(Game* game, i32 me_id) {
+    game->discard->push(game->discard, game->players->data[me_id]->jail);
+    game->players->data[me_id]->jail = NULL;
+    if (judge(game, me_id, 201, 213)) return SUCCESS;  // SUCCESS escapes from jail
+    return FAIL;                                       // FAIL escapes from jail
 }
 
 bool bang(Game* game, i32 me_id) {
@@ -133,12 +164,17 @@ bool gatling(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
-// Todo: request
 bool indians(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
         if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
-        // if(request(game, i, Bang))continue;
-        attack_player(game, me_id, i);
+        while (1) {
+            Card* card = game->players->data[i]->request(game, i);
+            if (card == NULL) attack_player(game, me_id, i);
+            if (card->type == Bang) {
+                game->discard->push(game->discard, card);
+                break;
+            }
+        }
     }
     return SUCCESS;
 }
@@ -182,20 +218,35 @@ bool saloon(Game* game, i32 me_id) {
 }
 
 bool duel(Game* game, i32 me_id) {
-    i32 enemy_id;  //= choose_enemy(); Layer View Todo // enemy died should be in this function
-
+    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
+    if (enemy_id == -1) return FAIL;
     // duel
-    while (true) {
-        /*
-        if(!request(game, enemy_id, Bang)){
-            attack_player(game, me_id, enemy_id);
-            break;
+    bool duel_finish = false;
+    while (1) {
+        while (1) {
+            Card* card = game->players->data[enemy_id]->request(game, enemy_id);
+            if (card == NULL) {
+                attack_player(game, me_id, enemy_id);
+                duel_finish = true;
+                break;
+            }
+            if (card->type == Bang) {
+                game->discard->push(game->discard, card);
+            }
         }
-        if(!request(game, me_id, Bang)){
-            attack_player(game, -1, me_id);
-            break;
+        if (duel_finish) break;
+        while (1) {
+            Card* card = game->players->data[me_id]->request(game, me_id);
+            if (card == NULL) {
+                attack_player(game, enemy_id, me_id);
+                duel_finish = true;
+                break;
+            }
+            if (card->type == Bang) {
+                game->discard->push(game->discard, card);
+            }
         }
-        */
+        if (duel_finish) break;
     }
     return SUCCESS;
 }
@@ -215,37 +266,11 @@ bool mustang(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
-bool dynamite_judge(Game* game, i32 me_id) {
-    Player* me = game->players->data[me_id];
-    if (judge(game, me_id, 102, 109)) {
-        game->discard->push(game->discard, me->dynamite);
-        me->dynamite = NULL;
-        attack_player(game, -1, me_id);
-        attack_player(game, -1, me_id);
-        attack_player(game, -1, me_id);
-    } else {
-        i32 left_player_id = (me_id + 1) % game->players->size;
-        while (game->players->data[left_player_id]->hp <= 0) {
-            left_player_id = (left_player_id + 1) % game->players->size;
-        }
-        game->players->data[left_player_id]->mustang = me->mustang;
-        me->mustang = NULL;
-    }
-    return SUCCESS;
-}
-
 bool jail(Game* game, i32 me_id) {
-    i32 enemy_id;  //= choose_enemy(); View Todo
-    if (game->players->data[enemy_id]->hp <= 0) return FAIL;
+    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
+    if (enemy_id == -1) return FAIL;
     if (game->players->data[enemy_id]->role->type == Sheriff) return FAIL;
     return SUCCESS;
-}
-
-bool jail_judge(Game* game, i32 me_id) {
-    game->discard->push(game->discard, game->players->data[me_id]->jail);
-    game->players->data[me_id]->jail = NULL;
-    if (judge(game, me_id, 201, 213)) return SUCCESS;  // SUCCESS escapes from jail
-    return FAIL;                                       // FAIL escapes from jail
 }
 
 bool dynamite(Game* game, i32 me_id) {
@@ -254,27 +279,32 @@ bool dynamite(Game* game, i32 me_id) {
 }
 
 bool volcanic(Game* game, i32 me_id) {
-    if (game->players->data[me_id]->weapon != NULL) return FAIL;
+    Card* cur_card = game->players->data[me_id]->weapon;
+    game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool schofield(Game* game, i32 me_id) {
-    if (game->players->data[me_id]->weapon != NULL) return FAIL;
+    Card* cur_card = game->players->data[me_id]->weapon;
+    game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool remington(Game* game, i32 me_id) {
-    if (game->players->data[me_id]->weapon != NULL) return FAIL;
+    Card* cur_card = game->players->data[me_id]->weapon;
+    game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool rev_carabine(Game* game, i32 me_id) {
-    if (game->players->data[me_id]->weapon != NULL) return FAIL;
+    Card* cur_card = game->players->data[me_id]->weapon;
+    game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool winchester(Game* game, i32 me_id) {
-    if (game->players->data[me_id]->weapon != NULL) return FAIL;
+    Card* cur_card = game->players->data[me_id]->weapon;
+    game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
@@ -290,6 +320,7 @@ bool general_store(Game* game, i32 me_id) {
         Player* player = game->players->get(game->players, id);
         if (player->hp > 0) player->select(game, id, set);
     }
+    set->free(set);
 
     return SUCCESS;
 }
@@ -341,12 +372,12 @@ Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: re
                 {.type = Missed, .priority = 412, .use = missed},
                 {.type = Missed, .priority = 413, .use = missed},
                 {.type = Gatling, .priority = 210, .use = gatling},
-                {.type = Indians, .priority = 301, .use = NULL},
-                {.type = Indians, .priority = 313, .use = NULL},
-                {.type = Panic, .priority = 201, .use = NULL},  //= choose_enemy(); View Todo
-                {.type = Panic, .priority = 211, .use = NULL},
-                {.type = Panic, .priority = 212, .use = NULL},
-                {.type = Panic, .priority = 308, .use = NULL},
+                {.type = Indians, .priority = 301, .use = indians},
+                {.type = Indians, .priority = 313, .use = indians},
+                {.type = Panic, .priority = 201, .use = panic},
+                {.type = Panic, .priority = 211, .use = panic},
+                {.type = Panic, .priority = 212, .use = panic},
+                {.type = Panic, .priority = 308, .use = panic},
                 {.type = Cat_Balou, .priority = 213, .use = NULL},
                 {.type = Cat_Balou, .priority = 309, .use = NULL},
                 {.type = Cat_Balou, .priority = 310, .use = NULL},
@@ -363,9 +394,9 @@ Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: re
                 {.type = Beer, .priority = 210, .use = beer},
                 {.type = Beer, .priority = 211, .use = beer},
                 {.type = Saloon, .priority = 205, .use = saloon},
-                {.type = Duel, .priority = 111, .use = NULL},  // Done, Todo: request,choose_enemy
-                {.type = Duel, .priority = 312, .use = NULL},
-                {.type = Duel, .priority = 408, .use = NULL},
+                {.type = Duel, .priority = 111, .use = duel},  // Done, Todo: request,choose_enemy
+                {.type = Duel, .priority = 312, .use = duel},
+                {.type = Duel, .priority = 408, .use = duel},
                 {.type = Barrel, .priority = 112, .use = barrel},
                 {.type = Barrel, .priority = 113, .use = barrel},
                 {.type = Scope, .priority = 101, .use = scope},
