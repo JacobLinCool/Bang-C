@@ -7,7 +7,6 @@
 #include "types.h"
 #include "utils.h"
 
-
 bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
     if (enemy->hp > 0) return SUCCESS;
@@ -64,7 +63,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
 
 // If no me_id, me_id = player_id
 void attack_player(Game* game, i32 me_id, i32 player_id) {
-    if (__get_player_hp(game, player_id) <= 0) return;  // avoid mustang_judge error
+    if (get_player_hp(game, player_id) <= 0) return;  // avoid mustang_judge error
     // decrease player's hp
     game->players->data[player_id]->hp--;
     // use character ablity(if valid)
@@ -108,8 +107,8 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
 }
 
 bool bang(Game* game, i32 me_id) {
-    i32 enemy_id = choose_enemy(game, me_id); 
-    if(enemy_id == -1) return FAIL;
+    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
+    if (enemy_id == -1) return FAIL;
 
     // calculate distance between me and enemy
     i32 enemy_distance = distance(game, me_id, enemy_id);
@@ -145,9 +144,9 @@ bool indians(Game* game, i32 me_id) {
 }
 
 bool panic(Game* game, i32 me_id) {
-    i32 enemy_id = choose_enemy(game, me_id);
-    if( enemy_id == -1 ) return FAIL;
-    
+    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
+    if (enemy_id == -1) return FAIL;
+
     // calculate distance between me and enemy
     if (distance(game, me_id, enemy_id) > 1) return FAIL;
 

@@ -142,6 +142,6 @@ void recover(Game* game, i32 me_id) {
     return;
 }
 
-i32 get_player_hp(Game* game, i32 id) {return game->player->data[i]->hp;}
+i32 get_player_hp(Game* game, i32 id) { return game->players->data[id]->hp; }
 
 #endif  // __CORE_UTILS_H

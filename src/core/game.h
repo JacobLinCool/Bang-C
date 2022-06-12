@@ -46,7 +46,7 @@ void game_next(Game *game) {
         player = game->players->data[(game->turn + (++t)) % game->players->size];
     }
     // determine bomb and jail, may just skip this turn
-    if (player->mustang != NULL) mustang_judge(game, player->id);
+    if (player->mustang != NULL) dynamite_judge(game, player->id);
     if (player->hp <= 0) return;
     if (player->jail != NULL) {
         if (!jail_judge(game, player->id)) return;
