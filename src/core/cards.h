@@ -78,7 +78,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             Card* card = get_deck_top(game);
             game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
         }
-        if (enemy_type == El_Gringo) {
+        if (enemy_type == El_Gringo && me_id != -1) {
             draw_from_player(game, enemy_id, me_id);
         }
         if (enemy_type == Sid_Ketchum) {
@@ -176,7 +176,9 @@ bool bang(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
-bool missed(Game* game, i32 me_id) { return FAIL; }
+bool missed(Game* game, i32 me_id) {
+    return game->players->data[me_id]->character->type == Calamity_Janet;
+}
 
 bool gatling(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
@@ -259,6 +261,9 @@ bool duel(Game* game, i32 me_id) {
             }
             if (card->type == Bang) {
                 game->discard->push(game->discard, card);
+            } else if (card->type == Missed &&
+                       game->players->data[enemy_id]->character->type == Calamity_Janet) {
+                game->discard->push(game->discard, card);
             } else {
                 game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands,
                                                            card);
@@ -273,6 +278,9 @@ bool duel(Game* game, i32 me_id) {
                 break;
             }
             if (card->type == Bang) {
+                game->discard->push(game->discard, card);
+            } else if (card->type == Missed &&
+                       game->players->data[me_id]->character->type == Calamity_Janet) {
                 game->discard->push(game->discard, card);
             } else {
                 game->players->data[me_id]->hands->push(game->players->data[me_id]->hands, card);
