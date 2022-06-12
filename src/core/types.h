@@ -9,12 +9,12 @@ typedef struct Game Game;
 typedef void (*CharacterSkill)(Game* game, i32 player_id);
 
 typedef enum RoleType {
-    ROLE__LOW_BOUND,
+    ROLE_LOW_BOUND,
     Sheriff,   // 警長
     Deputy,    // 副警長
     Criminal,  // 歹徒
     Traitor,   // 叛徒
-    ROLE__HIGH_BOUND
+    ROLE_HIGH_BOUND
 } RoleType;
 
 typedef enum CharacterType {
