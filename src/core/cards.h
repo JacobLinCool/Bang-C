@@ -9,9 +9,10 @@
 
 bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
+    if (enemy->hp > 0) return SUCCESS;
     // use beer
     // if request() execute the card, then do nothing in if().
-    // if (request(game, enemy_id, Beer)) return 0;
+    // if (request(game, enemy_id, Beer)) return FAIL;
 
     // shows his role card
     // View layer Todo: call show(Game* game, i32 player_id)
@@ -31,7 +32,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
 
     // discard all cards
     Cards* discard_card = game->discard;
-    if (me_id != -1 && game->players->data[me_id]->character->type == Vulture_Sam)
+    if (me_id != enemy_id && game->players->data[me_id]->character->type == Vulture_Sam)
         discard_card = game->players->data[me_id]->hands;
     transfer(enemy->hands, discard_card);
     discard_card->push(discard_card, enemy->weapon);
@@ -42,7 +43,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     discard_card->push(discard_card, enemy->dynamite);
 
     // Penalties and Rewards
-    if (me_id == -1) return SUCCESS;
+    if (me_id == enemy_id) return SUCCESS;
     Player* me = game->players->data[me_id];
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
@@ -60,7 +61,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     return SUCCESS;
 }
 
-// If no me_id, enter -1
+// If no me_id, me_id = player_id
 void attack_player(Game* game, i32 me_id, i32 player_id) {
     if (game->players->data[player_id]->hp <= 0) return;  // avoid mustang_judge error
     // decrease player's hp

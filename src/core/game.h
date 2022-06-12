@@ -21,6 +21,7 @@ void game_join(Game *game, const char *name, Agent agent) {
 }
 
 void game_start(Game *game) {
+    // Todo: bullet initialize
     // shuffle cards, roles, characters
     VectorShuffle(game->deck);
     VectorShuffle(game->roles);
@@ -39,7 +40,17 @@ void game_start(Game *game) {
 void game_next(Game *game) {
     game->turn++;
     Player *player = game->players->data[game->turn % game->players->size];
-    // TODO: determine bomb and jail, may just skip this turn
+    // if player has died, then skip.
+    i32 t = 0;
+    while (player->hp <= 0) {
+        player = game->players->data[(game->turn + (++t)) % game->players->size];
+    }
+    // determine bomb and jail, may just skip this turn
+    if (player->mustang != NULL) mustang_judge(game, player->id);
+    if (player->hp <= 0) return;
+    if (player->jail != NULL) {
+        if (!jail_judge(game, player->id)) return;
+    }
     Event.emit(EVT_GAME_PLAYER_CHANGED, &(struct {
                    Game   *game;
                    Player *player;

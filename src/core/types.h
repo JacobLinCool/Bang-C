@@ -91,6 +91,7 @@ StructVector(Cards, Card*, NULL);
 
 typedef struct Player {
     char*      name;      /** player name, customizable */
+    i8         id;        /** player id */
     i8         bullet;    /** bullet count, equal to hp and max number of cards in hand */
     i8         hp;        /** player hp, default is character hp + role additional hp*/
     Role*      role;      /** player role, 4 types of roles */
