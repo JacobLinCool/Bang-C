@@ -53,7 +53,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
 
     Console.cyan("Please select a card: ");
     for (i32 i = 0; i < cards->size; i++) {
-        Console.yellow("%d. %d\n", i + 1, cards->data[i]->type);
+        Console.yellow("%d. %s\n", i + 1, card_name[cards->data[i]->type]);
     }
     i32 input = 0;
     scanf("%d", &input);
@@ -80,7 +80,7 @@ Card* real_player_request(Game* game, i32 player_id) {
 
     Console.cyan("Please select a card from your hand: ");
     for (i32 i = 0; i < player->hands->size; i++) {
-        Console.yellow("%d. %d\n", i + 1, player->hands->data[i]->type);
+        Console.yellow("%d. %s\n", i + 1, card_name[player->hands->data[i]->type]);
     }
 
     i32 input = 0;
@@ -106,14 +106,14 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     Console.cyan("Please select a card from target: ");
     i32 i = 1;
     for (; i <= player->hands->size; i++) {
-        Console.yellow("%d. %d\n", i, -1);
+        Console.yellow("%d. %s\n", i, card_name[0]);
     }
-    if (player->barrel) Console.yellow("%d. %d\n", i++, player->barrel->type);
-    if (player->mustang) Console.yellow("%d. %d\n", i++, player->mustang->type);
-    if (player->scope) Console.yellow("%d. %d\n", i++, player->scope->type);
-    if (player->weapon) Console.yellow("%d. %d\n", i++, player->weapon->type);
-    if (player->jail) Console.yellow("%d. %d\n", i++, player->jail->type);
-    if (player->dynamite) Console.yellow("%d. %d\n", i++, player->dynamite->type);
+    if (player->barrel) Console.yellow("%d. %s\n", i++, card_name[player->barrel->type]);
+    if (player->mustang) Console.yellow("%d. %s\n", i++, card_name[player->mustang->type]);
+    if (player->scope) Console.yellow("%d. %s\n", i++, card_name[player->scope->type]);
+    if (player->weapon) Console.yellow("%d. %s\n", i++, card_name[player->weapon->type]);
+    if (player->jail) Console.yellow("%d. %s\n", i++, card_name[player->jail->type]);
+    if (player->dynamite) Console.yellow("%d. %s\n", i++, card_name[player->dynamite->type]);
 
     i32 input = 0;
     scanf("%d", &input);
