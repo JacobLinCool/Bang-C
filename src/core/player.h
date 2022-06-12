@@ -19,6 +19,35 @@ void computer_player(Game* game, i32 player_id) {
     Console.gray("I am a computer, I will do nothing.");
 }
 
+// choose enemy, if not vaild people, return -1
+i32 player_choose_enemy(Game* game, i32 me_id) {
+    i32 enemy_id;
+    i32 plyaer_size = game->players->size;
+    printf("Choose enemy: \n");
+    printf("-1)cancel\n");
+    for (i32 i = 0, k = 1; i < plyaer_size; i++) {
+        if (me_id != i && get_player_hp(game, i) > 0) {
+            printf("%d)Player %d hp: %d\n", k++, i, get_player_hp(game, i));
+        }
+    }
+    scanf("%d", &enemy_id);
+    if (enemy_id < plyaer_size && get_player_hp(game, enemy_id) > 0 && enemy_id != me_id) {
+        enemy_id = -1;
+        printf("Wrong Player id!\n");
+    }
+    return enemy_id;
+}
+
+i32 computer_choose_enemy(Game* game, i32 me_id) {
+    i32 enemy_id;
+    i32 plyaer_size = game->players->size;
+    while (1) {
+        enemy_id = rand() % plyaer_size;
+        if (enemy_id != me_id && get_player_hp(game, enemy_id) > 0) break;
+    }
+    return enemy_id;
+}
+
 bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     Player* player = game->players->get(game->players, player_id);
 
