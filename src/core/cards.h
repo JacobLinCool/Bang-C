@@ -7,26 +7,6 @@
 #include "types.h"
 #include "utils.h"
 
-i32 __get_player_hp(Game* game, i32 id) {return game->player->data[i]->hp;}
-
-//choose enemy, if not vaild people, return -1
-i32 player_choose_enemy(Game* game, i32 me_id) {
-    i32 enemy_id;
-    i32 plyaer_size = game->player->size;
-    printf("Choose enemy: \n");
-    printf("-1)cancel\n");
-    for(i32 i = 0, k = 1; i < plyaer_size; i++) {
-        if(me_id != i && __get_player_hp(game, i) > 0) {
-            printf("%d)Player %d hp: %d\n", k++, i, __get_player_hp(game, i));
-        }
-    }
-    sancf("%d", &enemy_id);
-    if( enemy_id < plyaer_size && __get_player_hp(game, enemy_id) > 0 && enemy_id != me_id ) {
-        enemy_id = -1;
-        printf( "Wrong Player id!\n" );
-    }
-    return enemy_id;
-}
 
 bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
@@ -148,7 +128,7 @@ bool missed(Game* game, i32 me_id) { return FAIL; }
 
 bool gatling(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
-        if (__get_player_hp(game, me_id) <= 0 || me_id == i) continue;
+        if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
         bang_no_distance(game, me_id, i);
     }
     return SUCCESS;
@@ -157,8 +137,7 @@ bool gatling(Game* game, i32 me_id) {
 // Todo: request
 bool indians(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
-        if (__get_player_hp(game, me_id) <= 0 || me_id == i) continue;
-        if()
+        if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
         // if(request(game, i, Bang))continue;
         attack_player(game, me_id, i);
     }
