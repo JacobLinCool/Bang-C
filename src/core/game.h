@@ -94,7 +94,7 @@ void game_next(Game *game) {
 
         // 1.restriction detection
         if (select_card->type == Bang) {
-            // only one BANG! card may be played per turn;
+            // only one BANG! card may be played per turn
             if (bang_used) {
                 player->hands->push(player->hands, select_card);
                 continue;
