@@ -110,6 +110,11 @@ typedef struct Player {
      * @return true if selected, false if failed.
      */
     bool (*select)(Game* game, i32 player_id, Cards* cards);
+    /**
+     * @brief Request a card from player's hand.
+     * @return the card if success, NULL if failed.
+     */
+    Card* (*request)(Game* game, i32 player_id);
 } Player;
 
 StructVector(Players, Player*, NULL);

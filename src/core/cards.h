@@ -35,12 +35,12 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (me_id != enemy_id && game->players->data[me_id]->character->type == Vulture_Sam)
         discard_card = game->players->data[me_id]->hands;
     transfer(enemy->hands, discard_card);
-    discard_card->push(discard_card, enemy->weapon);
-    discard_card->push(discard_card, enemy->barrel);
-    discard_card->push(discard_card, enemy->mustang);
-    discard_card->push(discard_card, enemy->scope);
-    discard_card->push(discard_card, enemy->jail);
-    discard_card->push(discard_card, enemy->dynamite);
+    if (NULL != enemy->weapon) discard_card->push(discard_card, enemy->weapon);
+    if (NULL != enemy->barrel) discard_card->push(discard_card, enemy->barrel);
+    if (NULL != enemy->mustang) discard_card->push(discard_card, enemy->mustang);
+    if (NULL != enemy->scope) discard_card->push(discard_card, enemy->scope);
+    if (NULL != enemy->jail) discard_card->push(discard_card, enemy->jail);
+    if (NULL != enemy->dynamite) discard_card->push(discard_card, enemy->dynamite);
 
     // Penalties and Rewards
     if (me_id == enemy_id) return SUCCESS;
@@ -49,12 +49,12 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
         // Sheriff discards all cards
         discard_card = game->discard;
         transfer(me->hands, discard_card);
-        discard_card->push(discard_card, me->weapon);
-        discard_card->push(discard_card, me->barrel);
-        discard_card->push(discard_card, me->mustang);
-        discard_card->push(discard_card, me->scope);
-        discard_card->push(discard_card, me->jail);
-        discard_card->push(discard_card, me->dynamite);
+        if (NULL != me->weapon) discard_card->push(discard_card, me->weapon);
+        if (NULL != me->barrel) discard_card->push(discard_card, me->barrel);
+        if (NULL != me->mustang) discard_card->push(discard_card, me->mustang);
+        if (NULL != me->scope) discard_card->push(discard_card, me->scope);
+        if (NULL != me->jail) discard_card->push(discard_card, me->jail);
+        if (NULL != me->dynamite) discard_card->push(discard_card, me->dynamite);
     } else if (enemy->role->type == Criminal) {
         player_draw_deck(game, me_id, 3);
     }
