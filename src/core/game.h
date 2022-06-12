@@ -21,7 +21,6 @@ void game_join(Game *game, const char *name, Agent agent) {
 }
 
 void game_start(Game *game) {
-    // Todo: bullet initialize
     // shuffle cards, roles, characters
     VectorShuffle(game->deck);
     VectorShuffle(game->roles);
@@ -29,11 +28,13 @@ void game_start(Game *game) {
     // assign card, role, character to players
     for (int i = 0; i < game->players->size; i++) {
         Player *nowPlayer = game->players->data[i];
+        nowPlayer->bullet = nowPlayer->character->health + (nowPlayer->role->type == Sheriff);
         for (int j = 0; j < nowPlayer->bullet; j++) {
             nowPlayer->hands->push(nowPlayer->hands, game->deck->pop(game->deck));
         }
         nowPlayer->role = game->roles->pop(game->roles);
         nowPlayer->character = game->characters->pop(game->characters);
+        nowPlayer->id = i;
     }
 }
 
