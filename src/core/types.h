@@ -104,6 +104,8 @@ typedef struct Player {
     Card*      dynamite;  /** bomb, NULL if no dynamite */
     Cards*     hands;     /** cards in hand */
 
+    i32 (*choose_enemy)(Game* game, i32 me_id);
+
     void (*play)(Game* game, i32 player_id);
     /**
      * @brief Select one card from a set of cards.

@@ -63,7 +63,7 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
 
 // If no me_id, me_id = player_id
 void attack_player(Game* game, i32 me_id, i32 player_id) {
-    if (game->players->data[player_id]->hp <= 0) return;  // avoid mustang_judge error
+    if (get_player_hp(game, player_id) <= 0) return;  // avoid mustang_judge error
     // decrease player's hp
     game->players->data[player_id]->hp--;
     // use character ablity(if valid)
@@ -106,11 +106,9 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     return;
 }
 
-// Todo: bang can only use once, request
 bool bang(Game* game, i32 me_id) {
-    i32 enemy_id;  //= choose_enemy(); View Todo
-    // enemy died?
-    if (game->players->data[enemy_id]->hp <= 0) return FAIL;
+    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
+    if (enemy_id == -1) return FAIL;
 
     // calculate distance between me and enemy
     i32 enemy_distance = distance(game, me_id, enemy_id);
@@ -129,7 +127,7 @@ bool missed(Game* game, i32 me_id) { return FAIL; }
 
 bool gatling(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
-        if (game->players->data[i]->hp <= 0 || me_id == i) continue;
+        if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
         bang_no_distance(game, me_id, i);
     }
     return SUCCESS;
@@ -138,7 +136,7 @@ bool gatling(Game* game, i32 me_id) {
 // Todo: request
 bool indians(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
-        if (game->players->data[i]->hp <= 0 || me_id == i) continue;
+        if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
         // if(request(game, i, Bang))continue;
         attack_player(game, me_id, i);
     }
@@ -146,13 +144,12 @@ bool indians(Game* game, i32 me_id) {
 }
 
 bool panic(Game* game, i32 me_id) {
-    i32 enemy_id;  //= choose_enemy(); View Todo
-    // enemy died?
-    if (game->players->data[enemy_id]->hp <= 0) return FAIL;
+    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
+    if (enemy_id == -1) return FAIL;
+
     // calculate distance between me and enemy
-    i32 enemy_distance = distance(game, me_id, enemy_id);
-    if (enemy_distance > 1) return FAIL;
-    // Todo: draw a card from the enemy
+    if (distance(game, me_id, enemy_id) > 1) return FAIL;
+
     draw_from_player(game, me_id, enemy_id);
     return SUCCESS;
 }
@@ -165,14 +162,6 @@ bool stagecoach(Game* game, i32 me_id) {
 bool wells_fargo(Game* game, i32 me_id) {
     player_draw_deck(game, me_id, 3);
     return SUCCESS;
-}
-
-void recover(Game* game, i32 me_id) {
-    if (game->players->data[me_id]->hp == game->players->data[me_id]->character->health +
-                                              (game->players->data[me_id]->role->type == Sheriff))
-        return;
-    game->players->data[me_id]->hp++;
-    return;
 }
 
 bool beer(Game* game, i32 me_id) {
@@ -226,11 +215,11 @@ bool mustang(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
-bool mustang_judge(Game* game, i32 me_id) {
+bool dynamite_judge(Game* game, i32 me_id) {
     Player* me = game->players->data[me_id];
     if (judge(game, me_id, 102, 109)) {
-        game->discard->push(game->discard, me->mustang);
-        me->mustang = NULL;
+        game->discard->push(game->discard, me->dynamite);
+        me->dynamite = NULL;
         attack_player(game, -1, me_id);
         attack_player(game, -1, me_id);
         attack_player(game, -1, me_id);
