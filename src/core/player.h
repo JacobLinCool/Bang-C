@@ -19,6 +19,57 @@ void computer_player(Game* game, i32 player_id) {
     Console.gray("I am a computer, I will do nothing.");
 }
 
+bool real_player_select(Game* game, i32 player_id, Cards* cards) {
+    Player* player = game->players->get(game->players, player_id);
+
+    Console.cyan("Please select a card: ");
+    for (i32 i = 0; i < cards->size; i++) {
+        Console.yellow("%d. %d\n", i + 1, cards->data[i]->type);
+    }
+    i32 input = 0;
+    scanf("%d", &input);
+    if (input < 1 || input > cards->size) {
+        return false;
+    }
+
+    player->hands->push(player->hands, cards->remove(cards, input - 1));
+
+    return true;
+}
+
+bool computer_player_select(Game* game, i32 player_id, Cards* cards) {
+    Player* player = game->players->get(game->players, player_id);
+    i32     random = rand() % cards->size;
+
+    player->hands->push(player->hands, cards->remove(cards, random));
+
+    return true;
+}
+
+Card* real_player_request(Game* game, i32 player_id) {
+    Player* player = game->players->get(game->players, player_id);
+
+    Console.cyan("Please select a card from your hand: ");
+    for (i32 i = 0; i < player->hands->size; i++) {
+        Console.yellow("%d. %d\n", i + 1, player->hands->data[i]->type);
+    }
+
+    i32 input = 0;
+    scanf("%d", &input);
+    if (input < 1 || input > player->hands->size) {
+        return NULL;
+    }
+
+    return player->hands->remove(player->hands, input - 1);
+}
+
+Card* computer_player_request(Game* game, i32 player_id) {
+    Player* player = game->players->get(game->players, player_id);
+    i32     random = rand() % player->hands->size;
+
+    return player->hands->remove(player->hands, random);
+}
+
 // TODO: player play func
 // NOTE: when use the card jail
 

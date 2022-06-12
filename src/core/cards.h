@@ -35,12 +35,12 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (me_id != enemy_id && game->players->data[me_id]->character->type == Vulture_Sam)
         discard_card = game->players->data[me_id]->hands;
     transfer(enemy->hands, discard_card);
-    discard_card->push(discard_card, enemy->weapon);
-    discard_card->push(discard_card, enemy->barrel);
-    discard_card->push(discard_card, enemy->mustang);
-    discard_card->push(discard_card, enemy->scope);
-    discard_card->push(discard_card, enemy->jail);
-    discard_card->push(discard_card, enemy->dynamite);
+    if (NULL != enemy->weapon) discard_card->push(discard_card, enemy->weapon);
+    if (NULL != enemy->barrel) discard_card->push(discard_card, enemy->barrel);
+    if (NULL != enemy->mustang) discard_card->push(discard_card, enemy->mustang);
+    if (NULL != enemy->scope) discard_card->push(discard_card, enemy->scope);
+    if (NULL != enemy->jail) discard_card->push(discard_card, enemy->jail);
+    if (NULL != enemy->dynamite) discard_card->push(discard_card, enemy->dynamite);
 
     // Penalties and Rewards
     if (me_id == enemy_id) return SUCCESS;
@@ -49,12 +49,12 @@ bool died_player(Game* game, i32 me_id, i32 enemy_id) {
         // Sheriff discards all cards
         discard_card = game->discard;
         transfer(me->hands, discard_card);
-        discard_card->push(discard_card, me->weapon);
-        discard_card->push(discard_card, me->barrel);
-        discard_card->push(discard_card, me->mustang);
-        discard_card->push(discard_card, me->scope);
-        discard_card->push(discard_card, me->jail);
-        discard_card->push(discard_card, me->dynamite);
+        if (NULL != me->weapon) discard_card->push(discard_card, me->weapon);
+        if (NULL != me->barrel) discard_card->push(discard_card, me->barrel);
+        if (NULL != me->mustang) discard_card->push(discard_card, me->mustang);
+        if (NULL != me->scope) discard_card->push(discard_card, me->scope);
+        if (NULL != me->jail) discard_card->push(discard_card, me->jail);
+        if (NULL != me->dynamite) discard_card->push(discard_card, me->dynamite);
     } else if (enemy->role->type == Criminal) {
         player_draw_deck(game, me_id, 3);
     }
@@ -289,6 +289,22 @@ bool winchester(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
+bool general_store(Game* game, i32 me_id) {
+    Cards* set = create_Cards();
+    for (int i = 0; i < game->players->size; i++) {
+        if (game->players->get(game->players, i)->hp <= 0) continue;
+        set->push(set, get_deck_top(game));
+    }
+
+    for (int i = 0; i < game->players->size; i++) {
+        int     id = (me_id + i) % game->players->size;
+        Player* player = game->players->get(game->players, id);
+        if (player->hp > 0) player->select(game, id, set);
+    }
+
+    return SUCCESS;
+}
+
 Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: request
                 {.type = Bang, .priority = 201, .use = bang},
                 {.type = Bang, .priority = 212, .use = bang},
@@ -340,8 +356,8 @@ Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: re
                 {.type = Stagecoach, .priority = 109, .use = stagecoach},
                 {.type = Stagecoach, .priority = 109, .use = stagecoach},
                 {.type = Wells_Fargo, .priority = 203, .use = wells_fargo},
-                {.type = General_Store, .priority = 112, .use = NULL},
-                {.type = General_Store, .priority = 409, .use = NULL},
+                {.type = General_Store, .priority = 112, .use = general_store},
+                {.type = General_Store, .priority = 409, .use = general_store},
                 {.type = Beer, .priority = 206, .use = beer},
                 {.type = Beer, .priority = 207, .use = beer},
                 {.type = Beer, .priority = 208, .use = beer},
