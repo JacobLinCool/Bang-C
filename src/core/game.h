@@ -104,6 +104,7 @@ void game_next(Game *game) {
             }
         } else if (repeat_card(game, player->id, select_card)) {
             // no player can ever have two identical cards face up in front of him.
+            player->hands->push(player->hands, select_card);
             continue;
         }
         // 2.use card
@@ -114,6 +115,11 @@ void game_next(Game *game) {
         }
         // (b)brown card
         if (select_card->use == SUCCESS) game->discard->push(game->discard, select_card);
+
+        // 3.check if someone died(only brown card used)
+        for (int i = 0; i < game->players->size; i++) {
+            if (game->players->data[i]->hp <= 0) died_player(game, player->id, i);
+        }
     }
 
     //  3.Discard excess cards
