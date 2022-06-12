@@ -99,6 +99,97 @@ Card* computer_player_request(Game* game, i32 player_id) {
     return player->hands->remove(player->hands, random);
 }
 
+Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
+    Player* player = game->players->get(game->players, player_id);
+    Player* target = game->players->get(game->players, target_id);
+
+    Console.cyan("Please select a card from target: ");
+    i32 i = 1;
+    for (; i <= player->hands->size; i++) {
+        Console.yellow("%d. %d\n", i, -1);
+    }
+    if (player->barrel) Console.yellow("%d. %d\n", i++, player->barrel->type);
+    if (player->mustang) Console.yellow("%d. %d\n", i++, player->mustang->type);
+    if (player->scope) Console.yellow("%d. %d\n", i++, player->scope->type);
+    if (player->weapon) Console.yellow("%d. %d\n", i++, player->weapon->type);
+    if (player->jail) Console.yellow("%d. %d\n", i++, player->jail->type);
+    if (player->dynamite) Console.yellow("%d. %d\n", i++, player->dynamite->type);
+
+    i32 input = 0;
+    scanf("%d", &input);
+    if (input < 1 || input >= i) {
+        return NULL;
+    }
+
+    if (input <= player->hands->size) {
+        return player->hands->remove(player->hands, input - 1);
+    } else {
+        input -= player->hands->size;
+
+        if (input == 0 && player->barrel) {
+            Card* x = player->barrel;
+            player->barrel = NULL;
+            return x;
+        } else if (input == 1 && player->mustang) {
+            Card* x = player->mustang;
+            player->mustang = NULL;
+            return x;
+        } else if (input == 2 && player->scope) {
+            Card* x = player->scope;
+            player->scope = NULL;
+            return x;
+        } else if (input == 3 && player->weapon) {
+            Card* x = player->weapon;
+            player->weapon = NULL;
+            return x;
+        } else if (input == 4 && player->jail) {
+            Card* x = player->jail;
+            player->jail = NULL;
+            return x;
+        } else if (input == 5 && player->dynamite) {
+            Card* x = player->dynamite;
+            player->dynamite = NULL;
+            return x;
+        }
+    }
+
+    return NULL;
+}
+
+Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
+    Player* player = game->players->get(game->players, player_id);
+    Player* target = game->players->get(game->players, target_id);
+
+    if (target->barrel && !player->barrel) {
+        Card* x = target->barrel;
+        target->barrel = NULL;
+        return x;
+    } else if (target->mustang && !player->mustang) {
+        Card* x = target->mustang;
+        target->mustang = NULL;
+        return x;
+    } else if (target->scope && !player->scope) {
+        Card* x = target->scope;
+        target->scope = NULL;
+        return x;
+    } else if (target->weapon && !player->weapon) {
+        Card* x = target->weapon;
+        target->weapon = NULL;
+        return x;
+    } else if (target->jail && !player->jail) {
+        Card* x = target->jail;
+        target->jail = NULL;
+        return x;
+    } else if (target->dynamite && !player->dynamite) {
+        Card* x = target->dynamite;
+        target->dynamite = NULL;
+        return x;
+    }
+
+    i32 random = rand() % target->hands->size;
+    return target->hands->remove(target->hands, random);
+}
+
 // TODO: player play func
 // NOTE: when use the card jail
 
