@@ -37,6 +37,33 @@ void game_start(Game *game) {
     }
 }
 
+bool repeat_card(Game *game, i32 player_id, Card *select_card) {
+    Player *player = game->players->data[player_id];
+
+    // no player can ever have two identical cards face up in front of him.
+    if (select_card->type == Barrel && player->barrel != NULL) return true;
+    if (select_card->type == Mustang && player->mustang != NULL) return true;
+    if (select_card->type == Scope && player->scope != NULL) return true;
+    if (select_card->type == Jail && player->jail != NULL) return true;
+    if (select_card->type == Dynamite && player->dynamite != NULL) return true;
+    return false;
+}
+
+void equip_weapon(Game *game, i32 player_id, Card *card) {
+    Player *player = game->players->data[player_id];
+    if (card->type == Barrel || card->type == Mustang || card->type == Scope) {
+        if (card->type == Barrel) player->barrel = card;
+        if (card->type == Mustang) player->mustang = card;
+        if (card->type == Scope) player->scope = card;
+        return;
+    }
+    if (player->weapon != NULL) {
+        game->discard->push(game->discard, player->weapon);
+    }
+    player->weapon = card;
+    return;
+}
+
 void game_next(Game *game) {
     game->turn++;
     Player *player = game->players->data[game->turn % game->players->size];
@@ -55,8 +82,44 @@ void game_next(Game *game) {
                    Game   *game;
                    Player *player;
                }){game, player});
-    // TODO: get new card
-    player->play(game, game->turn % game->players->size);
+
+    // 1.Draw two cards
+    player_draw_deck(game, player->id, 2);
+
+    // 2.Play any number of cards
+    bool bang_used = 0;
+    while (1) {
+        Card *select_card = player->request(game, player->id);
+        if (select_card == NULL) break;
+
+        // 1.restriction detection
+        if (select_card->type == Bang) {
+            // only one BANG! card may be played per turn;
+            if (bang_used) {
+                player->hands->push(player->hands, select_card);
+                continue;
+            } else {
+                bang_used = true;
+            }
+        } else if (repeat_card(game, player->id, select_card)) {
+            // no player can ever have two identical cards face up in front of him.
+            continue;
+        }
+        // 2.use card
+        // (a)blue card
+        if (is_weapon(select_card)) {
+            equip_weapon(game, player->id, select_card);
+            continue;
+        }
+        // (b)brown card
+        if (select_card->use == SUCCESS) game->discard->push(game->discard, select_card);
+    }
+
+    //  3.Discard excess cards
+    while (player->hands->size > player->hp) {
+        Card *select_card = player->request(game, player->id);
+        game->discard->push(game->discard, select_card);
+    }
 }
 
 Game *new_game() {
