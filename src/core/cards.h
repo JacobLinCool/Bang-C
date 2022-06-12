@@ -67,22 +67,44 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
 }
 
 // If no me_id, me_id = player_id
-void attack_player(Game* game, i32 me_id, i32 player_id) {
-    if (get_player_hp(game, player_id) <= 0) return;  // avoid mustang_judge error
+void attack_player(Game* game, i32 me_id, i32 enemy_id) {
+    if (get_player_hp(game, enemy_id) <= 0) return;  // avoid mustang_judge error
     // decrease player's hp
-    game->players->data[player_id]->hp--;
+    game->players->data[enemy_id]->hp--;
     // use character ablity(if valid)
-    CharacterType me_type = game->players->data[player_id]->character->type;
-    if (me_type == Bart_Cassidy || me_type == El_Gringo || me_type == Sid_Ketchum) {
-        if (me_type == El_Gringo) {
-            draw_from_player(game, me_id, player_id);
-        } else {
-            game->players->data[player_id]->character->skill(game, player_id);
+    CharacterType enemy_type = game->players->data[enemy_id]->character->type;
+    if (enemy_type == Bart_Cassidy || enemy_type == El_Gringo || enemy_type == Sid_Ketchum) {
+        if (enemy_type == Bart_Cassidy) {
+            Card* card = get_deck_top(game);
+            game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
+        }
+        if (enemy_type == El_Gringo) {
+            draw_from_player(game, enemy_id, me_id);
+        }
+        if (enemy_type == Sid_Ketchum) {
+            if (game->players->data[enemy_id]->hands->size >= 2) {
+                while (1) {
+                    Card* card = game->players->data[enemy_id]->request(game, enemy_id);
+                    if (card == NULL) {
+                        break;
+                    }
+                    game->discard->push(game->discard, card);
+                    break;
+                }
+                while (1) {
+                    Card* card = game->players->data[enemy_id]->request(game, enemy_id);
+                    if (card != NULL) {
+                        game->discard->push(game->discard, card);
+                        break;
+                    }
+                }
+                game->players->data[enemy_id]->hp++;
+            }
         }
     }
 
     // dead
-    died_player(game, me_id, player_id);
+    died_player(game, me_id, enemy_id);
     return;
 }
 
@@ -169,10 +191,15 @@ bool indians(Game* game, i32 me_id) {
         if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
         while (1) {
             Card* card = game->players->data[i]->request(game, i);
-            if (card == NULL) attack_player(game, me_id, i);
+            if (card == NULL) {
+                attack_player(game, me_id, i);
+                break;
+            }
             if (card->type == Bang) {
                 game->discard->push(game->discard, card);
                 break;
+            } else {
+                game->players->data[i]->hands->push(game->players->data[i]->hands, card);
             }
         }
     }
@@ -232,6 +259,8 @@ bool duel(Game* game, i32 me_id) {
             }
             if (card->type == Bang) {
                 game->discard->push(game->discard, card);
+            } else {
+                game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
             }
         }
         if (duel_finish) break;
@@ -244,6 +273,8 @@ bool duel(Game* game, i32 me_id) {
             }
             if (card->type == Bang) {
                 game->discard->push(game->discard, card);
+            } else {
+                game->players->data[me_id]->hands->push(game->players->data[me_id]->hands, card);
             }
         }
         if (duel_finish) break;
