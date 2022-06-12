@@ -1,6 +1,7 @@
 #ifndef __CORE_PLAYER_H
 #define __CORE_PLAYER_H
 #include "../utils/all.h"
+#include "ai.h"
 #include "cards.h"
 #include "constants.h"
 #include "game.h"
@@ -94,9 +95,10 @@ Card* real_player_request(Game* game, i32 player_id) {
 
 Card* computer_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
-    i32     random = rand() % player->hands->size;
+    // i32     random = rand() % player->hands->size;
+    i32 choose = ai_request(game, player_id);
 
-    return player->hands->remove(player->hands, random);
+    return player->hands->remove(player->hands, choose);
 }
 
 Card* real_player_take(Game* game, i32 player_id, i32 target_id) {

@@ -35,6 +35,10 @@ void game_start(Game *game) {
         nowPlayer->character = game->characters->pop(game->characters);
         nowPlayer->id = i;
     }
+    // ai initialize
+    for (int i = 0; i < game->players->size; i++) {
+        ai_initialize(game, i);
+    }
 }
 
 bool repeat_card(Game *game, i32 player_id, Card *select_card) {
