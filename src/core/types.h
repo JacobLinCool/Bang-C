@@ -105,6 +105,11 @@ typedef struct Player {
     Cards*     hands;     /** cards in hand */
 
     void (*play)(Game* game, i32 player_id);
+    /**
+     * @brief Select one card from a set of cards.
+     * @return true if selected, false if failed.
+     */
+    bool (*select)(Game* game, i32 player_id, Cards* cards);
 } Player;
 
 StructVector(Players, Player*, NULL);
