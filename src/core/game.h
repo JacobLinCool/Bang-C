@@ -77,10 +77,20 @@ void game_next(Game *game) {
         player = game->players->data[(game->turn + (++t)) % game->players->size];
     }
     // determine bomb and jail, may just skip this turn
-    if (player->mustang != NULL) dynamite_judge(game, player->id);
+    if (player->dynamite != NULL) {
+        if (dynamite_judge(game, player->id)) {
+            Card *card = player->dynamite;
+            player->dynamite = NULL;
+            game->discard->push(game->discard, card);
+        }
+    }
     if (player->hp <= 0) return;
     if (player->jail != NULL) {
-        if (!jail_judge(game, player->id)) return;
+        if (jail_judge(game, player->id)) {
+            Card *card = player->jail;
+            player->jail = NULL;
+            game->discard->push(game->discard, card);
+        }
     }
     Event.emit(EVT_GAME_PLAYER_CHANGED, &(struct {
                    Game   *game;
@@ -88,7 +98,16 @@ void game_next(Game *game) {
                }){game, player});
 
     // 1.Draw two cards
-    player_draw_deck(game, player->id, 2);
+    if (player->character->type == Black_Jack) {
+        player_draw_deck(game, player->id, 1);
+        Card *second_card = get_deck_top(game);
+        player->hands->push(player->hands, second_card);
+        if (second_card->priority / 100 == 2 || second_card->priority / 100 == 3) {
+            player_draw_deck(game, player->id, 1);
+        }
+    } else {
+        player_draw_deck(game, player->id, 2);
+    }
 
     // 2.Play any number of cards
     bool bang_used = 0;
@@ -117,8 +136,12 @@ void game_next(Game *game) {
             continue;
         }
         // (b)brown card
-        if (select_card->use(game, player->id) == SUCCESS)
+        if (select_card->use(game, player->id) == SUCCESS) {
+            if (select_card->type == Missed && player->character->type == Calamity_Janet) {
+                bang(game, player->id);
+            }
             game->discard->push(game->discard, select_card);
+        }
 
         // 3.check if someone died(only brown card used)
         for (int i = 0; i < game->players->size; i++) {
