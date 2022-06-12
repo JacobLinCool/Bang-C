@@ -294,6 +294,15 @@ bool general_store(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
+bool is_weapon(Card* card) {
+    if (card->type == Volcanic || card->type == Schofield || card->type == Remington ||
+        card->type == Rev_Carabine || card->type == Remington || card->type == Barrel ||
+        card->type == Mustang || card->type == Scope) {
+        return true;
+    }
+    return false;
+}
+
 Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: request
                 {.type = Bang, .priority = 201, .use = bang},
                 {.type = Bang, .priority = 212, .use = bang},
