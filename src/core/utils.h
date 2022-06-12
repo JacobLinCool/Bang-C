@@ -134,4 +134,12 @@ bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
     return SUCCESS;
 }
 
+void recover(Game* game, i32 me_id) {
+    if (game->players->data[me_id]->hp == game->players->data[me_id]->character->health +
+                                              (game->players->data[me_id]->role->type == Sheriff))
+        return;
+    game->players->data[me_id]->hp++;
+    return;
+}
+
 #endif  // __CORE_UTILS_H
