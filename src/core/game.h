@@ -8,10 +8,23 @@
 #include "roles.h"
 #include "types.h"
 
-void game_join(Game *game, const char *name, Agent agent) {
+void game_join(Game *game, const char *name, bool is_computer) {
     Player *player = $(calloc(1, sizeof(Player)));
     player->name = $(strdup(name));
-    player->play = agent;
+    player->hands = create_Cards();
+    if (is_computer) {
+        player->play = computer_player;
+        player->choose_enemy = computer_choose_enemy;
+        player->select = computer_player_select;
+        player->request = computer_player_request;
+        player->take = computer_player_take;
+    } else {
+        player->play = real_player;
+        player->choose_enemy = player_choose_enemy;
+        player->select = real_player_select;
+        player->request = real_player_request;
+        player->take = real_player_take;
+    }
     game->players->push(game->players, player);
     Event.emit(EVT_GAME_PLAYER_JOIN, &(struct {
                    Game   *game;
@@ -109,6 +122,7 @@ void game_next(Game *game) {
     // 2.Play any number of cards
     bool bang_used = 0;
     while (true) {
+        play_or_discard = AI_PLAY;
         Card *select_card = player->request(game, player->id);
         if (select_card == NULL) break;
 
@@ -144,6 +158,7 @@ void game_next(Game *game) {
 
     //  3.Discard excess cards
     while (player->hands->size > player->hp) {
+        play_or_discard = AI_DISCARD;
         Card *select_card = player->request(game, player->id);
         game->discard->push(game->discard, select_card);
     }
