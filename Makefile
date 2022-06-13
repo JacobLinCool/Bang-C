@@ -11,7 +11,7 @@ test_files = $(wildcard $(test_dir)/**/*.c)
 all: build
 
 server: force
-	@$(cc) -o server $(src_dir)/web/server.c $(third_dir)/wsServer/libws.a
+	@$(cc) -o server $(src_dir)/web/server.c $(third_dir)/wsServer/libws.a $(third_dir)/mkjson/lib/libmkjson.a
 	@echo "Build complete"
 
 build:
@@ -53,6 +53,10 @@ setup:
 	curl -s -o $(third_dir)/cimple/string.h $(cimple_remote)/string.h
 	curl -s -o $(third_dir)/cimple/timing.h $(cimple_remote)/timing.h
 	curl -s -o $(third_dir)/cimple/options.h $(cimple_remote)/options.h
-	cd $(third_dir)/wsServer && make install
+
+	cd $(third_dir)/wsServer && make install && cd ../..
+
+	rm -rf $(third_dir)/mkjson
+	cd $(third_dir) && curl -L https://github.com/Jacajack/mkjson/archive/master.zip -o mkjson.zip && unzip mkjson.zip && rm mkjson.zip && mv mkjson-master mkjson && cd mkjson && make && cd ../..
 
 .PHONY: all build clean test force

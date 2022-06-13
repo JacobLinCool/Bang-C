@@ -1,6 +1,7 @@
 #include <unistd.h>
 
 #include "../third/cimple/all.h"
+#include "../third/mkjson/mkjson.h"
 #include "../third/uds/vector.h"
 #include "../third/wsServer/include/ws.h"
 #include "../utils/all.h"
@@ -76,10 +77,17 @@ void onmessage(ws_cli_conn_t *client, const char *msg, size_t size, int type) {
         }
     } else {
         Console.cyan("Received [%s] (%zu), from: %s", msg, size, sender->name);
+
         for (size_t i = 0; i < named_connections->size; i++) {
             NamedConnection *receiver = named_connections->get(named_connections, i);
             if (receiver->client != sender->client) {
-                ws_sendframe_txt(receiver->client, String.format("%s: %s", sender->name, msg));
+                char *json =
+                    mkjson(MKJSON_OBJ, 3, MKJSON_STRING, "from", sender->name, MKJSON_STRING, "to",
+                           receiver->name, MKJSON_STRING, "message", msg);
+
+                ws_sendframe_txt(receiver->client, json);
+
+                free(json);
             }
         }
     }
