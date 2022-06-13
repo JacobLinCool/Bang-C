@@ -9,6 +9,7 @@
 #include "roles.h"
 #include "types.h"
 #include "utils.h"
+#define BAD_GUY 5
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 typedef struct _Weight {
@@ -96,6 +97,12 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
 
     // if event is play cards
     ai_target = weight[0].target;
+    if (ai->role->type == Traitor && game->players->data[ai_target]->role->type == Sheriff) {
+        i32 card_type = candi_card->data[weight[0].id]->type;
+        if (card_type == Bang || card_type == Indians || card_type == Duel) {
+            disgust[player_id][ai_target]--;
+        }
+    }
     return weight[0].id;
     // if event is discard cards
     i32 missed_cnt = 0;
@@ -124,6 +131,7 @@ i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 
     i32      player_cnt = ai_player_cnt(game);
     for (int i = 0; i < game->players->size; i++) {
         if (game->players->data[i]->role->type == Sheriff) Sheriff_id = i;
+        if (player_cnt == 2 && i != ai_id) disgust[ai_id][i] = 10;
     }
     i32 max_distance = 1;
     if (ai->weapon != NULL) max_distance += ai->weapon->type - Volcanic;
@@ -131,7 +139,12 @@ i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 
     // many many cards
     if (card == Bang) {
         ai_target = max_dist_id[max_distance];
-        return 6 + max_disgust[max_distance];
+        if (player_cnt > 2 && ai->role->type == Traitor &&
+            game->players->data[ai_target]->role->type == Sheriff) {
+            if (game->players->data[ai_target]->hp < 4) return 0;
+        }
+        return max_disgust[max_distance] * (4 - game->players->data[ai_target]->hands->size) *
+               (4 - game->players->data[ai_target]->hands->size);
     }
     if (card == Missed) return 0;
     if (card == Gatling) {
@@ -145,7 +158,7 @@ i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 
         }
         if (ai->role->type == Criminal) {
             for (int i = 0; i < game->players->size; i++) {
-                if (i != ai_id && disgust[ai_id][i] < 5) return 0;
+                if (i != ai_id && disgust[ai_id][i] < BAD_GUY) return 0;
                 return 20;
             }
         }
@@ -165,7 +178,7 @@ i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 
         i32 total = 0;
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->hp <= 0) continue;
-            if (disgust[ai_id][i] < 5) {
+            if (disgust[ai_id][i] < BAD_GUY) {
                 total += (i == ai_id ? 5 : 2) * (5 - game->players->data[i]->hands->size);
             }
         }
@@ -176,7 +189,7 @@ i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 
         i32 total = 0;
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->hp <= 0) continue;
-            if (disgust[ai_id][i] < 5) {
+            if (disgust[ai_id][i] < BAD_GUY) {
                 total += (i == ai_id ? 5 : 2) * (5 - game->players->data[i]->hp);
             }
         }
@@ -194,25 +207,30 @@ i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 
     if (card == Scope) return 400;
     if (card == Mustang) return 450;
     if (card == Jail) {
-        if (max_disgust[9] <= 4) return 0;
+        if (max_disgust[9] < BAD_GUY) return 0;
         ai_target = max_dist_id[9];
+        if (ai_target == Sheriff_id) return 0;  // should be modified
         return 2 * max_disgust[9];
     }
     if (card == Volcanic) return 200;
     if (card == Schofield) {
-        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] > 4) return 0;
+        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
+            return 0;
         return 120 * ((ai->weapon != NULL ? ai->weapon->type : 0) < card);
     }
     if (card == Remington) {
-        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] > 4) return 0;
+        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
+            return 0;
         return 130 * ((ai->weapon != NULL ? ai->weapon->type : 0) < card);
     }
     if (card == Rev_Carabine) {
-        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] > 4) return 0;
+        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
+            return 0;
         return 140 * ((ai->weapon != NULL ? ai->weapon->type : 0) < card);
     }
     if (card == Winchester) {
-        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] > 4) return 0;
+        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
+            return 0;
         return 150 * ((ai->weapon != NULL ? ai->weapon->type : 0) < card);
     }
 }
