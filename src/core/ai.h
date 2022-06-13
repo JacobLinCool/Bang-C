@@ -12,6 +12,7 @@
 #define BAD_GUY 5
 #define AI_PLAY 0
 #define AI_DISCARD 1
+#define AI_SPECIFY 2
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
@@ -20,13 +21,27 @@ typedef struct _Weight {
     i32 target;
     i32 id;
 } Weight;
-i32 disgust[7][7];
-i32 ai_target;
-i8  play_or_discard;  // 0: play 1: discard
+i32      disgust[7][7];
+i32      ai_target;
+i8       ai_request_type;  // 0: play 1: discard
+CardType ai_request_card;
 
 i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 max_dist_id[10]);
 i32 equip_total(Game* game, i32 me_id, i32 player_id);
 i32 card_count(Game* game, i32 player_id, i32 card);
+
+/**
+ * @brief AI request setting
+ *
+ * @param type AI_PLAY(0) AI_DISCARD(1) AI_SPECIFY(2)
+ * @param card if type is AI_SPECIFY(2), then need it
+ */
+void ai_request_setting(i8 type, CardType card) {
+    if (type == AI_SPECIFY) {
+        ai_request_card = card;
+    }
+    ai_request_type = type;
+}
 int ai_weight_cmp(const void* a, const void* b) {
     return (*(Weight*)b).weight - (*(Weight*)a).weight;
 }
@@ -81,8 +96,8 @@ void ai_initialize(Game* game, i32 player_id) {
 
 i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     Player* ai = game->players->data[player_id];
-    i32     max_disgust[10];
-    i32     max_dist_id[10];
+    i32     max_disgust[10] = {0};
+    i32     max_dist_id[10] = {0};
     for (int i = 0; i < game->players->size; i++) {
         if (game->players->data[i]->hp <= 0 || i == player_id) continue;
         i32 dist = (distance(game, player_id, i) > 0 ? distance(game, player_id, i) : 0);
@@ -106,7 +121,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     qsort(weight, candi_card->size, sizeof(Weight), ai_weight_cmp);  // sort from big to small
 
     // if event is discard cards
-    if (play_or_discard == AI_DISCARD) {
+    if (ai_request_type == AI_DISCARD) {
         i32 missed_cnt = 0;
         for (int i = candi_card->size - 1; i >= 0; i--) {
             if (ai->hands->data[i]->type == Missed && missed_cnt < 2) {
@@ -116,6 +131,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
             }
             return weight[i].id;
         }
+        return weight[candi_card->size - 1].id;
     }
     // if event is play cards
     if (weight[0].weight <= 10) return -1;
