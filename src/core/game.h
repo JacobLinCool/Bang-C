@@ -43,10 +43,15 @@ void game_start(Game *game) {
         nowPlayer->role = game->roles->pop(game->roles);
         nowPlayer->character = game->characters->pop(game->characters);
         nowPlayer->bullet = nowPlayer->character->health + (nowPlayer->role->type == Sheriff);
-        nowPlayer->id = i;
+        nowPlayer->hp = nowPlayer->bullet;
+        if (nowPlayer->role->type == Sheriff && i != 0) game->players->swap(game->players, 0, i);
         for (int j = 0; j < nowPlayer->bullet; j++) {
             nowPlayer->hands->push(nowPlayer->hands, game->deck->pop(game->deck));
         }
+    }
+    for (int i = 0; i < game->players->size; i++) {
+        Player *nowPlayer = game->players->data[i];
+        nowPlayer->id = i;
     }
     // ai initialize
     for (int i = 0; i < game->players->size; i++) {
