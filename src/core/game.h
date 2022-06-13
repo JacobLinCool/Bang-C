@@ -27,13 +27,13 @@ void game_start(Game *game) {
     // assign card, role, character to players
     for (int i = 0; i < game->players->size; i++) {
         Player *nowPlayer = game->players->data[i];
+        nowPlayer->role = game->roles->pop(game->roles);
+        nowPlayer->character = game->characters->pop(game->characters);
         nowPlayer->bullet = nowPlayer->character->health + (nowPlayer->role->type == Sheriff);
+        nowPlayer->id = i;
         for (int j = 0; j < nowPlayer->bullet; j++) {
             nowPlayer->hands->push(nowPlayer->hands, game->deck->pop(game->deck));
         }
-        nowPlayer->role = game->roles->pop(game->roles);
-        nowPlayer->character = game->characters->pop(game->characters);
-        nowPlayer->id = i;
     }
     // ai initialize
     for (int i = 0; i < game->players->size; i++) {

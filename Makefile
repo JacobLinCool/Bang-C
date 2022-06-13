@@ -11,7 +11,7 @@ test_files = $(wildcard $(test_dir)/**/*.c)
 all: build
 
 build:
-	@$(cc) -o main $(src_dir)/main.c
+	@$(cc) -o main $(src_dir)/main.c -fsanitize=address -g
 	@echo "Build complete"
 
 test: $(test_files)
