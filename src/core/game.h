@@ -82,10 +82,11 @@ void game_next(Game *game) {
     }
     if (player->hp <= 0) return;
     if (player->jail != NULL) {
-        if (jail_judge(game, player->id)) {
-            Card *card = player->jail;
-            player->jail = NULL;
-            game->discard->push(game->discard, card);
+        Card *card = player->jail;
+        player->jail = NULL;
+        game->discard->push(game->discard, card);
+        if (!jail_judge(game, player->id)) {
+            return;
         }
     }
     Event.emit(EVT_GAME_PLAYER_CHANGED, &(struct {
@@ -101,6 +102,14 @@ void game_next(Game *game) {
         if (second_card->priority / 100 == 2 || second_card->priority / 100 == 3) {
             player_draw_deck(game, player->id, 1);
         }
+    } else if (player->character->type == Kit_Carlson) {
+        Cards *cards = create_Cards();
+        for (int i = 0; i < 3; i++) cards->push(cards, get_deck_top(game));
+        player->select(game, player->id, cards);
+        player->select(game, player->id, cards);
+        game->deck->insert(game->deck, 0, cards->pop(cards));
+        cards->free(cards);
+    } else if (player->character->type == Pedro_Ramirez) {
     } else {
         player_draw_deck(game, player->id, 2);
     }
@@ -114,7 +123,7 @@ void game_next(Game *game) {
         // 1.restriction detection
         if (select_card->type == Bang) {
             // only one BANG! card may be played per turn
-            if (bang_used) {
+            if (bang_used || player->character->type == Willy_the_Kid) {
                 player->hands->push(player->hands, select_card);
                 continue;
             } else {
