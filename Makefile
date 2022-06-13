@@ -10,6 +10,10 @@ test_files = $(wildcard $(test_dir)/**/*.c)
 
 all: build
 
+server: force
+	@$(cc) -o server $(src_dir)/web/server.c $(third_dir)/wsServer/libws.a
+	@echo "Build complete"
+
 build:
 	@$(cc) -o main $(src_dir)/main.c -fsanitize=address -g
 	@echo "Build complete"
@@ -27,14 +31,13 @@ clean:
 	@echo "Cleaned"
 
 setup:
-	rm -rf $(third_dir)
-	mkdir $(third_dir)
-
+	rm -rf $(third_dir)/uds
 	mkdir $(third_dir)/uds
 	curl -s -o $(third_dir)/uds/vector.h $(uds_remote)/vector.h
 	curl -s -o $(third_dir)/uds/xor-list.h $(uds_remote)/xor-list.h
 	curl -s -o $(third_dir)/uds/deque.h $(uds_remote)/deque.h
 
+	rm -rf $(third_dir)/cimple
 	mkdir $(third_dir)/cimple
 	curl -s -o $(third_dir)/cimple/all.h $(cimple_remote)/all.h
 	curl -s -o $(third_dir)/cimple/base.h $(cimple_remote)/base.h
@@ -46,5 +49,6 @@ setup:
 	curl -s -o $(third_dir)/cimple/string.h $(cimple_remote)/string.h
 	curl -s -o $(third_dir)/cimple/timing.h $(cimple_remote)/timing.h
 	curl -s -o $(third_dir)/cimple/options.h $(cimple_remote)/options.h
+	cd $(third_dir)/wsServer && make install
 
 .PHONY: all build clean test force
