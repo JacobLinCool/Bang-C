@@ -16,11 +16,11 @@ i32 main() {
     char* player_name = $(calloc(1024, sizeof(char)));
     printf("Enter player name: ");
     scanf("%[^\n]%*c", player_name);
-    game->join(game, player_name, real_player);
+    game->join(game, player_name, false);
 
-    game->join(game, "Computer A", computer_player);
-    game->join(game, "Computer B", computer_player);
-    game->join(game, "Computer C", computer_player);
+    game->join(game, "Computer A", true);
+    game->join(game, "Computer B", true);
+    game->join(game, "Computer C", true);
 
     VectorShuffle(game->players);
 
