@@ -43,10 +43,15 @@ void game_start(Game *game) {
         nowPlayer->role = game->roles->pop(game->roles);
         nowPlayer->character = game->characters->pop(game->characters);
         nowPlayer->bullet = nowPlayer->character->health + (nowPlayer->role->type == Sheriff);
-        nowPlayer->id = i;
+        nowPlayer->hp = nowPlayer->bullet;
+        if (nowPlayer->role->type == Sheriff && i != 0) game->players->swap(game->players, 0, i);
         for (int j = 0; j < nowPlayer->bullet; j++) {
             nowPlayer->hands->push(nowPlayer->hands, game->deck->pop(game->deck));
         }
+    }
+    for (int i = 0; i < game->players->size; i++) {
+        Player *nowPlayer = game->players->data[i];
+        nowPlayer->id = i;
     }
     // ai initialize
     for (int i = 0; i < game->players->size; i++) {
@@ -70,13 +75,15 @@ void equip_weapon(Game *game, i32 player_id, Card *card) {
 }
 
 void game_next(Game *game) {
-    game->turn++;
+    DEBUG_PRINT("turn: %ld, total_players: %ld\n", game->turn, game->players->size);
     Player *player = game->players->data[game->turn % game->players->size];
     // if player has died, then skip.
     i32 t = 0;
     while (player->hp <= 0) {
         player = game->players->data[(game->turn + (++t)) % game->players->size];
     }
+    game->turn++;
+    DEBUG_PRINT("It's player %d turn!!!\n", player->id);
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
         if (dynamite_judge(game, player->id)) {
@@ -94,10 +101,10 @@ void game_next(Game *game) {
             return;
         }
     }
-    Event.emit(EVT_GAME_PLAYER_CHANGED, &(struct {
+    /*Event.emit(EVT_GAME_PLAYER_CHANGED, &(struct {
                    Game   *game;
                    Player *player;
-               }){game, player});
+               }){game, player});*/
 
     // 1.Draw two cards
     if (player->character->type == Black_Jack) {
@@ -118,14 +125,13 @@ void game_next(Game *game) {
     } else {
         player_draw_deck(game, player->id, 2);
     }
-
+    DEBUG_PRINT("Done: Draw two cards\n");
     // 2.Play any number of cards
     bool bang_used = 0;
     while (true) {
-        play_or_discard = AI_PLAY;
+        ai_request_setting(AI_PLAY, 0);
         Card *select_card = player->request(game, player->id);
         if (select_card == NULL) break;
-
         // 1.restriction detection
         if (select_card->type == Bang) {
             // only one BANG! card may be played per turn
@@ -143,22 +149,21 @@ void game_next(Game *game) {
             continue;
         }
         // (b)brown card
+        DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (select_card->use(game, player->id) == SUCCESS) {
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
                 bang(game, player->id);
             }
             game->discard->push(game->discard, select_card);
         }
-
         // 3.check if someone died(only brown card used)
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->hp <= 0) died_player(game, player->id, i);
         }
     }
-
     //  3.Discard excess cards
     while (player->hands->size > player->hp) {
-        play_or_discard = AI_DISCARD;
+        ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
         game->discard->push(game->discard, select_card);
     }

@@ -137,6 +137,25 @@ bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
     return SUCCESS;
 }
 
+// Why not just draw from the first card? It's for FUN!
+bool discard_from_enemy(Game* game, i32 me_id, i32 enemy_id) {
+    Player* me = game->players->data[me_id];
+    Player* enemy = game->players->data[enemy_id];
+    if (enemy->hp <= 0) return FAIL;
+
+    i8 total_card = enemy->hands->size;
+    if (total_card == 0) return SUCCESS;
+
+    Card* selected = NULL;
+    while (!selected) {
+        selected = me->take(game, me_id, enemy_id);
+    }
+
+    game->discard->push(game->discard, selected);
+
+    return SUCCESS;
+}
+
 void recover(Game* game, i32 me_id) {
     if (game->players->data[me_id]->hp == game->players->data[me_id]->character->health +
                                               (game->players->data[me_id]->role->type == Sheriff))
