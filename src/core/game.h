@@ -54,18 +54,6 @@ void game_start(Game *game) {
     }
 }
 
-bool repeat_card(Game *game, i32 player_id, Card *select_card) {
-    Player *player = game->players->data[player_id];
-
-    // no player can ever have two identical cards face up in front of him.
-    if (select_card->type == Barrel && player->barrel != NULL) return true;
-    if (select_card->type == Mustang && player->mustang != NULL) return true;
-    if (select_card->type == Scope && player->scope != NULL) return true;
-    if (select_card->type == Jail && player->jail != NULL) return true;
-    if (select_card->type == Dynamite && player->dynamite != NULL) return true;
-    return false;
-}
-
 void equip_weapon(Game *game, i32 player_id, Card *card) {
     Player *player = game->players->data[player_id];
     if (card->type == Barrel || card->type == Mustang || card->type == Scope) {
@@ -133,7 +121,7 @@ void game_next(Game *game) {
 
     // 2.Play any number of cards
     bool bang_used = 0;
-    while (1) {
+    while (true) {
         play_or_discard = AI_PLAY;
         Card *select_card = player->request(game, player->id);
         if (select_card == NULL) break;
@@ -141,16 +129,12 @@ void game_next(Game *game) {
         // 1.restriction detection
         if (select_card->type == Bang) {
             // only one BANG! card may be played per turn
-            if (bang_used || player->character->type == Willy_the_Kid) {
+            if (bang_used && player->character->type != Willy_the_Kid) {
                 player->hands->push(player->hands, select_card);
                 continue;
             } else {
                 bang_used = true;
             }
-        } else if (repeat_card(game, player->id, select_card)) {
-            // no player can ever have two identical cards face up in front of him.
-            player->hands->push(player->hands, select_card);
-            continue;
         }
         // 2.use card
         // (a)blue card

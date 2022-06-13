@@ -122,6 +122,11 @@ typedef struct Player {
      * @return the card if success, NULL if failed.
      */
     Card* (*take)(Game* game, i32 player_id, i32 target_id);
+    /**
+     * @brief Pedro Ramirez's skill. Take a card from discard pile instead of the deck.
+     * @return true if took, false otherwise.
+     */
+    bool (*ramirez)(Game* game, i32 player_id);
 } Player;
 
 StructVector(Players, Player*, NULL);

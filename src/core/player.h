@@ -199,6 +199,44 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
     return target->hands->remove(target->hands, random);
 }
 
+bool real_player_ramirez(Game* game, i32 player_id) {
+    Player* player = game->players->get(game->players, player_id);
+
+    Console.cyan("Do you want to take the top card from the discard pile? (y/n)");
+
+    if (game->discard->size == 0) {
+        Console.blue("Sadly, there is no card to take.");
+        return false;
+    }
+
+    char input = 0;
+    scanf("%c", &input);
+
+    if (input == 'y') {
+        player->hands->push(player->hands, game->discard->pop(game->discard));
+        return true;
+    } else {
+        return false;
+    }
+
+    return false;
+}
+
+bool computer_player_ramirez(Game* game, i32 player_id) {
+    Player* player = game->players->get(game->players, player_id);
+
+    if (game->discard->size == 0) {
+        return false;
+    }
+
+    if (rand() % 2 == 0) {
+        player->hands->push(player->hands, game->discard->pop(game->discard));
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // TODO: player play func
 // NOTE: when use the card jail
 
