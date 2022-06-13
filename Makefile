@@ -3,9 +3,6 @@ src_dir = src
 test_dir = tests
 third_dir = $(src_dir)/third
 
-uds_remote = https://raw.githubusercontent.com/JacobLinCool/Universal-Data-Structures/main/src
-cimple_remote = https://raw.githubusercontent.com/JacobLinCool/Cimple-Lib/main/src
-
 test_files = $(wildcard $(test_dir)/**/*.c)
 
 all: build
@@ -32,28 +29,17 @@ clean:
 
 setup:
 	rm -rf $(third_dir)/uds
-	mkdir $(third_dir)/uds
-	curl -s -o $(third_dir)/uds/vector.h $(uds_remote)/vector.h
-	curl -s -o $(third_dir)/uds/xor-list.h $(uds_remote)/xor-list.h
-	curl -s -o $(third_dir)/uds/deque.h $(uds_remote)/deque.h
+	cd $(third_dir) && curl -L https://github.com/JacobLinCool/Universal-Data-Structures/archive/main.zip -o uds.zip && unzip uds.zip && rm uds.zip && mv Universal-Data-Structures-main/src uds && rm -rf Universal-Data-Structures-main && cd ..
 
 	rm -rf $(third_dir)/cimple
-	mkdir $(third_dir)/cimple
-	curl -s -o $(third_dir)/cimple/all.h $(cimple_remote)/all.h
-	curl -s -o $(third_dir)/cimple/base.h $(cimple_remote)/base.h
-	curl -s -o $(third_dir)/cimple/buffer.h $(cimple_remote)/buffer.h
-	curl -s -o $(third_dir)/cimple/bucket.h $(cimple_remote)/bucket.h
-	curl -s -o $(third_dir)/cimple/console.h $(cimple_remote)/console.h
-	curl -s -o $(third_dir)/cimple/debug.h $(cimple_remote)/debug.h
-	curl -s -o $(third_dir)/cimple/file.h $(cimple_remote)/file.h
-	curl -s -o $(third_dir)/cimple/string.h $(cimple_remote)/string.h
-	curl -s -o $(third_dir)/cimple/timing.h $(cimple_remote)/timing.h
-	curl -s -o $(third_dir)/cimple/options.h $(cimple_remote)/options.h
+	cd $(third_dir) && curl -L https://github.com/JacobLinCool/Cimple-Lib/archive/main.zip -o cimple.zip && unzip cimple.zip && rm cimple.zip && mv Cimple-Lib-main/src cimple && rm -rf Cimple-Lib-main && cd ..
 
 	rm -rf $(third_dir)/wsServer
 	cd $(third_dir) && curl -L https://github.com/Theldus/wsServer/archive/master.zip -o wsServer.zip && unzip wsServer.zip && rm wsServer.zip && mv wsServer-master wsServer && cd wsServer && make install && cd ../..
 
 	rm -rf $(third_dir)/mkjson
 	cd $(third_dir) && curl -L https://github.com/Jacajack/mkjson/archive/master.zip -o mkjson.zip && unzip mkjson.zip && rm mkjson.zip && mv mkjson-master mkjson && cd mkjson && make && cd ../..
+
+	chmod -R 777 $(third_dir)
 
 .PHONY: all build clean test force
