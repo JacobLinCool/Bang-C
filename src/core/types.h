@@ -138,7 +138,7 @@ typedef struct Game {
     Characters* characters; /** characters to be drawn */
 
     /** add a player to game */
-    void (*join)(Game* game, const char* name, Agent agent);
+    void (*join)(Game* game, const char* name, bool is_computer);
     /** start the game, this will init something, such as shuffle cards */
     void (*start)(Game* game);
     /** call next player to play its turn */
