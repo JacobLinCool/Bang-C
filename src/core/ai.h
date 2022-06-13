@@ -12,6 +12,7 @@
 #define BAD_GUY 5
 #define AI_PLAY 0
 #define AI_DISCARD 1
+
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 typedef struct _Weight {
@@ -22,6 +23,7 @@ typedef struct _Weight {
 i32 disgust[7][7];
 i32 ai_target;
 i8  play_or_discard;  // 0: play 1: discard
+
 i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 max_dist_id[10]);
 i32 equip_total(Game* game, i32 me_id, i32 player_id);
 i32 card_count(Game* game, i32 player_id, i32 card);

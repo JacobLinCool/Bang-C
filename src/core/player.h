@@ -97,15 +97,22 @@ Card* real_player_request(Game* game, i32 player_id) {
     if (input < 1 || input > player->hands->size) {
         return NULL;
     }
+    if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
+        player_draw_deck(game, player->id, 1);
+    }
 
     return player->hands->remove(player->hands, input - 1);
 }
 
 Card* computer_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
+
     // i32     random = rand() % player->hands->size;
     i32 choose = ai_request(game, player_id, player->hands);
-    if (choose == -1) return NULL;
+    if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
+        player_draw_deck(game, player->id, 1);
+    }
+
     return player->hands->remove(player->hands, choose);
 }
 
@@ -162,7 +169,9 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
             return x;
         }
     }
-
+    if (target->hands->size == 1 && target->character->type == Suzy_Lafayette) {
+        player_draw_deck(game, target->id, 1);
+    }
     return NULL;
 }
 
@@ -183,7 +192,9 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
         target->weapon = NULL;
         return x;
     }
-
+    if (target->hands->size == 1 && target->character->type == Suzy_Lafayette) {
+        player_draw_deck(game, target->id, 1);
+    }
     i32 random = rand() % target->hands->size;
     return target->hands->remove(target->hands, random);
 }

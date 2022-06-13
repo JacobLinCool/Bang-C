@@ -122,14 +122,33 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
 
+    bool  pass = false;
+    Card* card[2] = {NULL};
+    i32   card_amount = 0;
     while (1) {
-        Card* card = enemy->request(game, enemy_id);
-        if (card == NULL) break;
-        if (card->type == Missed) {
-            game->discard->push(game->discard, card);
-            return;
+        card[card_amount] = enemy->request(game, enemy_id);
+        if (card[card_amount] == NULL) break;
+        if (card[card_amount]->type == Missed) {
+            card_amount++;
+            missed_total++;
         }
+        if (card[card_amount]->type == Bang && enemy->character->type == Calamity_Janet) {
+            card_amount++;
+            missed_total++;
+        }
+        if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer)) {
+            pass = true;
+            break;
+        }
+        enemy->hands->push(enemy->hands, card[card_amount]);
     }
+
+    if (pass) {
+        if (card[0]) game->discard->push(game->discard, card[0]);
+        if (card[1]) game->discard->push(game->discard, card[1]);
+        return;
+    }
+
     attack_player(game, me_id, enemy_id);
     return;
 }
@@ -147,7 +166,7 @@ bool dynamite_judge(Game* game, i32 me_id) {
         while (game->players->data[left_player_id]->hp <= 0) {
             left_player_id = (left_player_id + 1) % game->players->size;
         }
-        game->players->data[left_player_id]->mustang = me->mustang;
+        game->players->data[left_player_id]->dynamite = me->dynamite;
         me->mustang = NULL;
     }
     return SUCCESS;
@@ -199,6 +218,10 @@ bool indians(Game* game, i32 me_id) {
                 break;
             }
             if (card->type == Bang) {
+                game->discard->push(game->discard, card);
+                break;
+            } else if (card->type == Missed &&
+                       game->players->data[i]->character->type == Calamity_Janet) {
                 game->discard->push(game->discard, card);
                 break;
             } else {
