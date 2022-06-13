@@ -12,7 +12,11 @@ server: force
 	@echo "Build complete"
 
 build:
-	@$(cc) -o main $(src_dir)/main.c -fsanitize=address -g
+	@$(cc) -o main $(src_dir)/main.c
+	@echo "Build complete"
+
+debug:
+	@$(cc) -o main $(src_dir)/main.c -fsanitize=address -g -D DEBUG
 	@echo "Build complete"
 
 test: $(test_files)

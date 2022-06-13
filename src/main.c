@@ -9,18 +9,19 @@
 // }
 
 i32 main() {
-    setup_catcher();
+    // setup_catcher();
     srand(1481);
     Game* game = new_game();
 
     char* player_name = $(calloc(1024, sizeof(char)));
     printf("Enter player name: ");
     scanf("%[^\n]%*c", player_name);
-    game->join(game, player_name, false);
+    // game->join(game, player_name, false);
 
     game->join(game, "Computer A", true);
     game->join(game, "Computer B", true);
     game->join(game, "Computer C", true);
+    game->join(game, "Computer D", true);
 
     VectorShuffle(game->players);
 
@@ -28,6 +29,7 @@ i32 main() {
     while (game->finished == false) {
         game->next(game);
     }
+    // Todo: who is win, GUI(show all roles.)
     $free();
 
     Console.green("Everything is done.");
