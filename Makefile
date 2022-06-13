@@ -50,7 +50,8 @@ setup:
 	curl -s -o $(third_dir)/cimple/timing.h $(cimple_remote)/timing.h
 	curl -s -o $(third_dir)/cimple/options.h $(cimple_remote)/options.h
 
-	cd $(third_dir)/wsServer && make install && cd ../..
+	rm -rf $(third_dir)/wsServer
+	cd $(third_dir) && curl -L https://github.com/Theldus/wsServer/archive/master.zip -o wsServer.zip && unzip wsServer.zip && rm wsServer.zip && mv wsServer-master wsServer && cd wsServer && make install && cd ../..
 
 	rm -rf $(third_dir)/mkjson
 	cd $(third_dir) && curl -L https://github.com/Jacajack/mkjson/archive/master.zip -o mkjson.zip && unzip mkjson.zip && rm mkjson.zip && mv mkjson-master mkjson && cd mkjson && make && cd ../..

@@ -24,8 +24,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
 #include <time.h>
+#include <sys/time.h>
 
 /* clang-format off */
 #ifndef _WIN32
@@ -583,8 +583,8 @@ static inline void int32_to_ping_msg(int32_t ping_id, uint8_t *msg)
 	/* Encodes as big-endian. */
 	msg[0] = (ping_id >> 24);
 	msg[1] = (ping_id >> 16);
-	msg[2] = (ping_id >> 8);
-	msg[3] = (ping_id >> 0);
+	msg[2] = (ping_id >>  8);
+	msg[3] = (ping_id >>  0);
 }
 
 /**
@@ -1556,8 +1556,8 @@ static void *ws_accept(void *data)
 			 * See:
 			 *   https://linux.die.net/man/3/setsockopt
 			 */
-			setsockopt(
-				new_sock, SOL_SOCKET, SO_SNDTIMEO, &time, sizeof(struct timeval));
+			setsockopt(new_sock, SOL_SOCKET, SO_SNDTIMEO, &time,
+				sizeof(struct timeval));
 		}
 
 		if (new_sock < 0)
@@ -1621,8 +1621,8 @@ static void *ws_accept(void *data)
  * @return If @p thread_loop != 0, returns 0. Otherwise, never
  * returns.
  */
-int ws_socket(
-	struct ws_events *evs, uint16_t port, int thread_loop, uint32_t timeout_ms)
+int ws_socket(struct ws_events *evs, uint16_t port, int thread_loop,
+	uint32_t timeout_ms)
 {
 	struct sockaddr_in server; /* Server.                */
 	pthread_t accept_thread;   /* Accept thread.         */
@@ -1690,7 +1690,7 @@ int ws_socket(
 	listen(*sock, MAX_CLIENTS);
 
 	/* Wait for incoming connections. */
-	// printf("Waiting for incoming connections...\n");
+	printf("Waiting for incoming connections...\n");
 	memset(client_socks, -1, sizeof(client_socks));
 
 	/* Accept connections. */
