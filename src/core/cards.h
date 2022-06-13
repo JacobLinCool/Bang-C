@@ -14,7 +14,6 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (enemy->hp > 0) return;
 
     while (1) {
-        DEBUG_PRINT("request: Beer");
         ai_request_setting(AI_SPECIFY, Beer);
         Card* card = enemy->request(game, enemy_id);
         if (card == NULL) break;

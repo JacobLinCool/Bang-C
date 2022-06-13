@@ -122,9 +122,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     qsort(weight, candi_card->size, sizeof(Weight), ai_weight_cmp);  // sort from big to small
 
     // if event is discard cards
-    // DEBUG_PRINT("request_type: %d\n", ai_request_type);
     if (ai_request_type == AI_DISCARD) {
-        DEBUG_PRINT("DISCARD\n");
         i32 missed_cnt = 0;
         for (int i = candi_card->size - 1; i >= 0; i--) {
             if (ai->hands->data[i]->type == Missed && missed_cnt < 2) {
