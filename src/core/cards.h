@@ -102,7 +102,8 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             }
         }
     }
-
+    // determine AI disgust value
+    ai_disgust_change(me_id, enemy_id, 1);
     // dead
     died_player(game, me_id, enemy_id);
     return;

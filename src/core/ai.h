@@ -17,7 +17,7 @@ typedef struct _Weight {
     i32 target;
     i32 id;
 } Weight;
-i32 disgust[4][4];
+i32 disgust[7][7];
 i32 ai_target;
 i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 max_dist_id[10]);
 i32 equip_total(Game* game, i32 me_id, i32 player_id);
@@ -26,12 +26,17 @@ int ai_weight_cmp(const void* a, const void* b) {
     return (*(Weight*)b).weight - (*(Weight*)a).weight;
 }
 
+void ai_disgust_change(i32 ai_id, i32 target_id, i32 value) {
+    disgust[ai_id][target_id] += value;
+    return;
+}
+
 void ai_initialize(Game* game, i32 player_id) {
     // disgust initialize
     /*
         警長	    others: 2
         歹徒	    警長:5
-        叛徒	    警長:A 歹徒:5	A預設6，針對他一次後變為0
+        叛徒	    警長:A 歹徒:5	A預設6，針對他一次後減少1
     */
     for (int i = 0; i < 4; i++) disgust[player_id][i] = 0;
     Player* my = game->players->data[player_id];

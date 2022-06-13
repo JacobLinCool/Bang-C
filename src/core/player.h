@@ -36,6 +36,8 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
         enemy_id = -1;
         printf("Wrong Player id!\n");
     }
+    // determine AI disgust value
+    ai_disgust_change(enemy_id, me_id, 1);
     return enemy_id;
 }
 
@@ -47,6 +49,9 @@ i32 computer_choose_enemy(Game* game, i32 me_id) {
         if (enemy_id != me_id && get_player_hp(game, enemy_id) > 0) break;
     }
     return enemy_id;*/
+
+    // determine AI disgust value
+    ai_disgust_change(ai_target, me_id, 1);
     return ai_target;
 }
 
