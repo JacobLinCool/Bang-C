@@ -128,6 +128,7 @@ void game_next(Game *game) {
     DEBUG_PRINT("Done: Draw two cards\n");
     // 2.Play any number of cards
     bool bang_used = 0;
+    ai_bang_use = 0;
     while (true) {
         ai_request_setting(AI_PLAY, 0);
         Card *select_card = player->request(game, player->id);
@@ -140,6 +141,7 @@ void game_next(Game *game) {
                 continue;
             } else {
                 bang_used = true;
+                ai_bang_use = true;
             }
         }
         // 2.use card
@@ -151,22 +153,28 @@ void game_next(Game *game) {
         // (b)brown card
         DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (select_card->use(game, player->id) == SUCCESS) {
+            DEBUG_PRINT("Done: use success\n");
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
                 bang(game, player->id);
             }
             game->discard->push(game->discard, select_card);
         }
+        DEBUG_PRINT("Done: 2.use cards\n");
         // 3.check if someone died(only brown card used)
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->hp <= 0) died_player(game, player->id, i);
         }
+        DEBUG_PRINT("Done: 3.check if someone died\n");
+        if (game->finished) return;
     }
     //  3.Discard excess cards
+    DEBUG_PRINT("In Progress: 3.Discard excess cards\n");
     while (player->hands->size > player->hp) {
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
         game->discard->push(game->discard, select_card);
     }
+    DEBUG_PRINT("Done: 3.Discard excess cards\n");
 }
 
 Game *new_game() {
