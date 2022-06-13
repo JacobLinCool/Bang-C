@@ -1,5 +1,7 @@
 #ifndef __CORE_AI_H
 #define __CORE_AI_H
+#include <stdlib.h>
+
 #include "../utils/all.h"
 #include "cards.h"
 #include "constants.h"
@@ -9,11 +11,19 @@
 #include "utils.h"
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+typedef struct _Weight {
+    i32 weight;
+    i32 target;
+    i32 id;
+} Weight;
 i32 disgust[4][4];
 i32 ai_target;
 i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 max_dist_id[10]);
 i32 equip_total(Game* game, i32 me_id, i32 player_id);
 i32 card_count(Game* game, i32 player_id, i32 card);
+int ai_weight_cmp(const void* a, const void* b) {
+    return (*(Weight*)b).weight - (*(Weight*)a).weight;
+}
 
 void ai_initialize(Game* game, i32 player_id) {
     // disgust initialize
@@ -58,11 +68,12 @@ void ai_initialize(Game* game, i32 player_id) {
     return;
 }
 
-i32 ai_request(Game* game, i32 player_id) {
+i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     Player* ai = game->players->data[player_id];
     i32     max_disgust[10];
     i32     max_dist_id[10];
     for (int i = 0; i < game->players->size; i++) {
+        if (game->players->data[i]->hp <= 0 || i == player_id) continue;
         i32 dist = (distance(game, player_id, i) > 0 ? distance(game, player_id, i) : 0);
         if (disgust[player_id][i] > max_disgust[dist]) {
             max_disgust[dist] = disgust[player_id][i];
@@ -75,9 +86,26 @@ i32 ai_request(Game* game, i32 player_id) {
             max_dist_id[i] = max_dist_id[i - 1];
         }
     }
-    i32 weight[ai->hands->size];
-    for (int i = 0; i < ai->hands->size; i++) {
-        weight[i] = ai_card_weight(game, player_id, i, max_disgust, max_dist_id);
+    Weight weight[candi_card->size];
+    for (int i = 0; i < candi_card->size; i++) {
+        weight[i].weight = ai_card_weight(game, player_id, i, max_disgust, max_dist_id);
+        weight[i].id = i;
+        weight[i].target = ai_target;
+    }
+    qsort(weight, candi_card->size, sizeof(Weight), ai_weight_cmp);  // sort from big to small
+
+    // if event is play cards
+    ai_target = weight[0].target;
+    return weight[0].id;
+    // if event is discard cards
+    i32 missed_cnt = 0;
+    for (int i = candi_card->size - 1; i >= 0; i--) {
+        if (ai->hands->data[i]->type == Missed && missed_cnt < 2) {
+            // prevent discard Missed, reserve at most 2 Missed
+            missed_cnt++;
+            continue;
+        }
+        return weight[i].id;
     }
 }
 
@@ -87,13 +115,6 @@ i32 ai_player_cnt(Game* game) {
         if (game->players->data[i]->hp > 0) cnt++;
     }
     return cnt;
-}
-
-i32 ai_find_disgust_id(Game* game, i32 max_num, i32 max_disgust[10]) {
-    for (int i = 0; i < game->players->size; i++) {
-        if (max_num == max_disgust[i]) return i;
-    }
-    return 0;
 }
 
 i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 max_dist_id[10]) {
@@ -143,16 +164,18 @@ i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 
     if (card == General_Store) {
         i32 total = 0;
         for (int i = 0; i < game->players->size; i++) {
+            if (game->players->data[i]->hp <= 0) continue;
             if (disgust[ai_id][i] < 5) {
                 total += (i == ai_id ? 5 : 2) * (5 - game->players->data[i]->hands->size);
             }
         }
         return total;
     }
-    if (card == Beer) return (game->players->size > 2 ? 5 * (ai->bullet - ai->hp) : 0);
+    if (card == Beer) return (ai_player_cnt(game) > 2 ? 5 * (ai->bullet - ai->hp) : 0);
     if (card == Saloon) {
         i32 total = 0;
         for (int i = 0; i < game->players->size; i++) {
+            if (game->players->data[i]->hp <= 0) continue;
             if (disgust[ai_id][i] < 5) {
                 total += (i == ai_id ? 5 : 2) * (5 - game->players->data[i]->hp);
             }
@@ -169,7 +192,7 @@ i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 
     }
     if (card == Barrel) return 500;
     if (card == Scope) return 400;
-    if (card == Mustang) return 400;
+    if (card == Mustang) return 450;
     if (card == Jail) {
         if (max_disgust[9] <= 4) return 0;
         ai_target = max_dist_id[9];
@@ -198,7 +221,7 @@ i32 equip_total(Game* game, i32 me_id, i32 player_id) {
     Player* player = game->players->data[player_id];
     Player* my = game->players->data[me_id];
     i32     total = 0;
-    if (player->weapon->type == Volcanic) total += 200;
+    if (player->scope != NULL) total += 100;
     if (player->weapon->type == Schofield)
         total += 120 * ((my->weapon != NULL ? my->weapon->type : 0) < player->weapon->type);
     if (player->weapon->type == Remington)
@@ -210,8 +233,9 @@ i32 equip_total(Game* game, i32 me_id, i32 player_id) {
     if (player->weapon->type == Winchester)
         total += 150 * ((my->weapon != NULL ? my->weapon->type : 0) < player->weapon->type);
     ;
+    if (player->weapon->type == Volcanic) total += 200;
+    if (player->mustang != NULL) total += 450;
     if (player->barrel != NULL) total += 500;
-    if (player->scope != NULL) total += 100;
     return total;
 }
 

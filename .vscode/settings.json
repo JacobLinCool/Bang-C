@@ -8,6 +8,9 @@
     "editor.defaultFormatter": "ms-vscode.cpptools",
     "editor.formatOnSave": true,
     "files.associations": {
-        "*.h": "c"
+        "*.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c"
     },
 }

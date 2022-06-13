@@ -40,13 +40,14 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
 }
 
 i32 computer_choose_enemy(Game* game, i32 me_id) {
-    i32 enemy_id;
+    /*i32 enemy_id;
     i32 plyaer_size = game->players->size;
     while (1) {
         enemy_id = rand() % plyaer_size;
         if (enemy_id != me_id && get_player_hp(game, enemy_id) > 0) break;
     }
-    return enemy_id;
+    return enemy_id;*/
+    return ai_target;
 }
 
 bool real_player_select(Game* game, i32 player_id, Cards* cards) {
@@ -69,9 +70,11 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
 
 bool computer_player_select(Game* game, i32 player_id, Cards* cards) {
     Player* player = game->players->get(game->players, player_id);
-    i32     random = rand() % cards->size;
+    /*i32     random = rand() % cards->size;*/
 
-    player->hands->push(player->hands, cards->remove(cards, random));
+    i32 choose = ai_request(game, player_id, cards);
+
+    player->hands->push(player->hands, cards->remove(cards, choose));
 
     return true;
 }
@@ -96,7 +99,7 @@ Card* real_player_request(Game* game, i32 player_id) {
 Card* computer_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
     // i32     random = rand() % player->hands->size;
-    i32 choose = ai_request(game, player_id);
+    i32 choose = ai_request(game, player_id, player->hands);
 
     return player->hands->remove(player->hands, choose);
 }
@@ -170,21 +173,9 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
         Card* x = target->mustang;
         target->mustang = NULL;
         return x;
-    } else if (target->scope && !player->scope) {
-        Card* x = target->scope;
-        target->scope = NULL;
-        return x;
-    } else if (target->weapon && !player->weapon) {
+    } else if (target->weapon != NULL) {
         Card* x = target->weapon;
         target->weapon = NULL;
-        return x;
-    } else if (target->jail && !player->jail) {
-        Card* x = target->jail;
-        target->jail = NULL;
-        return x;
-    } else if (target->dynamite && !player->dynamite) {
-        Card* x = target->dynamite;
-        target->dynamite = NULL;
         return x;
     }
 
