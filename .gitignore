@@ -7,3 +7,4 @@
 
 *.o
 *.exe
+src/third/*/
