@@ -25,6 +25,7 @@ i32      disgust[7][7];
 i32      ai_target;
 i8       ai_request_type;  // 0: play 1: discard
 CardType ai_request_card;
+bool     ai_bang_use;
 
 i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 max_dist_id[10]);
 i32 equip_total(Game* game, i32 me_id, i32 player_id);
@@ -164,9 +165,13 @@ i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 
     }
     i32 max_distance = 1;
     if (ai->weapon != NULL) max_distance += ai->weapon->type - Volcanic;
-
+    DEBUG_PRINT("Card: %s\n", card_name[card]);
     // many many cards
     if (card == Bang) {
+        if (ai_bang_use) {
+            DEBUG_PRINT("Bang used\n");
+            return -100;
+        }
         ai_target = max_dist_id[max_distance];
         if (player_cnt > 2 && ai->role->type == Traitor &&
             game->players->data[ai_target]->role->type == Sheriff) {
@@ -269,18 +274,18 @@ i32 equip_total(Game* game, i32 me_id, i32 player_id) {
     Player* my = game->players->data[me_id];
     i32     total = 0;
     if (player->scope != NULL) total += 100;
-    if (player->weapon->type == Schofield)
+    if (player->weapon != NULL && player->weapon->type == Schofield)
         total += 120 * ((my->weapon != NULL ? my->weapon->type : 0) < player->weapon->type);
-    if (player->weapon->type == Remington)
+    if (player->weapon != NULL && player->weapon->type == Remington)
         total += 130 * ((my->weapon != NULL ? my->weapon->type : 0) < player->weapon->type);
     ;
-    if (player->weapon->type == Rev_Carabine)
+    if (player->weapon != NULL && player->weapon->type == Rev_Carabine)
         total += 140 * ((my->weapon != NULL ? my->weapon->type : 0) < player->weapon->type);
     ;
-    if (player->weapon->type == Winchester)
+    if (player->weapon != NULL && player->weapon->type == Winchester)
         total += 150 * ((my->weapon != NULL ? my->weapon->type : 0) < player->weapon->type);
     ;
-    if (player->weapon->type == Volcanic) total += 200;
+    if (player->weapon != NULL && player->weapon->type == Volcanic) total += 200;
     if (player->mustang != NULL) total += 450;
     if (player->barrel != NULL) total += 500;
     return total;

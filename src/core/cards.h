@@ -8,7 +8,9 @@
 #include "utils.h"
 
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
+    DEBUG_PRINT("%d died %d\n", me_id, enemy_id);
     Player* enemy = game->players->data[enemy_id];
+    DEBUG_PRINT("enemy hp: %d\n", enemy->hp);
     if (enemy->hp > 0) return;
 
     while (1) {
@@ -69,6 +71,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
 
 // If no me_id, me_id = player_id
 void attack_player(Game* game, i32 me_id, i32 enemy_id) {
+    DEBUG_PRINT("%d attack %d\n", me_id, enemy_id);
     if (get_player_hp(game, enemy_id) <= 0) return;  // avoid mustang_judge error
     // decrease player's hp
     game->players->data[enemy_id]->hp--;
@@ -83,7 +86,9 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             draw_from_player(game, enemy_id, me_id);
         }
         if (enemy_type == Sid_Ketchum) {
+            DEBUG_PRINT("enemy is Sid_Ketchum\n");
             if (game->players->data[enemy_id]->hands->size >= 2) {
+                DEBUG_PRINT("enemy has 2 or more cards\n");
                 while (1) {
                     ai_request_setting(AI_DISCARD, 0);
                     Card* card = game->players->data[enemy_id]->request(game, enemy_id);
@@ -93,6 +98,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
                     game->discard->push(game->discard, card);
                     break;
                 }
+                DEBUG_PRINT("has discarded one card\n");
                 while (1) {
                     ai_request_setting(AI_DISCARD, 0);
                     Card* card = game->players->data[enemy_id]->request(game, enemy_id);
@@ -106,9 +112,12 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
         }
     }
     // determine AI disgust value
+    DEBUG_PRINT("ai_disgust_change\n");
     ai_disgust_change(me_id, enemy_id, 1);
     // dead
+    DEBUG_PRINT("died_player\n");
     died_player(game, me_id, enemy_id);
+    DEBUG_PRINT("Done: Attack player\n");
     return;
 }
 
@@ -156,6 +165,7 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     }
 
     attack_player(game, me_id, enemy_id);
+    DEBUG_PRINT("Done: bang_no_distance\n");
     return;
 }
 
@@ -199,6 +209,7 @@ bool bang(Game* game, i32 me_id) {
 
     if (weapon_distance < enemy_distance) return FAIL;
     bang_no_distance(game, me_id, enemy_id);
+    DEBUG_PRINT("Done: bang\n");
     return SUCCESS;
 }
 

@@ -9,7 +9,7 @@
 // }
 
 i32 main() {
-    setup_catcher();
+    // setup_catcher();
     srand(1481);
     Game* game = new_game();
 
@@ -29,6 +29,7 @@ i32 main() {
     while (game->finished == false) {
         game->next(game);
     }
+    // Todo: who is win, GUI(show all roles.)
     $free();
 
     Console.green("Everything is done.");
