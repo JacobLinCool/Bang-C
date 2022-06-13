@@ -10,6 +10,8 @@
 #include "types.h"
 #include "utils.h"
 #define BAD_GUY 5
+#define AI_PLAY 0
+#define AI_DISCARD 1
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 typedef struct _Weight {
@@ -19,6 +21,7 @@ typedef struct _Weight {
 } Weight;
 i32 disgust[7][7];
 i32 ai_target;
+i8  play_or_discard;  // 0: play 1: discard
 i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 max_dist_id[10]);
 i32 equip_total(Game* game, i32 me_id, i32 player_id);
 i32 card_count(Game* game, i32 player_id, i32 card);
@@ -100,7 +103,20 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     }
     qsort(weight, candi_card->size, sizeof(Weight), ai_weight_cmp);  // sort from big to small
 
+    // if event is discard cards
+    if (play_or_discard == AI_DISCARD) {
+        i32 missed_cnt = 0;
+        for (int i = candi_card->size - 1; i >= 0; i--) {
+            if (ai->hands->data[i]->type == Missed && missed_cnt < 2) {
+                // prevent discard Missed, reserve at most 2 Missed
+                missed_cnt++;
+                continue;
+            }
+            return weight[i].id;
+        }
+    }
     // if event is play cards
+    if (weight[0].weight <= 10) return -1;
     ai_target = weight[0].target;
     if (ai->role->type == Traitor && game->players->data[ai_target]->role->type == Sheriff) {
         i32 card_type = candi_card->data[weight[0].id]->type;
@@ -109,16 +125,6 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
         }
     }
     return weight[0].id;
-    // if event is discard cards
-    i32 missed_cnt = 0;
-    for (int i = candi_card->size - 1; i >= 0; i--) {
-        if (ai->hands->data[i]->type == Missed && missed_cnt < 2) {
-            // prevent discard Missed, reserve at most 2 Missed
-            missed_cnt++;
-            continue;
-        }
-        return weight[i].id;
-    }
 }
 
 i32 ai_player_cnt(Game* game) {

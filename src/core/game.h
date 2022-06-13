@@ -112,6 +112,7 @@ void game_next(Game *game) {
     // 2.Play any number of cards
     bool bang_used = 0;
     while (1) {
+        play_or_discard = AI_PLAY;
         Card *select_card = player->request(game, player->id);
         if (select_card == NULL) break;
 
@@ -151,6 +152,7 @@ void game_next(Game *game) {
 
     //  3.Discard excess cards
     while (player->hands->size > player->hp) {
+        play_or_discard = AI_DISCARD;
         Card *select_card = player->request(game, player->id);
         game->discard->push(game->discard, select_card);
     }

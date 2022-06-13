@@ -105,7 +105,7 @@ Card* computer_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
     // i32     random = rand() % player->hands->size;
     i32 choose = ai_request(game, player_id, player->hands);
-
+    if (choose == -1) return NULL;
     return player->hands->remove(player->hands, choose);
 }
 
