@@ -4,7 +4,6 @@
 !*/
 !Makefile
 !LICENSE
-!Dockerfile
 
 *.o
 *.exe

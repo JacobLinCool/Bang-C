@@ -50,4 +50,10 @@ setup:
 
 	chmod -R 777 $(third_dir)
 
+dockerfile: force
+	docker buildx build --push --platform linux/arm64/v8 --tag jacoblincool/bang-dev .
+
+docker: force
+	docker run --rm -it -p 8080:8080 jacoblincool/bang-dev bash -c '/app/server'
+
 .PHONY: all build clean test force
