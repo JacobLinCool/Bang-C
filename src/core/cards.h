@@ -20,7 +20,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             return;
         }
     }
-
+    enemy->dead = true;
     printf("Died player(%s) role is %s\n", enemy->name, role_name[enemy->role->type]);
 
     // END OF THE GAME detection
@@ -158,7 +158,14 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
             pass = true;
             break;
         }
-        enemy->hands->push(enemy->hands, card[card_amount]);
+        // return wrong card
+        if (enemy->character->type == Calamity_Janet) {
+            if (card[card_amount]->type != Bang && card[card_amount]->type != Missed) {
+                enemy->hands->push(enemy->hands, card[card_amount]);
+            }
+        } else if (card[card_amount]->type != Missed) {
+            enemy->hands->push(enemy->hands, card[card_amount]);
+        }
     }
 
     if (pass) {

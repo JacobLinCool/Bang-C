@@ -7,6 +7,7 @@
 //     Game* game = event->game;
 //     Console.cyan("It's %s's turn!", game->players->data[game->turn % game->players->size]->name);
 // }
+void main_win(Game* game);
 
 i32 main() {
     // setup_catcher();
@@ -32,8 +33,27 @@ i32 main() {
     DEBUG_PRINT("Game End!\n");
 
     // Todo: who is win, GUI(show all roles.)
+    main_win(game);
     $free();
 
     Console.green("Everything is done.");
     return EXIT_SUCCESS;
+}
+
+void main_win(Game* game) {
+    i32 live_player[5] = {0};
+    for (int i = 0; i < game->players->size; i++) {
+        if (game->players->data[i]->hp > 0) {
+            live_player[game->players->data[i]->role->type]++;
+        }
+    }
+    if (live_player[Sheriff] == 0) {
+        if (live_player[Criminal] == 0) {
+            Console.green("Traitor win!");
+        } else {
+            Console.green("Criminal win!");
+        }
+    } else {
+        Console.green("Sheriff and Deputy win!");
+    }
 }

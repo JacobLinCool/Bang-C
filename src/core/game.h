@@ -53,6 +53,7 @@ void game_start(Game *game) {
         nowPlayer->character = game->characters->pop(game->characters);
         nowPlayer->bullet = nowPlayer->character->health + (nowPlayer->role->type == Sheriff);
         nowPlayer->hp = nowPlayer->bullet;
+        nowPlayer->dead = false;
         if (nowPlayer->role->type == Sheriff && i != 0) game->players->swap(game->players, 0, i);
         for (int j = 0; j < nowPlayer->bullet; j++) {
             nowPlayer->hands->push(nowPlayer->hands, game->deck->pop(game->deck));
@@ -182,7 +183,8 @@ void game_next(Game *game) {
         }
         // 3.check if someone died(only brown card used)
         for (int i = 0; i < game->players->size; i++) {
-            if (game->players->data[i]->hp <= 0) died_player(game, player->id, i);
+            if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
+                died_player(game, player->id, i);
         }
         if (game->finished) return;
     }
