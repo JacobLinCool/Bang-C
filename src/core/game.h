@@ -98,11 +98,7 @@ void game_next(Game *game) {
 
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
-        if (dynamite_judge(game, player->id)) {
-            Card *card = player->dynamite;
-            player->dynamite = NULL;
-            game->discard->push(game->discard, card);
-        }
+        dynamite_judge(game, player->id);
     }
     if (player->hp <= 0) return;
     if (player->jail != NULL) {
@@ -144,6 +140,7 @@ void game_next(Game *game) {
         game->deck->insert(game->deck, 0, debug_card);
         cards->free(cards);
     } else if (player->character->type == Pedro_Ramirez) {
+        player_draw_deck(game, player->id, 2 - player->ramirez(game, player->id));
     } else {
         player_draw_deck(game, player->id, 2);
     }
@@ -177,9 +174,7 @@ void game_next(Game *game) {
             continue;
         }
         // (b)brown card
-        DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (select_card->use(game, player->id) == SUCCESS) {
-            DEBUG_PRINT("Done: use success\n");
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
                 bang(game, player->id);
             }
@@ -201,7 +196,6 @@ void game_next(Game *game) {
 
         if (select_card != NULL) game->discard->push(game->discard, select_card);
     }
-    DEBUG_PRINT("Done: 3.Discard excess cards\n");
 }
 
 Game *new_game() {
