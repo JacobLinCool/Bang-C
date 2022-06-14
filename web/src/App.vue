@@ -3,7 +3,7 @@
 
     type MessageType = "ask" | "chat";
 
-    const ws = new WebSocket("ws://localhost:8080/");
+    const ws = new WebSocket(window.location.hostname === "localhost" ? "ws://localhost:8080" : "wss://bang.jacoblin.cool");
 
     const name = ref("");
     const message = ref("");
