@@ -95,6 +95,7 @@ void game_next(Game *game) {
     game->turn++;
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
     print_status(game);
+
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
         if (dynamite_judge(game, player->id)) {
@@ -147,11 +148,13 @@ void game_next(Game *game) {
         player_draw_deck(game, player->id, 2);
     }
     print_status(game);
+
     // 2.Play any number of cards
     bool bang_used = 0;
     ai_bang_use = 0;
     while (true) {
         DEBUG_PRINT("player %d, choose your card\n", player->id);
+
         ai_request_setting(AI_PLAY, 0);
         Card *select_card = player->request(game, player->id);
         if (select_card == NULL) break;
@@ -174,7 +177,9 @@ void game_next(Game *game) {
             continue;
         }
         // (b)brown card
+        DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (select_card->use(game, player->id) == SUCCESS) {
+            DEBUG_PRINT("Done: use success\n");
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
                 bang(game, player->id);
             }
@@ -188,6 +193,7 @@ void game_next(Game *game) {
     }
     //  3.Discard excess cards
     DEBUG_PRINT("Now: Discard cards.\n");
+
     while (player->hands->size > player->hp) {
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
@@ -195,6 +201,7 @@ void game_next(Game *game) {
 
         if (select_card != NULL) game->discard->push(game->discard, select_card);
     }
+    DEBUG_PRINT("Done: 3.Discard excess cards\n");
 }
 
 Game *new_game() {

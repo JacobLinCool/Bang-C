@@ -30,6 +30,7 @@ i32 main() {
         game->next(game);
     }
     DEBUG_PRINT("Game End!\n");
+
     // Todo: who is win, GUI(show all roles.)
     $free();
 

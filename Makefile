@@ -3,12 +3,13 @@ src_dir = src
 test_dir = tests
 third_dir = $(src_dir)/third
 
-uds_remote = https://raw.githubusercontent.com/JacobLinCool/Universal-Data-Structures/main/src
-cimple_remote = https://raw.githubusercontent.com/JacobLinCool/Cimple-Lib/main/src
-
 test_files = $(wildcard $(test_dir)/**/*.c)
 
 all: build
+
+server: force
+	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/wsServer/libws.a $(third_dir)/cJSON/libcjson.a
+	@echo "Build complete"
 
 build:
 	@$(cc) -o main $(src_dir)/main.c
@@ -31,24 +32,18 @@ clean:
 	@echo "Cleaned"
 
 setup:
-	rm -rf $(third_dir)
-	mkdir $(third_dir)
+	rm -rf $(third_dir)/uds
+	cd $(third_dir) && curl -L https://github.com/JacobLinCool/Universal-Data-Structures/archive/main.zip -o uds.zip && unzip uds.zip && rm uds.zip && mv Universal-Data-Structures-main/src uds && rm -rf Universal-Data-Structures-main && cd ..
 
-	mkdir $(third_dir)/uds
-	curl -s -o $(third_dir)/uds/vector.h $(uds_remote)/vector.h
-	curl -s -o $(third_dir)/uds/xor-list.h $(uds_remote)/xor-list.h
-	curl -s -o $(third_dir)/uds/deque.h $(uds_remote)/deque.h
+	rm -rf $(third_dir)/cimple
+	cd $(third_dir) && curl -L https://github.com/JacobLinCool/Cimple-Lib/archive/main.zip -o cimple.zip && unzip cimple.zip && rm cimple.zip && mv Cimple-Lib-main/src cimple && rm -rf Cimple-Lib-main && cd ..
 
-	mkdir $(third_dir)/cimple
-	curl -s -o $(third_dir)/cimple/all.h $(cimple_remote)/all.h
-	curl -s -o $(third_dir)/cimple/base.h $(cimple_remote)/base.h
-	curl -s -o $(third_dir)/cimple/buffer.h $(cimple_remote)/buffer.h
-	curl -s -o $(third_dir)/cimple/bucket.h $(cimple_remote)/bucket.h
-	curl -s -o $(third_dir)/cimple/console.h $(cimple_remote)/console.h
-	curl -s -o $(third_dir)/cimple/debug.h $(cimple_remote)/debug.h
-	curl -s -o $(third_dir)/cimple/file.h $(cimple_remote)/file.h
-	curl -s -o $(third_dir)/cimple/string.h $(cimple_remote)/string.h
-	curl -s -o $(third_dir)/cimple/timing.h $(cimple_remote)/timing.h
-	curl -s -o $(third_dir)/cimple/options.h $(cimple_remote)/options.h
+	rm -rf $(third_dir)/wsServer
+	cd $(third_dir) && curl -L https://github.com/Theldus/wsServer/archive/master.zip -o wsServer.zip && unzip wsServer.zip && rm wsServer.zip && mv wsServer-master wsServer && cd wsServer && make && cd ../..
+
+	rm -rf $(third_dir)/cJSON
+	cd $(third_dir) && curl -L https://github.com/DaveGamble/cJSON/archive/master.zip -o cJSON.zip && unzip cJSON.zip && rm cJSON.zip && mv cJSON-master cJSON && cd cJSON && make && cd ../..
+
+	chmod -R 777 $(third_dir)
 
 .PHONY: all build clean test force
