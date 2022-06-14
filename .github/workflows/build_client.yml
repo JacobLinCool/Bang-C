@@ -1,0 +1,34 @@
+name: Build Client
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "**/*.vue"
+            - "**/*.js"
+            - "**/*.ts"
+
+jobs:
+    check:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2.2.2
+              with:
+                  version: latest
+                  run_install: true
+
+            - name: Build
+              run: cd web && pnpm build
+
+            - name: Deploy
+              uses: peaceiris/actions-gh-pages@v3
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN  }}
+                  publish_dir: "./web/dist"
+                  publish_branch: "gh-pages"
