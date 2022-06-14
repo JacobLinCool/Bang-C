@@ -33,7 +33,8 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
     }
     scanf("%d", &enemy_id);
     enemy_id--;
-    if (enemy_id < plyaer_size && get_player_hp(game, enemy_id) > 0 && enemy_id != me_id) {
+    if ((enemy_id < 0 || enemy_id > plyaer_size) && get_player_hp(game, enemy_id) > 0 &&
+        enemy_id != me_id) {
         enemy_id = -1;
         printf("Wrong Player id!\n");
     }
