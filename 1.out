@@ -1,0 +1,2692 @@
+Enter player name: assign: Traitor
+assign: Sheriff
+assign: Criminal
+assign: Deputy
+assign: Criminal
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Remington] [Barrel] [Bang] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [General Store] [Duel] [Winchester] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Volcanic] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Rev Carabine] [Panic] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 2,2(Criminal): 2,3(Criminal): 2,
+[Bang] weight: 0,[Missed] weight: 0,[Beer] weight: 0,
+0(Sheriff): -10000,1(Traitor): 2,2(Criminal): 2,3(Criminal): 2,
+[Missed] weight: 0,[Beer] weight: 0,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Remington] [Barrel] [Bang] [Indians] [Bang] [Missed] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [General Store] [Duel] [Winchester] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Volcanic] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Rev Carabine] [Panic] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 2,2(Criminal): 2,3(Criminal): 2,
+[Barrel] weight: 500,[Remington] weight: 130,[Schofield] weight: 120,[Bang] weight: 0,[Indians] weight: 0,[Bang] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Barrel
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 2,2(Criminal): 2,3(Criminal): 2,
+[Remington] weight: 130,[Schofield] weight: 120,[Bang] weight: 0,[Indians] weight: 0,[Bang] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Remington
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 2,2(Criminal): 2,3(Criminal): 2,
+[Bang] weight: 0,[Indians] weight: 0,[Bang] weight: 0,[Missed] weight: 0,[Schofield] weight: -120,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Bang] [Indians] [Bang] [Missed] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [General Store] [Duel] [Winchester] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Volcanic] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Rev Carabine] [Panic] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Bang] [Indians] [Bang] [Missed] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [General Store] [Duel] [Winchester] [Bang] [Cat Balou] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Volcanic] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Rev Carabine] [Panic] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 6,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Cat Balou] weight: 3780,[Winchester] weight: 150,[Bang] weight: 6,[Duel] weight: 1,[Beer] weight: 0,[General Store] weight: -5,
+[93m[DEBUG][0m Use: Cat Balou
+[93m[DEBUG][0m 1->0: select [Barrel]
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 6,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Winchester] weight: 150,[Bang] weight: 6,[Duel] weight: 1,[Beer] weight: 0,[General Store] weight: 0,
+[93m[DEBUG][0m Use: Winchester
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 6,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Bang] weight: 6,[General Store] weight: 5,[Duel] weight: 1,[Beer] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Bang] [Indians] [Bang] [Missed] 
+Weapon: [Remington]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [General Store] [Duel] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Volcanic] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Rev Carabine] [Panic] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Bang] [Indians] [Bang] [Missed] 
+Weapon: [Remington]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [General Store] [Duel] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Volcanic] [Missed] [Bang] [Schofield] [Gatling] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Rev Carabine] [Panic] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 5,1(Traitor): 0,2(Criminal): -10000,3(Criminal): 0,
+[Volcanic] weight: 200,[Schofield] weight: 120,[Gatling] weight: 20,[Bang] weight: 0,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Volcanic
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 5,1(Traitor): 0,2(Criminal): -10000,3(Criminal): 0,
+[Schofield] weight: 120,[Gatling] weight: 20,[Bang] weight: 0,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Schofield
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 5,1(Traitor): 0,2(Criminal): -10000,3(Criminal): 0,
+[Gatling] weight: 20,[Bang] weight: 5,[Bang] weight: 5,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Gatling
+[93m[DEBUG][0m 2 attack 1
+[93m[DEBUG][0m 2 attack 3
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 5,1(Traitor): 1,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 0,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Bang] [Indians] [Bang] 
+Weapon: [Remington]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [General Store] [Duel] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 3(max: 4)
+Cards:[Bang] [Bang] [Rev Carabine] [Panic] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Bang] [Indians] [Bang] 
+Weapon: [Remington]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [General Store] [Duel] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 3(max: 4)
+Cards:[Bang] [Bang] [Rev Carabine] [Panic] [Bang] [Cat Balou] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 5,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Panic] weight: 650,[Cat Balou] weight: 650,[Rev Carabine] weight: 140,[Bang] weight: 0,[Bang] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Panic
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 5,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Rev Carabine] weight: 140,[Remington] weight: 130,[Bang] weight: 0,[Bang] weight: 0,[Bang] weight: 0,[Cat Balou] weight: 0,
+[93m[DEBUG][0m Use: Rev Carabine
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 5,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Bang] weight: 0,[Cat Balou] weight: 0,[Remington] weight: -130,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 5,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Bang] weight: 0,[Cat Balou] weight: 0,[Remington] weight: -130,
+[93m[DEBUG][0m Discard: Remington
+0(Sheriff): 5,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Bang] weight: 0,[Cat Balou] weight: 0,
+[93m[DEBUG][0m Discard: Cat Balou
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Bang] [Indians] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [General Store] [Duel] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 3(max: 4)
+Cards:[Bang] [Bang] [Bang] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 3,2(Criminal): 2,3(Criminal): 3,
+[Mustang] weight: 450,[Panic] weight: 0,[Beer] weight: 0,
+0(Sheriff): -10000,1(Traitor): 3,2(Criminal): 2,3(Criminal): 3,
+[Panic] weight: 0,[Beer] weight: 0,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Schofield] [Bang] [Indians] [Bang] [Mustang] [Panic] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [General Store] [Duel] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 3(max: 4)
+Cards:[Bang] [Bang] [Bang] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 3,2(Criminal): 2,3(Criminal): 3,
+[Mustang] weight: 450,[Schofield] weight: 120,[Bang] weight: 0,[Indians] weight: 0,[Bang] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Use: Mustang
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 3,2(Criminal): 2,3(Criminal): 3,
+[Schofield] weight: 120,[Bang] weight: 0,[Indians] weight: 0,[Bang] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Use: Schofield
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 3,2(Criminal): 2,3(Criminal): 3,
+[Bang] weight: 0,[Indians] weight: 0,[Bang] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Bang] [Indians] [Bang] [Panic] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [General Store] [Duel] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 3(max: 4)
+Cards:[Bang] [Bang] [Bang] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 5(max: 5)
+Cards:[Bang] [Indians] [Bang] [Panic] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [General Store] [Duel] [Bang] [Beer] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 3(max: 4)
+Cards:[Bang] [Bang] [Bang] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 6,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Duel] weight: 25,[Beer] weight: 5,[Bang] weight: 5,[Beer] weight: 5,[Bang] weight: 5,[General Store] weight: -5,
+[93m[DEBUG][0m Use: Duel
+[93m[DEBUG][0m 1 attack 0
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 6,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[Bang] weight: 5,[Beer] weight: 5,[Bang] weight: 5,[General Store] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 6,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[Bang] weight: 5,[Beer] weight: 5,[Bang] weight: 5,[General Store] weight: 0,
+[93m[DEBUG][0m Discard: General Store
+0(Sheriff): 6,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[Bang] weight: 5,[Beer] weight: 5,[Bang] weight: 5,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 4(max: 5)
+Cards:[Indians] [Panic] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Bang] [Beer] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 3(max: 4)
+Cards:[Bang] [Bang] [Bang] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 4(max: 5)
+Cards:[Indians] [Panic] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Bang] [Beer] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Bang] [Scope] [Saloon] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 3(max: 4)
+Cards:[Bang] [Bang] [Bang] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 5,1(Traitor): 1,2(Criminal): -10000,3(Criminal): 1,
+[Scope] weight: 400,[Saloon] weight: 13,[Bang] weight: 1,[Bang] weight: 1,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Scope
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 5,1(Traitor): 1,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 20,[Bang] weight: 20,[Saloon] weight: 13,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Bang
+[93m[DEBUG][0m 2 attack 0
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 6,1(Traitor): 1,2(Criminal): -10000,3(Criminal): 1,
+[Saloon] weight: 13,[Missed] weight: 0,[Bang] weight: -100,
+[93m[DEBUG][0m Use: Saloon
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 6,1(Traitor): 1,2(Criminal): -10000,3(Criminal): 1,
+[Missed] weight: 0,[Bang] weight: -100,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 4(max: 5)
+Cards:[Indians] [Panic] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Bang] [Beer] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 4(max: 5)
+Cards:[Indians] [Panic] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Bang] [Beer] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Panic] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 5,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 20,[Bang] weight: 20,[Bang] weight: 20,[Panic] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Bang
+[93m[DEBUG][0m 3 attack 0
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Panic] weight: 0,[Missed] weight: 0,[Bang] weight: -100,[Bang] weight: -100,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Panic] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Bang] [Beer] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Panic] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 4,2(Criminal): 3,3(Criminal): 4,
+[Missed] weight: 0,[Bang] weight: -100,[Bang] weight: -100,
+0(Sheriff): -10000,1(Traitor): 4,2(Criminal): 3,3(Criminal): 4,
+[Bang] weight: -100,[Bang] weight: -100,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Panic] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Bang] [Beer] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Panic] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 4,2(Criminal): 3,3(Criminal): 4,
+[Indians] weight: 4,[Bang] weight: 4,[Panic] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): -10000,1(Traitor): 4,2(Criminal): 3,3(Criminal): 4,
+[Indians] weight: 4,[Bang] weight: 4,[Panic] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Panic
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Bang] [Beer] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Panic] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Bang] [Beer] [Beer] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Panic] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 6,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Bang] weight: 20,[Bang] weight: 20,[Beer] weight: 0,[Beer] weight: 0,[Beer] weight: 0,
+[93m[DEBUG][0m Use: Bang
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 6,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 0,[Beer] weight: 0,[Beer] weight: 0,[Bang] weight: -100,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Beer] [Beer] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Panic] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Beer] [Beer] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Panic] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 6,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 6,[Bang] weight: 6,[Beer] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Beer] [Beer] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Panic] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Beer] [Beer] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Panic] [Missed] [Missed] [Barrel] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Barrel] weight: 500,[Bang] weight: 6,[Bang] weight: 6,[Panic] weight: 0,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Barrel
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 6,[Bang] weight: 6,[Panic] weight: 0,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 6,[Bang] weight: 6,[Panic] weight: 0,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Panic
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Beer] [Beer] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 4,2(Criminal): 3,3(Criminal): 4,
+[Duel] weight: 4,[Bang] weight: 0,[Bang] weight: 0,
+0(Sheriff): -10000,1(Traitor): 4,2(Criminal): 3,3(Criminal): 4,
+[Bang] weight: 0,[Bang] weight: 0,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] [Duel] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 4(max: 4)
+Cards:[Beer] [Beer] [Beer] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 4,2(Criminal): 3,3(Criminal): 4,
+[Duel] weight: 25,[Indians] weight: 0,[Missed] weight: 0,[Bang] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Duel
+[93m[DEBUG][0m 0 attack 1
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Bang] weight: 5,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Bang] weight: 5,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Beer] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Beer] [Dynamite] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 7,[Beer] weight: 5,[Beer] weight: 5,[Beer] weight: 5,[Dynamite] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 7,[Beer] weight: 5,[Beer] weight: 5,[Beer] weight: 5,[Dynamite] weight: 0,
+[93m[DEBUG][0m Discard: Dynamite
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 7,[Beer] weight: 5,[Beer] weight: 5,[Beer] weight: 5,
+[93m[DEBUG][0m Discard: Beer
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Beer] [Bang] [General Store] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 6,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 6,[Bang] weight: 6,[General Store] weight: 6,[Bang] weight: 6,[Beer] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 6,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 6,[Bang] weight: 6,[General Store] weight: 6,[Bang] weight: 6,[Beer] weight: 0,
+[93m[DEBUG][0m Discard: Beer
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [General Store] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Rev Carabine]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [General Store] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] [Cat Balou] [Volcanic] 
+Weapon: [Rev Carabine]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Volcanic] weight: 200,[Bang] weight: 6,[Bang] weight: 6,[Missed] weight: 0,[Missed] weight: 0,[Cat Balou] weight: 0,
+[93m[DEBUG][0m Use: Volcanic
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Cat Balou] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Cat Balou] weight: 0,
+[93m[DEBUG][0m Discard: Cat Balou
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [General Store] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Missed] weight: 0,[Missed] weight: 0,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [General Store] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [General Store] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] [Jail] [Stagecoach] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [General Store] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 7,[Beer] weight: 5,[Beer] weight: 5,[Jail] weight: 0,[Stagecoach] weight: -15,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 7,[Beer] weight: 5,[Beer] weight: 5,[Jail] weight: 0,[Stagecoach] weight: -15,
+[93m[DEBUG][0m Discard: Stagecoach
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 7,[Beer] weight: 5,[Beer] weight: 5,[Jail] weight: 0,
+[93m[DEBUG][0m Discard: Jail
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [General Store] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [General Store] [Bang] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 6,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 6,[Bang] weight: 6,[Bang] weight: 6,[Bang] weight: 6,[General Store] weight: 1,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 6,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 6,[Bang] weight: 6,[Bang] weight: 6,[Bang] weight: 6,[General Store] weight: 1,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: General Store
+0(Sheriff): 6,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 6,[Bang] weight: 6,[Bang] weight: 6,[Bang] weight: 6,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] [Wells Fargo] [Cat Balou] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Cat Balou] weight: 0,[Wells Fargo] weight: -20,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Cat Balou] weight: 0,[Wells Fargo] weight: -20,
+[93m[DEBUG][0m Discard: Wells Fargo
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Cat Balou] weight: 0,
+[93m[DEBUG][0m Discard: Cat Balou
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Mustang] weight: 450,[Bang] weight: 5,[Missed] weight: 0,
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Bang] weight: 5,[Missed] weight: 0,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] [Mustang] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Mustang] weight: 450,[Indians] weight: 5,[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Mustang
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 3,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] [Bang] [Jail] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 7,[Beer] weight: 5,[Beer] weight: 5,[Bang] weight: 0,[Jail] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 7,[Beer] weight: 5,[Beer] weight: 5,[Bang] weight: 0,[Jail] weight: 0,
+[93m[DEBUG][0m Discard: Jail
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 7,[Beer] weight: 5,[Beer] weight: 5,[Bang] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] [Duel] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 6,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Duel] weight: 144,[Bang] weight: 6,[Bang] weight: 6,[Bang] weight: 6,[Bang] weight: 6,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Duel
+[93m[DEBUG][0m 2 attack 0
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 7,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 7,[Bang] weight: 7,[Bang] weight: 7,[Bang] weight: 7,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 7,[Bang] weight: 7,[Bang] weight: 7,[Bang] weight: 7,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] [Missed] [Panic] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Discard: Panic
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Missed
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Indians] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 4,3(Criminal): 4,
+[Bang] weight: 5,[Bang] weight: 5,[Stagecoach] weight: -10,
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 4,3(Criminal): 4,
+[Bang] weight: 5,[Stagecoach] weight: -15,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Indians] [Missed] [Missed] [Bang] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 4,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 4,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 4,3(Criminal): 4,
+[Indians] weight: 5,[Bang] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 4,3(Criminal): 4,
+[Indians] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Indians
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Indians] [Schofield] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Schofield] weight: 120,[Indians] weight: 28,[Beer] weight: 5,[Beer] weight: 5,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Schofield
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Indians] weight: 28,[Beer] weight: 5,[Beer] weight: 5,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Indians
+[93m[DEBUG][0m 1 attack 0
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[Beer] weight: 5,[Bang] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 1(max: 5)
+Cards:[Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 1(max: 5)
+Cards:[Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Bang] [Missed] [Missed] [Jail] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 7,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 28,[Bang] weight: 28,[Missed] weight: 0,[Missed] weight: 0,[Jail] weight: 0,
+[93m[DEBUG][0m Use: Bang
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 7,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Missed] weight: 0,[Missed] weight: 0,[Jail] weight: 0,[Bang] weight: -100,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 1(max: 5)
+Cards:[Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Jail] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 1(max: 5)
+Cards:[Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Jail] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Bang] [Beer] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Bang] weight: 0,[Beer] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Bang] weight: 0,[Beer] weight: 0,
+[93m[DEBUG][0m Discard: Beer
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 1(max: 5)
+Cards:[Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Jail] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Bang] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 5,3(Criminal): 4,
+[Beer] weight: 20,[Bang] weight: 0,[Bang] weight: 0,
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 5,3(Criminal): 4,
+[Bang] weight: 0,[Bang] weight: 0,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 1(max: 5)
+Cards:[Missed] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Jail] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Bang] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 5,3(Criminal): 4,
+[Beer] weight: 20,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Beer
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 5,3(Criminal): 4,
+[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Jail] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Bang] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Beer] [Bang] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Jail] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Bang] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[Beer] weight: 5,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[Beer] weight: 5,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[Beer] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Beer
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Jail] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Bang] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Jail] [Stagecoach] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Bang] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 7,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 28,[Bang] weight: 28,[Missed] weight: 0,[Missed] weight: 0,[Jail] weight: 0,[Stagecoach] weight: -15,
+[93m[DEBUG][0m Use: Bang
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 7,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Missed] weight: 0,[Missed] weight: 0,[Jail] weight: 0,[Stagecoach] weight: -10,[Bang] weight: -100,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Missed] weight: 0,[Missed] weight: 0,[Jail] weight: 0,[Stagecoach] weight: -10,[Bang] weight: -100,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Jail] [Stagecoach] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Bang] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Jail] [Stagecoach] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Bang] [Jail] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Bang] weight: 0,[Jail] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Bang] weight: 0,[Jail] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Jail
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Bang] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Jail] [Stagecoach] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 4,
+[Gatling] weight: 20,[Beer] weight: 15,[Bang] weight: 0,
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 4,
+[Beer] weight: 15,[Bang] weight: 0,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Gatling] [Beer] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Jail] [Stagecoach] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 4,
+[Gatling] weight: 20,[Beer] weight: 15,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Gatling
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 4,
+[Beer] weight: 15,[Bang] weight: 6,
+[93m[DEBUG][0m Use: Beer
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 4,
+[Bang] weight: 6,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Stagecoach] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [Bang] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Stagecoach] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[General Store] weight: 5,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[General Store] weight: 5,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Stagecoach] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Stagecoach] [Cat Balou] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 7,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Missed] weight: 0,[Jail] weight: 0,[Cat Balou] weight: 0,[Missed] weight: 0,[Stagecoach] weight: -10,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): 2,2(Criminal): -10000,3(Criminal): 1,
+[Missed] weight: 0,[Jail] weight: 0,[Cat Balou] weight: 0,[Missed] weight: 0,[Stagecoach] weight: -10,
+[93m[DEBUG][0m Discard: Stagecoach
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Cat Balou] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 3(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Cat Balou] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Bang] [Missed] [Missed] [Panic] [Remington] 
+Weapon: [Volcanic]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Remington] weight: 130,[Bang] weight: 0,[Missed] weight: 0,[Missed] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Use: Remington
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 6,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Bang] weight: 54,[Missed] weight: 0,[Missed] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Use: Bang
+[93m[DEBUG][0m 3 attack 0
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 7,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Missed] weight: 0,[Missed] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Cat Balou] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 5,
+[Missed] weight: 0,[Bang] weight: -100,[Bang] weight: -100,
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 5,
+[Bang] weight: -100,[Bang] weight: -100,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Missed] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Cat Balou] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 5,
+[Bang] weight: 0,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 5,
+[Bang] weight: 0,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Cat Balou] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] [Panic] [Bang] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Cat Balou] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Panic] weight: 500,[Beer] weight: 5,[Missed] weight: 0,[General Store] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Panic
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Schofield] weight: 120,[Beer] weight: 5,[Missed] weight: 0,[General Store] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Use: Schofield
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[General Store] weight: 5,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 5,3(Criminal): 5,
+[Beer] weight: 5,[General Store] weight: 5,[Missed] weight: 0,[Bang] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Cat Balou] [Missed] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [Schofield]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Cat Balou] [Missed] [Bang] [Panic] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 7,1(Traitor): 3,2(Criminal): -10000,3(Criminal): 1,
+[Cat Balou] weight: 360,[Panic] weight: 360,[Bang] weight: 3,[Missed] weight: 0,[Jail] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Cat Balou
+[93m[DEBUG][0m 2->1: select [Schofield]
+[93m[DEBUG][0m player 2, choose your card
+0(Sheriff): 7,1(Traitor): 3,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 3,[Missed] weight: 0,[Jail] weight: 0,[Missed] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): 3,2(Criminal): -10000,3(Criminal): 1,
+[Bang] weight: 3,[Missed] weight: 0,[Jail] weight: 0,[Missed] weight: 0,[Panic] weight: 0,
+[93m[DEBUG][0m Discard: Panic
+[93m[DEBUG][0m It's player 3 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] [Beer] [Duel] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 3, choose your card
+0(Sheriff): 7,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Missed] weight: 0,[Missed] weight: 0,[Panic] weight: 0,[Beer] weight: 0,[Duel] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): 0,2(Criminal): 0,3(Criminal): -10000,
+[Missed] weight: 0,[Missed] weight: 0,[Panic] weight: 0,[Beer] weight: 0,[Duel] weight: 0,
+[93m[DEBUG][0m Discard: Duel
+[93m[DEBUG][0m It's player 0 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Missed] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] [Beer] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 5,
+[Rev Carabine] weight: 140,[Dynamite] weight: 2,[Indians] weight: 0,
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 5,
+[Dynamite] weight: 2,[Indians] weight: 0,
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Bang] [Missed] [Rev Carabine] [Dynamite] 
+Weapon: [Schofield]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] [Beer] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 5,
+[Rev Carabine] weight: 140,[Dynamite] weight: 2,[Bang] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Use: Rev Carabine
+[93m[DEBUG][0m player 0, choose your card
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 5,
+[Dynamite] weight: 4,[Bang] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): -10000,1(Traitor): 5,2(Criminal): 6,3(Criminal): 5,
+[Dynamite] weight: 4,[Bang] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+[93m[DEBUG][0m It's player 1 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Dynamite] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] [Beer] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Dynamite] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [General Store] [Bang] [Missed] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] [Beer] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 1, choose your card
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 6,3(Criminal): 5,
+[Beer] weight: 5,[Missed] weight: 0,[General Store] weight: 0,[Bang] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Now: Discard cards.
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 6,3(Criminal): 5,
+[Beer] weight: 5,[Missed] weight: 0,[General Store] weight: 0,[Bang] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: Bang
+0(Sheriff): 7,1(Traitor): -10000,2(Criminal): 6,3(Criminal): 5,
+[Beer] weight: 5,[General Store] weight: 5,[Missed] weight: 0,[Missed] weight: 0,
+[93m[DEBUG][0m Discard: General Store
+[93m[DEBUG][0m It's player 2 turn!!!
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Dynamite] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [Missed] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Missed] [Bang] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] [Beer] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+------------------------------------------
+player 0(Computer C),role: Sheriff,character: Kit_Carlson:
+hp: 2(max: 5)
+Cards:[Missed] [Dynamite] 
+Weapon: [Rev Carabine]
+Barrel: N,Mustang: Y,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 1(Computer A),role: Traitor,character: Suzy_Lafayette:
+hp: 3(max: 4)
+Cards:[Beer] [Missed] [Missed] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+player 2(Computer D),role: Criminal,character: Slab_the_Killer:
+hp: 4(max: 4)
+Cards:[Missed] [Jail] [Missed] [Bang] [Bang] [Cat Balou] 
+Weapon: [N]
+Barrel: N,Mustang: N,Scope: Y,Jail: N,Dynamite: N
+------------------------------------------
+player 3(Computer B),role: Criminal,character: Jourdonnais:
+hp: 4(max: 4)
+Cards:[Missed] [Missed] [Panic] [Beer] 
+Weapon: [Remington]
+Barrel: Y,Mustang: N,Scope: N,Jail: N,Dynamite: N
+------------------------------------------
+[93m[DEBUG][0m player 2, choose your card
+0(She

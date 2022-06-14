@@ -7,7 +7,14 @@
 #include "player.h"
 #include "roles.h"
 #include "types.h"
-
+void print_status(Game *game);
+bool valid_assign_role(Role *role, i32 player_total) {
+    if (role == NULL) return false;
+    printf("assign: %s\n", role_name[role->type]);
+    if (game_start_role_in_players[player_total - 4][role->type] <= 0) return false;
+    game_start_role_in_players[player_total - 4][role->type]--;
+    return true;
+}
 void game_join(Game *game, const char *name, bool is_computer) {
     Player *player = $(calloc(1, sizeof(Player)));
     player->name = $(strdup(name));
@@ -40,7 +47,9 @@ void game_start(Game *game) {
     // assign card, role, character to players
     for (int i = 0; i < game->players->size; i++) {
         Player *nowPlayer = game->players->data[i];
-        nowPlayer->role = game->roles->pop(game->roles);
+        while (!valid_assign_role(nowPlayer->role, game->players->size)) {
+            nowPlayer->role = game->roles->pop(game->roles);
+        }
         nowPlayer->character = game->characters->pop(game->characters);
         nowPlayer->bullet = nowPlayer->character->health + (nowPlayer->role->type == Sheriff);
         nowPlayer->hp = nowPlayer->bullet;
@@ -75,7 +84,6 @@ void equip_weapon(Game *game, i32 player_id, Card *card) {
 }
 
 void game_next(Game *game) {
-    DEBUG_PRINT("turn: %ld, total_players: %ld\n", game->turn, game->players->size);
     Player *player = game->players->data[game->turn % game->players->size];
     // if player has died, then skip.
     i32 t = 0;
@@ -84,6 +92,7 @@ void game_next(Game *game) {
     }
     game->turn++;
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
+    print_status(game);
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
         if (dynamite_judge(game, player->id)) {
@@ -107,6 +116,7 @@ void game_next(Game *game) {
                }){game, player});*/
 
     // 1.Draw two cards
+    DEBUG_PRINT("1.Draw two cards\n");
     if (player->character->type == Black_Jack) {
         player_draw_deck(game, player->id, 1);
         Card *second_card = get_deck_top(game);
@@ -117,19 +127,36 @@ void game_next(Game *game) {
     } else if (player->character->type == Kit_Carlson) {
         Cards *cards = create_Cards();
         for (int i = 0; i < 3; i++) cards->push(cards, get_deck_top(game));
+        ai_request_setting(AI_FORCE_PLAY, 0);
         player->select(game, player->id, cards);
+        ai_request_setting(AI_FORCE_PLAY, 0);
         player->select(game, player->id, cards);
-        game->deck->insert(game->deck, 0, cards->pop(cards));
+        Card *debug_card = cards->pop(cards);
+        for (int i = 0; i < game->deck->size; i++) {
+            if (game->deck->data[i] == NULL) {
+                DEBUG_PRINT("NULLLLLLLLL!\n");
+                exit(1);
+            }
+        }
+        DEBUG_PRINT("check passed before insert\n");
+        game->deck->insert(game->deck, 0, debug_card);
+        for (int i = 0; i < game->deck->size; i++) {
+            if (game->deck->data[i] == NULL) {
+                DEBUG_PRINT("NULLLLLLLLL!\n");
+                exit(1);
+            }
+        }
         cards->free(cards);
     } else if (player->character->type == Pedro_Ramirez) {
     } else {
         player_draw_deck(game, player->id, 2);
     }
-    DEBUG_PRINT("Done: Draw two cards\n");
+    print_status(game);
     // 2.Play any number of cards
     bool bang_used = 0;
     ai_bang_use = 0;
     while (true) {
+        DEBUG_PRINT("player %d, choose your card\n", player->id);
         ai_request_setting(AI_PLAY, 0);
         Card *select_card = player->request(game, player->id);
         if (select_card == NULL) break;
@@ -146,35 +173,33 @@ void game_next(Game *game) {
         }
         // 2.use card
         // (a)blue card
+        DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (is_weapon(select_card)) {
             equip_weapon(game, player->id, select_card);
             continue;
         }
         // (b)brown card
-        DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (select_card->use(game, player->id) == SUCCESS) {
-            DEBUG_PRINT("Done: use success\n");
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
                 bang(game, player->id);
             }
             game->discard->push(game->discard, select_card);
         }
-        DEBUG_PRINT("Done: 2.use cards\n");
         // 3.check if someone died(only brown card used)
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->hp <= 0) died_player(game, player->id, i);
         }
-        DEBUG_PRINT("Done: 3.check if someone died\n");
         if (game->finished) return;
     }
     //  3.Discard excess cards
-    DEBUG_PRINT("In Progress: 3.Discard excess cards\n");
+    DEBUG_PRINT("Now: Discard cards.\n");
     while (player->hands->size > player->hp) {
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
-        game->discard->push(game->discard, select_card);
+        DEBUG_PRINT("Discard: %s\n", card_name[select_card->type]);
+
+        if (select_card != NULL) game->discard->push(game->discard, select_card);
     }
-    DEBUG_PRINT("Done: 3.Discard excess cards\n");
 }
 
 Game *new_game() {
@@ -205,4 +230,25 @@ Game *new_game() {
     return game;
 }
 
+void print_status(Game *game) {
+    printf("------------------------------------------\n");
+    for (int i = 0; i < game->players->size; i++) {
+        Player *player = game->players->data[i];
+        printf("player %d(%s),role: %s,character: %s:\n", player->id, player->name,
+               role_name[player->role->type], character_name[player->character->type]);
+        printf("hp: %d(max: %d)\n", player->hp, player->bullet);
+        if (player->hands == NULL) return;
+        printf("Cards(%ld):", player->hands->size);
+        for (int i = 0; i < player->hands->size; i++) {
+            printf("[%s] ", card_name[player->hands->data[i]->type]);
+        }
+        printf("\nWeapon: [%s]\n", player->weapon == NULL ? "N" : card_name[player->weapon->type]);
+        printf("Barrel: %s,", player->barrel == NULL ? "N" : "Y");
+        printf("Mustang: %s,", player->mustang == NULL ? "N" : "Y");
+        printf("Scope: %s,", player->scope == NULL ? "N" : "Y");
+        printf("Jail: %s,", player->jail == NULL ? "N" : "Y");
+        printf("Dynamite: %s\n", player->dynamite == NULL ? "N" : "Y");
+        printf("------------------------------------------\n");
+    }
+}
 #endif  // __CORE_GAME_H

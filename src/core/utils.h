@@ -26,16 +26,18 @@ void transfer(Cards* from, Cards* to) {
 i32 distance(Game* game, i32 me_id, i32 enemy_id) {
     // initial distance (exclude special card)
     i32 front_dis = 1;
+    i32 step = 1;
     while (true) {
-        if ((me_id + front_dis) % game->players->size == enemy_id) break;
-
-        if (game->players->data[(me_id + front_dis) % game->players->size]->hp > 0) front_dis++;
+        if ((me_id + step) % game->players->size == enemy_id) break;
+        step++;
+        if (game->players->data[(me_id + step) % game->players->size]->hp > 0) front_dis++;
     }
     i32 back_dis = 1;
+    step = 1;
     while (true) {
-        if ((game->players->size + me_id - back_dis) % game->players->size == enemy_id) break;
-        if (game->players->data[(game->players->size + me_id - back_dis) % game->players->size]
-                ->hp > 0)
+        if ((game->players->size + me_id - step) % game->players->size == enemy_id) break;
+        step++;
+        if (game->players->data[(game->players->size + me_id - step) % game->players->size]->hp > 0)
             back_dis++;
     }
     i32 special_card_dis = ((game->players->data[enemy_id]->mustang != NULL) -
@@ -73,11 +75,33 @@ bool alive(Game* game, RoleType role) {
  * @return Card*
  */
 Card* get_deck_top(Game* game) {
+    for (int i = 0; i < game->deck->size; i++) {
+        if (game->deck->data[i] == NULL) {
+            DEBUG_PRINT("(before)get_deck_top: NULLLLLLLLL!\n");
+            exit(1);
+        }
+    }
     if (game->deck->size == 0) {
+        for (int i = 0; i < game->discard->size; i++) {
+            if (game->discard->data[i] == NULL) {
+                DEBUG_PRINT("(after)NULL on discard[%d]\n", i);
+                exit(1);
+            }
+        }
+        DEBUG_PRINT("game->deck->size is 0\n");
         transfer(game->discard, game->deck);
         game->deck->shuffle(game->deck);
     }
+    DEBUG_PRINT("deck remain: %ld\n", game->deck->size);
+    for (int i = 0; i < game->deck->size; i++) {
+        if (game->deck->data[i] == NULL) {
+            DEBUG_PRINT("(after)NULL on deck[%d]\n", i);
+            exit(1);
+        }
+    }
+    DEBUG_PRINT("deck remain: %ld\n", game->deck->size);
     Card* top_card = game->deck->pop(game->deck);
+    DEBUG_PRINT("give top_card: %x\n", top_card);
     return top_card;
 }
 
@@ -150,6 +174,7 @@ bool discard_from_enemy(Game* game, i32 me_id, i32 enemy_id) {
     while (!selected) {
         selected = me->take(game, me_id, enemy_id);
     }
+    DEBUG_PRINT("%d->%d: select [%s]\n", me_id, enemy_id, card_name[selected->type]);
 
     game->discard->push(game->discard, selected);
 

@@ -13,6 +13,7 @@
 #define AI_PLAY 0
 #define AI_DISCARD 1
 #define AI_SPECIFY 2
+#define AI_FORCE_PLAY 3
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
@@ -27,15 +28,26 @@ i8       ai_request_type;  // 0: play 1: discard
 CardType ai_request_card;
 bool     ai_bang_use;
 
-i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_disgust[10],
-                   i32 max_dist_id[10]);
-i32 equip_total(Game* game, i32 me_id, i32 player_id);
-i32 card_count(Game* game, i32 player_id, i32 card);
+i32  ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_disgust[10],
+                    i32 max_dist_id[10]);
+i32  equip_total(Game* game, i32 me_id, i32 player_id);
+i32  card_count(Game* game, i32 player_id, i32 card);
+void print_weight_card(Game* game, i32 me_id, Weight weight[], Cards* candi_card) {
+    for (int i = 0; i < 4; i++) {
+        printf("%d(%s): %d,", i, role_name[game->players->data[i]->role->type], disgust[me_id][i]);
+    }
+    printf("\n");
+    for (int i = 0; i < candi_card->size; i++) {
+        printf("[%s] weight: %d,", card_name[candi_card->data[weight[i].id]->type],
+               weight[i].weight);
+    }
+    printf("\n");
+}
 
 /**
  * @brief AI request setting
  *
- * @param type AI_PLAY(0) AI_DISCARD(1) AI_SPECIFY(2)
+ * @param type AI_PLAY(0) AI_DISCARD(1) AI_SPECIFY(2) AI_FORCE_PLAY(3)
  * @param card if type is AI_SPECIFY(2), then need it
  */
 void ai_request_setting(i8 type, CardType card) {
@@ -101,6 +113,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     Player* ai = game->players->data[player_id];
     i32     max_disgust[10] = {0};
     i32     max_dist_id[10] = {0};
+
     for (int i = 0; i < game->players->size; i++) {
         if (game->players->data[i]->hp <= 0 || i == player_id) continue;
         i32 dist = (distance(game, player_id, i) > 0 ? distance(game, player_id, i) : 0);
@@ -117,19 +130,20 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     }
     Weight weight[candi_card->size];
     for (int i = 0; i < candi_card->size; i++) {
+        // DEBUG_PRINT("(size: %d,ai: %d)card: %s\n", candi_card->size, player_id,
+        //             card_name[candi_card->data[i]->type]);
         weight[i].weight = ai_card_weight(game, candi_card, player_id, i, max_disgust, max_dist_id);
         weight[i].id = i;
         weight[i].target = ai_target;
     }
     qsort(weight, candi_card->size, sizeof(Weight), ai_weight_cmp);  // sort from big to small
-
+    print_weight_card(game, player_id, weight, candi_card);
     // if event is discard cards
     // DEBUG_PRINT("request_type: %d\n", ai_request_type);
     if (ai_request_type == AI_DISCARD) {
-        DEBUG_PRINT("DISCARD\n");
         i32 missed_cnt = 0;
         for (int i = candi_card->size - 1; i >= 0; i--) {
-            if (ai->hands->data[i]->type == Missed && missed_cnt < 2) {
+            if (candi_card->data[weight[i].id]->type == Missed && missed_cnt < 2) {
                 // prevent discard Missed, reserve at most 2 Missed
                 missed_cnt++;
                 continue;
@@ -139,7 +153,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
         return weight[candi_card->size - 1].id;
     }
     // if event is play cards
-    if (weight[0].weight <= 10) return -1;
+    if (ai_request_type != AI_FORCE_PLAY && weight[0].weight <= 8) return -1;
     ai_target = weight[0].target;
     if (ai->role->type == Traitor && game->players->data[ai_target]->role->type == Sheriff) {
         i32 card_type = candi_card->data[weight[0].id]->type;
@@ -170,11 +184,9 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
     }
     i32 max_distance = 1;
     if (ai->weapon != NULL) max_distance += ai->weapon->type - Volcanic;
-    DEBUG_PRINT("Card: %s\n", card_name[card]);
     // many many cards
     if (card == Bang) {
         if (ai_bang_use) {
-            DEBUG_PRINT("Bang used\n");
             return -100;
         }
         ai_target = max_dist_id[max_distance];
@@ -254,23 +266,23 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
     if (card == Volcanic) return 200;
     if (card == Schofield) {
         if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
-            return 0;
-        return 120 * ((ai->weapon != NULL ? ai->weapon->type : 0) < card);
+            return -100;
+        return 120 * (1 - 2 * ((ai->weapon != NULL ? ai->weapon->type : 0) > card));
     }
     if (card == Remington) {
         if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
-            return 0;
-        return 130 * ((ai->weapon != NULL ? ai->weapon->type : 0) < card);
+            return -100;
+        return 130 * (1 - 2 * ((ai->weapon != NULL ? ai->weapon->type : 0) > card));
     }
     if (card == Rev_Carabine) {
         if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
-            return 0;
-        return 140 * ((ai->weapon != NULL ? ai->weapon->type : 0) < card);
+            return -100;
+        return 140 * (1 - 2 * ((ai->weapon != NULL ? ai->weapon->type : 0) > card));
     }
     if (card == Winchester) {
         if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
-            return 0;
-        return 150 * ((ai->weapon != NULL ? ai->weapon->type : 0) < card);
+            return -100;
+        return 150 * (1 - 2 * ((ai->weapon != NULL ? ai->weapon->type : 0) > card));
     }
 }
 

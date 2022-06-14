@@ -8,13 +8,10 @@
 #include "utils.h"
 
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
-    DEBUG_PRINT("%d died %d\n", me_id, enemy_id);
     Player* enemy = game->players->data[enemy_id];
-    DEBUG_PRINT("enemy hp: %d\n", enemy->hp);
     if (enemy->hp > 0) return;
 
     while (1) {
-        DEBUG_PRINT("request: Beer");
         ai_request_setting(AI_SPECIFY, Beer);
         Card* card = enemy->request(game, enemy_id);
         if (card == NULL) break;
@@ -32,13 +29,15 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (alive(game, Sheriff) == false) {
         // Sheriff died
         game->finished = true;
+        DEBUG_PRINT("game finished.\n");
     } else if (alive(game, Criminal) == false && alive(game, Traitor) == false) {
         // Criminal and Traitor died
         game->finished = true;
+        DEBUG_PRINT("game finished.\n");
     }
 
     if (game->finished) return;
-
+    DEBUG_PRINT("game not finished.\n");
     // discard all cards
     Cards* discard_card = game->discard;
     if (me_id != enemy_id && game->players->data[me_id]->character->type == Vulture_Sam)
@@ -52,7 +51,11 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (NULL != enemy->dynamite) discard_card->push(discard_card, enemy->dynamite);
 
     // Penalties and Rewards
-    if (me_id == enemy_id) return;
+    DEBUG_PRINT("Penalties and Rewards.\n");
+    if (me_id == enemy_id) {
+        DEBUG_PRINT("I killed myself.\n");
+        return;
+    }
     Player* me = game->players->data[me_id];
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
@@ -65,6 +68,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         if (NULL != me->jail) discard_card->push(discard_card, me->jail);
         if (NULL != me->dynamite) discard_card->push(discard_card, me->dynamite);
     } else if (enemy->role->type == Criminal) {
+        DEBUG_PRINT("enemy->role->type == Criminal\n");
         player_draw_deck(game, me_id, 3);
     }
     return;
@@ -87,9 +91,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             draw_from_player(game, enemy_id, me_id);
         }
         if (enemy_type == Sid_Ketchum) {
-            DEBUG_PRINT("enemy is Sid_Ketchum\n");
             if (game->players->data[enemy_id]->hands->size >= 2) {
-                DEBUG_PRINT("enemy has 2 or more cards\n");
                 while (1) {
                     ai_request_setting(AI_DISCARD, 0);
                     Card* card = game->players->data[enemy_id]->request(game, enemy_id);
@@ -99,7 +101,6 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
                     game->discard->push(game->discard, card);
                     break;
                 }
-                DEBUG_PRINT("has discarded one card\n");
                 while (1) {
                     ai_request_setting(AI_DISCARD, 0);
                     Card* card = game->players->data[enemy_id]->request(game, enemy_id);
@@ -113,12 +114,9 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
         }
     }
     // determine AI disgust value
-    DEBUG_PRINT("ai_disgust_change\n");
     ai_disgust_change(me_id, enemy_id, 1);
     // dead
-    DEBUG_PRINT("died_player\n");
-    died_player(game, me_id, enemy_id);
-    DEBUG_PRINT("Done: Attack player\n");
+    // died_player(game, me_id, enemy_id);
     return;
 }
 
@@ -141,8 +139,6 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     while (1) {
         ai_request_setting(AI_SPECIFY, Missed);  // ai no use bang
         card[card_amount] = enemy->request(game, enemy_id);
-        DEBUG_PRINT("Give: %s\n",
-                    card[card_amount] == NULL ? "NULL" : card_name[card[card_amount]->type]);
         if (card[card_amount] == NULL) break;
         if (card[card_amount]->type == Missed) {
             // card_amount++;
@@ -166,7 +162,6 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     }
 
     attack_player(game, me_id, enemy_id);
-    DEBUG_PRINT("Done: bang_no_distance\n");
     return;
 }
 
@@ -210,7 +205,6 @@ bool bang(Game* game, i32 me_id) {
 
     if (weapon_distance < enemy_distance) return FAIL;
     bang_no_distance(game, me_id, enemy_id);
-    DEBUG_PRINT("Done: bang\n");
     return SUCCESS;
 }
 
@@ -373,30 +367,35 @@ bool dynamite(Game* game, i32 me_id) {
 
 bool volcanic(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool schofield(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool remington(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool rev_carabine(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool winchester(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
@@ -411,6 +410,7 @@ bool general_store(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
         int     id = (me_id + i) % game->players->size;
         Player* player = game->players->get(game->players, id);
+        ai_request_setting(AI_FORCE_PLAY, 0);
         if (player->hp > 0) player->select(game, id, set);
     }
     set->free(set);

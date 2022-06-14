@@ -117,8 +117,7 @@ Card* computer_player_request(Game* game, i32 player_id) {
         return NULL;
     }
     i32 choose = ai_request(game, player_id, player->hands);
-    DEBUG_PRINT("choose_id: %d\n", choose);
-    // DEBUG_PRINT("Choose: %s\n", choose < 0 ? "NULL" : card_name[choose]);
+    //  DEBUG_PRINT("Choose: %s\n", choose < 0 ? "NULL" : card_name[choose]);
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
     }
