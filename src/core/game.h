@@ -98,11 +98,7 @@ void game_next(Game *game) {
 
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
-        if (dynamite_judge(game, player->id)) {
-            Card *card = player->dynamite;
-            player->dynamite = NULL;
-            game->discard->push(game->discard, card);
-        }
+        dynamite_judge(game, player->id);
     }
     if (player->hp <= 0) return;
     if (player->jail != NULL) {
