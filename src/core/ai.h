@@ -27,7 +27,8 @@ i8       ai_request_type;  // 0: play 1: discard
 CardType ai_request_card;
 bool     ai_bang_use;
 
-i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 max_dist_id[10]);
+i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_disgust[10],
+                   i32 max_dist_id[10]);
 i32 equip_total(Game* game, i32 me_id, i32 player_id);
 i32 card_count(Game* game, i32 player_id, i32 card);
 
@@ -96,6 +97,7 @@ void ai_initialize(Game* game, i32 player_id) {
 }
 
 i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
+    if (candi_card->size == 0) return -1;
     Player* ai = game->players->data[player_id];
     i32     max_disgust[10] = {0};
     i32     max_dist_id[10] = {0};
@@ -115,7 +117,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     }
     Weight weight[candi_card->size];
     for (int i = 0; i < candi_card->size; i++) {
-        weight[i].weight = ai_card_weight(game, player_id, i, max_disgust, max_dist_id);
+        weight[i].weight = ai_card_weight(game, candi_card, player_id, i, max_disgust, max_dist_id);
         weight[i].id = i;
         weight[i].target = ai_target;
     }
@@ -156,9 +158,10 @@ i32 ai_player_cnt(Game* game) {
     return cnt;
 }
 
-i32 ai_card_weight(Game* game, i32 ai_id, i32 card_id, i32 max_disgust[10], i32 max_dist_id[10]) {
+i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_disgust[10],
+                   i32 max_dist_id[10]) {
     Player*  ai = game->players->data[ai_id];
-    CardType card = ai->hands->data[card_id]->type;
+    CardType card = cards->data[card_id]->type;
     i32      Sheriff_id;
     i32      player_cnt = ai_player_cnt(game);
     for (int i = 0; i < game->players->size; i++) {
