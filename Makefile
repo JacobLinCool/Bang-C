@@ -8,7 +8,7 @@ test_files = $(wildcard $(test_dir)/**/*.c)
 all: build
 
 server: force
-	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/wsServer/libws.a $(third_dir)/mkjson/lib/libmkjson.a $(third_dir)/cJSON/libcjson.a
+	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/wsServer/libws.a $(third_dir)/cJSON/libcjson.a
 	@echo "Build complete"
 
 build:
