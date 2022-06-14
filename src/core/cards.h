@@ -8,9 +8,7 @@
 #include "utils.h"
 
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
-    DEBUG_PRINT("%d died %d\n", me_id, enemy_id);
     Player* enemy = game->players->data[enemy_id];
-    DEBUG_PRINT("enemy hp: %d\n", enemy->hp);
     if (enemy->hp > 0) return;
 
     while (1) {
@@ -119,7 +117,6 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
         }
     }
     // determine AI disgust value
-    DEBUG_PRINT("ai_disgust_change\n");
     ai_disgust_change(me_id, enemy_id, 1);
     // dead
     // died_player(game, me_id, enemy_id);
@@ -146,8 +143,8 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     while (1) {
         ai_request_setting(AI_SPECIFY, Missed);  // ai no use bang
         card[card_amount] = enemy->request(game, enemy_id);
-        DEBUG_PRINT("Give: %s\n",
-                    card[card_amount] == NULL ? "NULL" : card_name[card[card_amount]->type]);
+        // DEBUG_PRINT("Give: %s\n",
+        //             card[card_amount] == NULL ? "NULL" : card_name[card[card_amount]->type]);
         if (card[card_amount] == NULL) break;
         if (card[card_amount]->type == Missed) {
             // card_amount++;
@@ -171,7 +168,6 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     }
 
     attack_player(game, me_id, enemy_id);
-    DEBUG_PRINT("Done: bang_no_distance\n");
     return;
 }
 
@@ -215,7 +211,7 @@ bool bang(Game* game, i32 me_id) {
 
     if (weapon_distance < enemy_distance) return FAIL;
     bang_no_distance(game, me_id, enemy_id);
-    DEBUG_PRINT("Done: bang\n");
+
     return SUCCESS;
 }
 

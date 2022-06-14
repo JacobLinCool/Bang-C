@@ -78,6 +78,7 @@ bool computer_player_select(Game* game, i32 player_id, Cards* cards) {
     /*i32     random = rand() % cards->size;*/
 
     i32 choose = ai_request(game, player_id, cards);
+    DEBUG_PRINT("select: [%s]\n", card_name[cards->data[choose]->type]);
 
     player->hands->push(player->hands, cards->remove(cards, choose));
 
