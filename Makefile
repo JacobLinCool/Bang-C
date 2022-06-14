@@ -8,7 +8,11 @@ test_files = $(wildcard $(test_dir)/**/*.c)
 all: build
 
 server: force
-	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/wsServer/libws.a $(third_dir)/cJSON/libcjson.a
+	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
+	@echo "Build complete"
+
+server-debug: force
+	@$(cc) -pthread -fsanitize=address -g -D DEBUG -o server $(src_dir)/web/server.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
 	@echo "Build complete"
 
 build:
@@ -38,11 +42,11 @@ setup:
 	rm -rf $(third_dir)/cimple
 	cd $(third_dir) && curl -L https://github.com/JacobLinCool/Cimple-Lib/archive/main.zip -o cimple.zip && unzip cimple.zip && rm cimple.zip && mv Cimple-Lib-main/src cimple && rm -rf Cimple-Lib-main && cd ..
 
-	rm -rf $(third_dir)/wsServer
-	cd $(third_dir) && curl -L https://github.com/Theldus/wsServer/archive/master.zip -o wsServer.zip && unzip wsServer.zip && rm wsServer.zip && mv wsServer-master wsServer && cd wsServer && make && cd ../..
-
 	rm -rf $(third_dir)/cJSON
 	cd $(third_dir) && curl -L https://github.com/DaveGamble/cJSON/archive/master.zip -o cJSON.zip && unzip cJSON.zip && rm cJSON.zip && mv cJSON-master cJSON && cd cJSON && make && cd ../..
+
+	rm -rf $(third_dir)/libwebsockets
+	cd $(third_dir) && curl -L https://github.com/warmcat/libwebsockets/archive/main.zip -o libwebsockets.zip && unzip libwebsockets.zip && rm libwebsockets.zip && mv libwebsockets-main libwebsockets && cd libwebsockets && mkdir build && cd build && cmake .. -DLWS_WITH_SSL=OFF && make && make install && cd ../../..
 
 	chmod -R 777 $(third_dir)
 
