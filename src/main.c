@@ -11,7 +11,8 @@ void main_win(Game* game);
 
 i32 main() {
     // setup_catcher();
-    srand(1481);
+    // srand(1481);
+    srand(1483);
     Game* game = new_game();
 
     char* player_name = $(calloc(1024, sizeof(char)));

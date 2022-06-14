@@ -25,12 +25,14 @@ void game_join(Game *game, const char *name, bool is_computer) {
         player->select = computer_player_select;
         player->request = computer_player_request;
         player->take = computer_player_take;
+        player->ramirez = computer_player_ramirez;
     } else {
         player->play = real_player;
         player->choose_enemy = player_choose_enemy;
         player->select = real_player_select;
         player->request = real_player_request;
         player->take = real_player_take;
+        player->ramirez = real_player_ramirez;
     }
     game->players->push(game->players, player);
     Event.emit(EVT_GAME_PLAYER_JOIN, &(struct {
