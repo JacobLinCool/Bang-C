@@ -20,7 +20,7 @@
             messages.push(message.payload);
         } else if (message.type === "ask") {
             const answer = prompt(message.payload.question);
-            name.value = answer;
+            name.value = answer || "";
             ws.send(JSON.stringify({ action: "name", name: answer }));
         } else if (message.type === "players") {
             players.splice(0, players.length, ...message.payload.players);
