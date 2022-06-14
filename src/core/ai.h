@@ -138,9 +138,9 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
         weight[i].target = ai_target;
     }
     qsort(weight, candi_card->size, sizeof(Weight), ai_weight_cmp);  // sort from big to small
-    print_weight_card(game, player_id, weight, candi_card);
-    // if event is discard cards
-    // DEBUG_PRINT("request_type: %d\n", ai_request_type);
+    // print_weight_card(game, player_id, weight, candi_card);
+    //  if event is discard cards
+    //  DEBUG_PRINT("request_type: %d\n", ai_request_type);
 
     if (ai_request_type == AI_DISCARD) {
         i32 missed_cnt = 0;

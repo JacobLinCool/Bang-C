@@ -16,13 +16,14 @@ i32 main() {
     time_t seed = time(NULL);
     // time_t seed = 1655227962;
     printf("seed: %ld\n", seed);
+    fflush(stdout);
     srand(seed);
     Game* game = new_game();
 
     char* player_name = $(calloc(1024, sizeof(char)));
-    printf("Enter player name: ");
-    scanf("%[^\n]%*c", player_name);
-    // game->join(game, player_name, false);
+    // printf("Enter player name: ");
+    // scanf("%[^\n]%*c", player_name);
+    //  game->join(game, player_name, false);
 
     game->join(game, "Computer A", true);
     game->join(game, "Computer B", true);
