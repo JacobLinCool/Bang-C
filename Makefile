@@ -8,7 +8,7 @@ test_files = $(wildcard $(test_dir)/**/*.c)
 all: build
 
 server: force
-	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/wsServer/libws.a $(third_dir)/mkjson/lib/libmkjson.a
+	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/wsServer/libws.a $(third_dir)/mkjson/lib/libmkjson.a $(third_dir)/cJSON/libcjson.a
 	@echo "Build complete"
 
 build:
@@ -39,10 +39,10 @@ setup:
 	cd $(third_dir) && curl -L https://github.com/JacobLinCool/Cimple-Lib/archive/main.zip -o cimple.zip && unzip cimple.zip && rm cimple.zip && mv Cimple-Lib-main/src cimple && rm -rf Cimple-Lib-main && cd ..
 
 	rm -rf $(third_dir)/wsServer
-	cd $(third_dir) && curl -L https://github.com/Theldus/wsServer/archive/master.zip -o wsServer.zip && unzip wsServer.zip && rm wsServer.zip && mv wsServer-master wsServer && cd wsServer && make install && cd ../..
+	cd $(third_dir) && curl -L https://github.com/Theldus/wsServer/archive/master.zip -o wsServer.zip && unzip wsServer.zip && rm wsServer.zip && mv wsServer-master wsServer && cd wsServer && make && cd ../..
 
-	rm -rf $(third_dir)/mkjson
-	cd $(third_dir) && curl -L https://github.com/Jacajack/mkjson/archive/master.zip -o mkjson.zip && unzip mkjson.zip && rm mkjson.zip && mv mkjson-master mkjson && cd mkjson && make && cd ../..
+	rm -rf $(third_dir)/cJSON
+	cd $(third_dir) && curl -L https://github.com/DaveGamble/cJSON/archive/master.zip -o cJSON.zip && unzip cJSON.zip && rm cJSON.zip && mv cJSON-master cJSON && cd cJSON && make && cd ../..
 
 	chmod -R 777 $(third_dir)
 

@@ -12,6 +12,6 @@ Utility.
 
 WebSocket Server.
 
-## [mkjson](https://github.com/Jacajack/mkjson)
+## [cJSON](https://github.com/DaveGamble/cJSON)
 
-JSON Serializer.
+JSON Serializer and Deserializer.
