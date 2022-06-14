@@ -182,6 +182,9 @@ void game_next(Game *game) {
                 bang(game, player->id);
             }
             game->discard->push(game->discard, select_card);
+        } else {
+            DEBUG_PRINT("Error Use\n");
+            player->hands->push(player->hands, select_card);
         }
         // 3.check if someone died(only brown card used)
         for (int i = 0; i < game->players->size; i++) {
