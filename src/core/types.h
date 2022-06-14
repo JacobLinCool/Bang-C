@@ -171,10 +171,8 @@ typedef struct EventPayload {
 } EventPayload;
 
 Role roles[] = {
-    {.type = Sheriff},
-    {.type = Deputy},
-    {.type = Criminal},
-    {.type = Traitor},
+    {.type = Sheriff},  {.type = Deputy},   {.type = Deputy},  {.type = Criminal},
+    {.type = Criminal}, {.type = Criminal}, {.type = Traitor},
 };
 
 Character chars[] = {

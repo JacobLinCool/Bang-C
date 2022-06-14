@@ -31,13 +31,15 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (alive(game, Sheriff) == false) {
         // Sheriff died
         game->finished = true;
+        DEBUG_PRINT("game finished.\n");
     } else if (alive(game, Criminal) == false && alive(game, Traitor) == false) {
         // Criminal and Traitor died
         game->finished = true;
+        DEBUG_PRINT("game finished.\n");
     }
 
     if (game->finished) return;
-
+    DEBUG_PRINT("game not finished.\n");
     // discard all cards
     Cards* discard_card = game->discard;
     if (me_id != enemy_id && game->players->data[me_id]->character->type == Vulture_Sam)
@@ -51,7 +53,11 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (NULL != enemy->dynamite) discard_card->push(discard_card, enemy->dynamite);
 
     // Penalties and Rewards
-    if (me_id == enemy_id) return;
+    DEBUG_PRINT("Penalties and Rewards.\n");
+    if (me_id == enemy_id) {
+        DEBUG_PRINT("I killed myself.\n");
+        return;
+    }
     Player* me = game->players->data[me_id];
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
@@ -64,6 +70,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         if (NULL != me->jail) discard_card->push(discard_card, me->jail);
         if (NULL != me->dynamite) discard_card->push(discard_card, me->dynamite);
     } else if (enemy->role->type == Criminal) {
+        DEBUG_PRINT("enemy->role->type == Criminal\n");
         player_draw_deck(game, me_id, 3);
     }
     return;
@@ -115,9 +122,8 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
     DEBUG_PRINT("ai_disgust_change\n");
     ai_disgust_change(me_id, enemy_id, 1);
     // dead
-    DEBUG_PRINT("died_player\n");
-    died_player(game, me_id, enemy_id);
-    DEBUG_PRINT("Done: Attack player\n");
+    // died_player(game, me_id, enemy_id);
+
     return;
 }
 
@@ -183,7 +189,7 @@ bool dynamite_judge(Game* game, i32 me_id) {
             left_player_id = (left_player_id + 1) % game->players->size;
         }
         game->players->data[left_player_id]->dynamite = me->dynamite;
-        me->mustang = NULL;
+        me->dynamite = NULL;
     }
     return SUCCESS;
 }
@@ -372,30 +378,35 @@ bool dynamite(Game* game, i32 me_id) {
 
 bool volcanic(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool schofield(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool remington(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool rev_carabine(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
 
 bool winchester(Game* game, i32 me_id) {
     Card* cur_card = game->players->data[me_id]->weapon;
+    if (cur_card == NULL) return SUCCESS;
     game->discard->push(game->discard, cur_card);
     return SUCCESS;
 }
@@ -410,6 +421,7 @@ bool general_store(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
         int     id = (me_id + i) % game->players->size;
         Player* player = game->players->get(game->players, id);
+        ai_request_setting(AI_FORCE_PLAY, 0);
         if (player->hp > 0) player->select(game, id, set);
     }
     set->free(set);
@@ -420,7 +432,7 @@ bool general_store(Game* game, i32 me_id) {
 bool is_weapon(Card* card) {
     if (card->type == Volcanic || card->type == Schofield || card->type == Remington ||
         card->type == Rev_Carabine || card->type == Remington || card->type == Barrel ||
-        card->type == Mustang || card->type == Scope) {
+        card->type == Mustang || card->type == Scope || card->type == Dynamite) {
         return true;
     }
     return false;

@@ -29,6 +29,8 @@ i32 main() {
     while (game->finished == false) {
         game->next(game);
     }
+    DEBUG_PRINT("Game End!\n");
+
     // Todo: who is win, GUI(show all roles.)
     $free();
 
