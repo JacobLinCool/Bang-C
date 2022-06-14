@@ -15,7 +15,6 @@
 #define AI_SPECIFY 2
 #define AI_FORCE_PLAY 3
 
-
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 typedef struct _Weight {
@@ -44,7 +43,6 @@ void print_weight_card(Game* game, i32 me_id, Weight weight[], Cards* candi_card
     }
     printf("\n");
 }
-
 
 /**
  * @brief AI request setting
@@ -189,7 +187,6 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
     if (ai->weapon != NULL) max_distance += ai->weapon->type - Volcanic;
     if (card == Bang) {
         if (ai_bang_use) {
-
             return -100;
         }
         ai_target = max_dist_id[max_distance];

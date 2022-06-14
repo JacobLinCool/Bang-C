@@ -160,7 +160,6 @@ bool discard_from_enemy(Game* game, i32 me_id, i32 enemy_id) {
     }
     DEBUG_PRINT("%d->%d: select [%s]\n", me_id, enemy_id, card_name[selected->type]);
 
-
     game->discard->push(game->discard, selected);
 
     return SUCCESS;
