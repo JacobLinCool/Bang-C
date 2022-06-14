@@ -244,6 +244,7 @@ bool computer_player_ramirez(Game* game, i32 player_id) {
     Cards* cards = create_Cards();
     DEBUG_PRINT("Top discard: [%s]\n", card_name[game->discard->back(game->discard)->type]);
     cards->push(cards, game->discard->back(game->discard));
+    ai_request_setting(AI_PLAY, 0);
     i32 choose = ai_request(game, player_id, cards);
     if (choose != -1) {
         DEBUG_PRINT("Choose from discard\n");
