@@ -179,7 +179,7 @@ bool dynamite_judge(Game* game, i32 me_id) {
             left_player_id = (left_player_id + 1) % game->players->size;
         }
         game->players->data[left_player_id]->dynamite = me->dynamite;
-        me->mustang = NULL;
+        me->dynamite = NULL;
     }
     return SUCCESS;
 }
@@ -421,7 +421,7 @@ bool general_store(Game* game, i32 me_id) {
 bool is_weapon(Card* card) {
     if (card->type == Volcanic || card->type == Schofield || card->type == Remington ||
         card->type == Rev_Carabine || card->type == Remington || card->type == Barrel ||
-        card->type == Mustang || card->type == Scope) {
+        card->type == Mustang || card->type == Scope || card->type == Dynamite) {
         return true;
     }
     return false;

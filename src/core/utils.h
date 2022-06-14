@@ -75,33 +75,17 @@ bool alive(Game* game, RoleType role) {
  * @return Card*
  */
 Card* get_deck_top(Game* game) {
-    for (int i = 0; i < game->deck->size; i++) {
-        if (game->deck->data[i] == NULL) {
-            DEBUG_PRINT("(before)get_deck_top: NULLLLLLLLL!\n");
-            exit(1);
-        }
-    }
     if (game->deck->size == 0) {
-        for (int i = 0; i < game->discard->size; i++) {
-            if (game->discard->data[i] == NULL) {
-                DEBUG_PRINT("(after)NULL on discard[%d]\n", i);
-                exit(1);
-            }
-        }
-        DEBUG_PRINT("game->deck->size is 0\n");
         transfer(game->discard, game->deck);
         game->deck->shuffle(game->deck);
     }
-    DEBUG_PRINT("deck remain: %ld\n", game->deck->size);
     for (int i = 0; i < game->deck->size; i++) {
         if (game->deck->data[i] == NULL) {
             DEBUG_PRINT("(after)NULL on deck[%d]\n", i);
             exit(1);
         }
     }
-    DEBUG_PRINT("deck remain: %ld\n", game->deck->size);
     Card* top_card = game->deck->pop(game->deck);
-    DEBUG_PRINT("give top_card: %x\n", top_card);
     return top_card;
 }
 

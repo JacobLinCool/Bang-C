@@ -70,10 +70,12 @@ void game_start(Game *game) {
 
 void equip_weapon(Game *game, i32 player_id, Card *card) {
     Player *player = game->players->data[player_id];
-    if (card->type == Barrel || card->type == Mustang || card->type == Scope) {
+    if (card->type == Barrel || card->type == Mustang || card->type == Scope ||
+        card->type == Dynamite) {
         if (card->type == Barrel) player->barrel = card;
         if (card->type == Mustang) player->mustang = card;
         if (card->type == Scope) player->scope = card;
+        if (card->type == Dynamite) player->dynamite = card;
         return;
     }
     if (player->weapon != NULL) {
@@ -138,14 +140,7 @@ void game_next(Game *game) {
                 exit(1);
             }
         }
-        DEBUG_PRINT("check passed before insert\n");
         game->deck->insert(game->deck, 0, debug_card);
-        for (int i = 0; i < game->deck->size; i++) {
-            if (game->deck->data[i] == NULL) {
-                DEBUG_PRINT("NULLLLLLLLL!\n");
-                exit(1);
-            }
-        }
         cards->free(cards);
     } else if (player->character->type == Pedro_Ramirez) {
     } else {

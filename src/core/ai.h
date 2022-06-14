@@ -263,6 +263,7 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
         if (ai_target == Sheriff_id) return 0;  // should be modified
         return 2 * max_disgust[9];
     }
+    if (card == Dynamite) return 10;
     if (card == Volcanic) return 200;
     if (card == Schofield) {
         if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
