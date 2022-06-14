@@ -29,21 +29,23 @@ i32 distance(Game* game, i32 me_id, i32 enemy_id) {
     i32 step = 1;
     while (true) {
         if ((me_id + step) % game->players->size == enemy_id) break;
-        step++;
         if (game->players->data[(me_id + step) % game->players->size]->hp > 0) front_dis++;
+        step++;
     }
     i32 back_dis = 1;
     step = 1;
     while (true) {
         if ((game->players->size + me_id - step) % game->players->size == enemy_id) break;
-        step++;
         if (game->players->data[(game->players->size + me_id - step) % game->players->size]->hp > 0)
             back_dis++;
+        step++;
     }
     i32 special_card_dis = ((game->players->data[enemy_id]->mustang != NULL) -
                             (game->players->data[me_id]->scope != NULL));
     i32 special_character_dis = (game->players->data[enemy_id]->character->type == Paul_Regret) -
                                 (game->players->data[enemy_id]->character->type == Rose_Doolan);
+    // DEBUG_PRINT("f:%d,b:%d,card:%d,char:%d\n", front_dis, back_dis, special_card_dis,
+    //             special_character_dis);
     return special_character_dis + special_card_dis + (front_dis < back_dis ? front_dis : back_dis);
 }
 
@@ -139,6 +141,7 @@ bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
     while (!selected) {
         selected = me->take(game, me_id, enemy_id);
     }
+    DEBUG_PRINT("%d->%d select [%s]\n", me_id, enemy_id, card_name[selected->type]);
 
     me->hands->push(me->hands, selected);
 

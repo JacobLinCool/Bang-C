@@ -25,12 +25,14 @@ void game_join(Game *game, const char *name, bool is_computer) {
         player->select = computer_player_select;
         player->request = computer_player_request;
         player->take = computer_player_take;
+        player->ramirez = computer_player_ramirez;
     } else {
         player->play = real_player;
         player->choose_enemy = player_choose_enemy;
         player->select = real_player_select;
         player->request = real_player_request;
         player->take = real_player_take;
+        player->ramirez = real_player_ramirez;
     }
     game->players->push(game->players, player);
     Event.emit(EVT_GAME_PLAYER_JOIN, &(struct {
@@ -53,6 +55,7 @@ void game_start(Game *game) {
         nowPlayer->character = game->characters->pop(game->characters);
         nowPlayer->bullet = nowPlayer->character->health + (nowPlayer->role->type == Sheriff);
         nowPlayer->hp = nowPlayer->bullet;
+        nowPlayer->dead = false;
         if (nowPlayer->role->type == Sheriff && i != 0) game->players->swap(game->players, 0, i);
         for (int j = 0; j < nowPlayer->bullet; j++) {
             nowPlayer->hands->push(nowPlayer->hands, game->deck->pop(game->deck));
@@ -147,7 +150,7 @@ void game_next(Game *game) {
     print_status(game);
 
     // 2.Play any number of cards
-    bool bang_used = 0;
+    i8 bang_used = 0;
     ai_bang_use = 0;
     while (true) {
         DEBUG_PRINT("player %d, choose your card\n", player->id);
@@ -162,8 +165,8 @@ void game_next(Game *game) {
                 player->hands->push(player->hands, select_card);
                 continue;
             } else {
-                bang_used = true;
-                ai_bang_use = true;
+                bang_used++;
+                ai_bang_use++;
             }
         }
         // 2.use card
@@ -179,10 +182,19 @@ void game_next(Game *game) {
                 bang(game, player->id);
             }
             game->discard->push(game->discard, select_card);
+        } else {
+            DEBUG_PRINT("Error Use\n");
+            if (select_card->type == Bang ||
+                (select_card->type == Missed && player->character->type == Calamity_Janet)) {
+                bang_used--;
+                ai_bang_use--;
+            }
+            player->hands->push(player->hands, select_card);
         }
         // 3.check if someone died(only brown card used)
         for (int i = 0; i < game->players->size; i++) {
-            if (game->players->data[i]->hp <= 0) died_player(game, player->id, i);
+            if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
+                died_player(game, player->id, i);
         }
         if (game->finished) return;
     }
@@ -192,7 +204,7 @@ void game_next(Game *game) {
     while (player->hands->size > player->hp) {
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
-        DEBUG_PRINT("Discard: %s\n", card_name[select_card->type]);
+        DEBUG_PRINT("Discard: %s\n", select_card == NULL ? "NULL" : card_name[select_card->type]);
 
         if (select_card != NULL) game->discard->push(game->discard, select_card);
     }

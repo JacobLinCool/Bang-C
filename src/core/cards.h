@@ -20,7 +20,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             return;
         }
     }
-
+    enemy->dead = true;
     printf("Died player(%s) role is %s\n", enemy->name, role_name[enemy->role->type]);
 
     // END OF THE GAME detection
@@ -158,7 +158,14 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
             pass = true;
             break;
         }
-        enemy->hands->push(enemy->hands, card[card_amount]);
+        // return wrong card
+        if (enemy->character->type == Calamity_Janet) {
+            if (card[card_amount]->type != Bang && card[card_amount]->type != Missed) {
+                enemy->hands->push(enemy->hands, card[card_amount]);
+            }
+        } else if (card[card_amount]->type != Missed) {
+            enemy->hands->push(enemy->hands, card[card_amount]);
+        }
     }
 
     if (pass) {
@@ -209,7 +216,11 @@ bool bang(Game* game, i32 me_id) {
         weapon_distance += game->players->data[me_id]->weapon->type - Volcanic;
     // whether my weapon can reach the enemy
 
-    if (weapon_distance < enemy_distance) return FAIL;
+    if (weapon_distance < enemy_distance) {
+        DEBUG_PRINT("Your Weapon Distance: %d\n", weapon_distance);
+        DEBUG_PRINT("Enemy Distance: %d\n", enemy_distance);
+        return FAIL;
+    }
     bang_no_distance(game, me_id, enemy_id);
 
     return SUCCESS;
@@ -221,7 +232,7 @@ bool missed(Game* game, i32 me_id) {
 
 bool gatling(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
-        if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
+        if (get_player_hp(game, i) <= 0 || me_id == i) continue;
         bang_no_distance(game, me_id, i);
     }
     return SUCCESS;
@@ -229,7 +240,7 @@ bool gatling(Game* game, i32 me_id) {
 
 bool indians(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
-        if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
+        if (get_player_hp(game, i) <= 0 || me_id == i) continue;
         while (1) {
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[i]->request(game, i);

@@ -7,18 +7,20 @@
 //     Game* game = event->game;
 //     Console.cyan("It's %s's turn!", game->players->data[game->turn % game->players->size]->name);
 // }
+void main_win(Game* game);
 
 i32 main() {
     // setup_catcher();
-    srand(1481);
+    // srand(1481);
+    srand(218243);
     Game* game = new_game();
 
     char* player_name = $(calloc(1024, sizeof(char)));
     printf("Enter player name: ");
     scanf("%[^\n]%*c", player_name);
-    // game->join(game, player_name, false);
+    game->join(game, player_name, false);
 
-    game->join(game, "Computer A", true);
+    // game->join(game, "Computer A", true);
     game->join(game, "Computer B", true);
     game->join(game, "Computer C", true);
     game->join(game, "Computer D", true);
@@ -28,12 +30,35 @@ i32 main() {
     game->start(game);
     while (game->finished == false) {
         game->next(game);
+        for (int i = 0; i < game->players->size; i++) {
+            if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
+                died_player(game, -1, i);
+        }
     }
     DEBUG_PRINT("Game End!\n");
 
     // Todo: who is win, GUI(show all roles.)
+    main_win(game);
     $free();
 
     Console.green("Everything is done.");
     return EXIT_SUCCESS;
+}
+
+void main_win(Game* game) {
+    i32 live_player[5] = {0};
+    for (int i = 0; i < game->players->size; i++) {
+        if (game->players->data[i]->hp > 0) {
+            live_player[game->players->data[i]->role->type]++;
+        }
+    }
+    if (live_player[Sheriff] == 0) {
+        if (live_player[Criminal] == 0) {
+            Console.green("Traitor win!");
+        } else {
+            Console.green("Criminal win!");
+        }
+    } else {
+        Console.green("Sheriff and Deputy win!");
+    }
 }
