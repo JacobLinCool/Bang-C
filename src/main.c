@@ -30,6 +30,10 @@ i32 main() {
     game->start(game);
     while (game->finished == false) {
         game->next(game);
+        for (int i = 0; i < game->players->size; i++) {
+            if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
+                died_player(game, -1, i);
+        }
     }
     DEBUG_PRINT("Game End!\n");
 

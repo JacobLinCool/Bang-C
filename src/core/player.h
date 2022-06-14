@@ -27,19 +27,17 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
     printf("Choose enemy: \n");
     printf("-1)cancel\n");
     for (i32 i = 0, k = 1; i < plyaer_size; i++) {
-        if (me_id != i && get_player_hp(game, i) > 0) {
-            printf("%d)Player %d hp: %d\n", k++, i, get_player_hp(game, i));
-        }
+        printf("%d)Player %d hp: %d\n", k++, i, get_player_hp(game, i));
     }
     scanf("%d", &enemy_id);
     enemy_id--;
-    if ((enemy_id < 0 || enemy_id > plyaer_size) && get_player_hp(game, enemy_id) > 0 &&
-        enemy_id != me_id) {
+    if ((enemy_id < 0 || enemy_id >= plyaer_size) || get_player_hp(game, enemy_id) <= 0 ||
+        enemy_id == me_id) {
         enemy_id = -1;
         printf("Wrong Player id!\n");
     }
     // determine AI disgust value
-    ai_disgust_change(enemy_id, me_id, 1);
+    ai_disgust_change(me_id, enemy_id, 1);
     return enemy_id;
 }
 
@@ -53,7 +51,7 @@ i32 computer_choose_enemy(Game* game, i32 me_id) {
     return enemy_id;*/
 
     // determine AI disgust value
-    ai_disgust_change(ai_target, me_id, 1);
+    ai_disgust_change(me_id, ai_target, 1);
     DEBUG_PRINT("ai choose enemy %d\n", ai_target);
     return ai_target;
 }
@@ -138,15 +136,15 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
 
     Console.cyan("Please select a card from target: ");
     i32 i = 1;
-    for (; i <= player->hands->size; i++) {
+    for (; i <= target->hands->size; i++) {
         Console.yellow("%d. %s\n", i, card_name[0]);
     }
-    if (player->barrel) Console.yellow("%d. %s\n", i++, card_name[player->barrel->type]);
-    if (player->mustang) Console.yellow("%d. %s\n", i++, card_name[player->mustang->type]);
-    if (player->scope) Console.yellow("%d. %s\n", i++, card_name[player->scope->type]);
-    if (player->weapon) Console.yellow("%d. %s\n", i++, card_name[player->weapon->type]);
-    if (player->jail) Console.yellow("%d. %s\n", i++, card_name[player->jail->type]);
-    if (player->dynamite) Console.yellow("%d. %s\n", i++, card_name[player->dynamite->type]);
+    if (target->barrel) Console.yellow("%d. %s\n", i++, card_name[target->barrel->type]);
+    if (target->mustang) Console.yellow("%d. %s\n", i++, card_name[target->mustang->type]);
+    if (target->scope) Console.yellow("%d. %s\n", i++, card_name[target->scope->type]);
+    if (target->weapon) Console.yellow("%d. %s\n", i++, card_name[target->weapon->type]);
+    if (target->jail) Console.yellow("%d. %s\n", i++, card_name[target->jail->type]);
+    if (target->dynamite) Console.yellow("%d. %s\n", i++, card_name[target->dynamite->type]);
 
     i32 input = 0;
     scanf("%d", &input);
@@ -154,34 +152,34 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
         return NULL;
     }
 
-    if (input <= player->hands->size) {
-        return player->hands->remove(player->hands, input - 1);
+    if (input <= target->hands->size) {
+        return target->hands->remove(target->hands, input - 1);
     } else {
-        input -= player->hands->size;
+        input -= target->hands->size;
 
-        if (input == 0 && player->barrel) {
-            Card* x = player->barrel;
-            player->barrel = NULL;
+        if (input == 0 && target->barrel) {
+            Card* x = target->barrel;
+            target->barrel = NULL;
             return x;
-        } else if (input == 1 && player->mustang) {
-            Card* x = player->mustang;
-            player->mustang = NULL;
+        } else if (input == 1 && target->mustang) {
+            Card* x = target->mustang;
+            target->mustang = NULL;
             return x;
-        } else if (input == 2 && player->scope) {
-            Card* x = player->scope;
-            player->scope = NULL;
+        } else if (input == 2 && target->scope) {
+            Card* x = target->scope;
+            target->scope = NULL;
             return x;
-        } else if (input == 3 && player->weapon) {
-            Card* x = player->weapon;
-            player->weapon = NULL;
+        } else if (input == 3 && target->weapon) {
+            Card* x = target->weapon;
+            target->weapon = NULL;
             return x;
-        } else if (input == 4 && player->jail) {
-            Card* x = player->jail;
-            player->jail = NULL;
+        } else if (input == 4 && target->jail) {
+            Card* x = target->jail;
+            target->jail = NULL;
             return x;
-        } else if (input == 5 && player->dynamite) {
-            Card* x = player->dynamite;
-            player->dynamite = NULL;
+        } else if (input == 5 && target->dynamite) {
+            Card* x = target->dynamite;
+            target->dynamite = NULL;
             return x;
         }
     }

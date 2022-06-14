@@ -232,7 +232,7 @@ bool missed(Game* game, i32 me_id) {
 
 bool gatling(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
-        if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
+        if (get_player_hp(game, i) <= 0 || me_id == i) continue;
         bang_no_distance(game, me_id, i);
     }
     return SUCCESS;
@@ -240,7 +240,7 @@ bool gatling(Game* game, i32 me_id) {
 
 bool indians(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
-        if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
+        if (get_player_hp(game, i) <= 0 || me_id == i) continue;
         while (1) {
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[i]->request(game, i);
