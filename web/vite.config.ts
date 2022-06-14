@@ -11,4 +11,9 @@ export default defineConfig({
             presets: [presetAttributify({}), presetUno()],
         }),
     ],
+    server: {
+        proxy: {
+            "/ws": "http://localhost:8080",
+        },
+    },
 });
