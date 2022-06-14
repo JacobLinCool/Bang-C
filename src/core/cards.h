@@ -8,10 +8,13 @@
 #include "utils.h"
 
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
+    DEBUG_PRINT("%d died %d\n", me_id, enemy_id);
     Player* enemy = game->players->data[enemy_id];
+    DEBUG_PRINT("enemy hp: %d\n", enemy->hp);
     if (enemy->hp > 0) return;
 
     while (1) {
+        ai_request_setting(AI_SPECIFY, Beer);
         Card* card = enemy->request(game, enemy_id);
         if (card == NULL) break;
         if (card->type == Beer) {
@@ -68,6 +71,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
 
 // If no me_id, me_id = player_id
 void attack_player(Game* game, i32 me_id, i32 enemy_id) {
+    DEBUG_PRINT("%d attack %d\n", me_id, enemy_id);
     if (get_player_hp(game, enemy_id) <= 0) return;  // avoid mustang_judge error
     // decrease player's hp
     game->players->data[enemy_id]->hp--;
@@ -82,8 +86,11 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             draw_from_player(game, enemy_id, me_id);
         }
         if (enemy_type == Sid_Ketchum) {
+            DEBUG_PRINT("enemy is Sid_Ketchum\n");
             if (game->players->data[enemy_id]->hands->size >= 2) {
+                DEBUG_PRINT("enemy has 2 or more cards\n");
                 while (1) {
+                    ai_request_setting(AI_DISCARD, 0);
                     Card* card = game->players->data[enemy_id]->request(game, enemy_id);
                     if (card == NULL) {
                         break;
@@ -91,7 +98,9 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
                     game->discard->push(game->discard, card);
                     break;
                 }
+                DEBUG_PRINT("has discarded one card\n");
                 while (1) {
+                    ai_request_setting(AI_DISCARD, 0);
                     Card* card = game->players->data[enemy_id]->request(game, enemy_id);
                     if (card != NULL) {
                         game->discard->push(game->discard, card);
@@ -103,9 +112,12 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
         }
     }
     // determine AI disgust value
+    DEBUG_PRINT("ai_disgust_change\n");
     ai_disgust_change(me_id, enemy_id, 1);
     // dead
+    DEBUG_PRINT("died_player\n");
     died_player(game, me_id, enemy_id);
+    DEBUG_PRINT("Done: Attack player\n");
     return;
 }
 
@@ -126,14 +138,17 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     Card* card[2] = {NULL};
     i32   card_amount = 0;
     while (1) {
+        ai_request_setting(AI_SPECIFY, Missed);  // ai no use bang
         card[card_amount] = enemy->request(game, enemy_id);
+        DEBUG_PRINT("Give: %s\n",
+                    card[card_amount] == NULL ? "NULL" : card_name[card[card_amount]->type]);
         if (card[card_amount] == NULL) break;
         if (card[card_amount]->type == Missed) {
-            card_amount++;
+            // card_amount++;
             missed_total++;
         }
         if (card[card_amount]->type == Bang && enemy->character->type == Calamity_Janet) {
-            card_amount++;
+            // card_amount++;
             missed_total++;
         }
         if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer)) {
@@ -150,6 +165,7 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     }
 
     attack_player(game, me_id, enemy_id);
+    DEBUG_PRINT("Done: bang_no_distance\n");
     return;
 }
 
@@ -193,6 +209,7 @@ bool bang(Game* game, i32 me_id) {
 
     if (weapon_distance < enemy_distance) return FAIL;
     bang_no_distance(game, me_id, enemy_id);
+    DEBUG_PRINT("Done: bang\n");
     return SUCCESS;
 }
 
@@ -212,6 +229,7 @@ bool indians(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
         if (get_player_hp(game, me_id) <= 0 || me_id == i) continue;
         while (1) {
+            ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[i]->request(game, i);
             if (card == NULL) {
                 attack_player(game, me_id, i);
@@ -240,6 +258,14 @@ bool panic(Game* game, i32 me_id) {
     if (distance(game, me_id, enemy_id) > 1) return FAIL;
 
     draw_from_player(game, me_id, enemy_id);
+    return SUCCESS;
+}
+
+bool cat_balou(Game* game, i32 me_id) {
+    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
+    if (enemy_id == -1) return FAIL;
+
+    discard_from_enemy(game, me_id, enemy_id);
     return SUCCESS;
 }
 
@@ -277,6 +303,7 @@ bool duel(Game* game, i32 me_id) {
     bool duel_finish = false;
     while (1) {
         while (1) {
+            ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[enemy_id]->request(game, enemy_id);
             if (card == NULL) {
                 attack_player(game, me_id, enemy_id);
@@ -295,6 +322,7 @@ bool duel(Game* game, i32 me_id) {
         }
         if (duel_finish) break;
         while (1) {
+            ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[me_id]->request(game, me_id);
             if (card == NULL) {
                 attack_player(game, enemy_id, me_id);
@@ -442,10 +470,10 @@ Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: re
                 {.type = Panic, .priority = 211, .use = panic},
                 {.type = Panic, .priority = 212, .use = panic},
                 {.type = Panic, .priority = 308, .use = panic},
-                {.type = Cat_Balou, .priority = 213, .use = NULL},
-                {.type = Cat_Balou, .priority = 309, .use = NULL},
-                {.type = Cat_Balou, .priority = 310, .use = NULL},
-                {.type = Cat_Balou, .priority = 311, .use = NULL},
+                {.type = Cat_Balou, .priority = 213, .use = cat_balou},
+                {.type = Cat_Balou, .priority = 309, .use = cat_balou},
+                {.type = Cat_Balou, .priority = 310, .use = cat_balou},
+                {.type = Cat_Balou, .priority = 311, .use = cat_balou},
                 {.type = Stagecoach, .priority = 109, .use = stagecoach},
                 {.type = Stagecoach, .priority = 109, .use = stagecoach},
                 {.type = Wells_Fargo, .priority = 203, .use = wells_fargo},

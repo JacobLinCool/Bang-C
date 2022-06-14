@@ -108,11 +108,21 @@ Card* computer_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
 
     // i32     random = rand() % player->hands->size;
+    if (ai_request_type == AI_SPECIFY) {
+        for (int i = 0; i < player->hands->size; i++) {
+            if (player->hands->data[i]->type == ai_request_card) {
+                return player->hands->remove(player->hands, i);
+            }
+        }
+        return NULL;
+    }
     i32 choose = ai_request(game, player_id, player->hands);
+    DEBUG_PRINT("choose_id: %d\n", choose);
+    // DEBUG_PRINT("Choose: %s\n", choose < 0 ? "NULL" : card_name[choose]);
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
     }
-
+    if (choose < 0) return NULL;
     return player->hands->remove(player->hands, choose);
 }
 
