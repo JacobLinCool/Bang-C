@@ -73,7 +73,7 @@ void ai_initialize(Game* game, i32 player_id) {
         歹徒	    警長:5
         叛徒	    警長:A 歹徒:5	A預設6，針對他一次後減少1
     */
-    for (int i = 0; i < 4; i++) disgust[player_id][i] = 0;
+    for (int i = 0; i < 7; i++) disgust[player_id][i] = 0;
     Player* my = game->players->data[player_id];
     switch (my->role->type) {
         case Sheriff:
@@ -160,7 +160,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     if (ai->role->type == Traitor && game->players->data[ai_target]->role->type == Sheriff) {
         i32 card_type = candi_card->data[weight[0].id]->type;
         if (card_type == Bang || card_type == Indians || card_type == Duel) {
-            disgust[player_id][ai_target]--;
+            disgust[player_id][ai_target] -= 2;
         }
     }
     return weight[0].id;

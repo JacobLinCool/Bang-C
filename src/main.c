@@ -11,16 +11,20 @@ void main_win(Game* game);
 
 i32 main() {
     // setup_catcher();
-    // srand(1481);
-    srand(218243);
+    // srand(1481);210909
+    // printf("ok\n");
+    time_t seed = time(NULL);
+    // time_t seed = 1655227962;
+    printf("seed: %ld\n", seed);
+    srand(seed);
     Game* game = new_game();
 
     char* player_name = $(calloc(1024, sizeof(char)));
     printf("Enter player name: ");
     scanf("%[^\n]%*c", player_name);
-    game->join(game, player_name, false);
+    // game->join(game, player_name, false);
 
-    // game->join(game, "Computer A", true);
+    game->join(game, "Computer A", true);
     game->join(game, "Computer B", true);
     game->join(game, "Computer C", true);
     game->join(game, "Computer D", true);
@@ -32,7 +36,7 @@ i32 main() {
         game->next(game);
         for (int i = 0; i < game->players->size; i++) {
             if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
-                died_player(game, -1, i);
+                died_player(game, i, i);
         }
     }
     DEBUG_PRINT("Game End!\n");
@@ -42,6 +46,7 @@ i32 main() {
     $free();
 
     Console.green("Everything is done.");
+    DEBUG_PRINT("seed: %ld\n", seed);
     return EXIT_SUCCESS;
 }
 
