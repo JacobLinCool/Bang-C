@@ -61,7 +61,8 @@ int ai_weight_cmp(const void* a, const void* b) {
 }
 
 void ai_disgust_change(i32 ai_id, i32 target_id, i32 value) {
-    disgust[ai_id][target_id] += value;
+    if (ai_id == -1) return;
+    disgust[target_id][ai_id] += value;
     return;
 }
 
