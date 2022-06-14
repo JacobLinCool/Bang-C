@@ -150,7 +150,7 @@ void game_next(Game *game) {
     print_status(game);
 
     // 2.Play any number of cards
-    bool bang_used = 0;
+    i8 bang_used = 0;
     ai_bang_use = 0;
     while (true) {
         DEBUG_PRINT("player %d, choose your card\n", player->id);
@@ -165,8 +165,8 @@ void game_next(Game *game) {
                 player->hands->push(player->hands, select_card);
                 continue;
             } else {
-                bang_used = true;
-                ai_bang_use = true;
+                bang_used++;
+                ai_bang_use++;
             }
         }
         // 2.use card
@@ -184,6 +184,11 @@ void game_next(Game *game) {
             game->discard->push(game->discard, select_card);
         } else {
             DEBUG_PRINT("Error Use\n");
+            if (select_card->type == Bang ||
+                (select_card->type == Missed && player->character->type == Calamity_Janet)) {
+                bang_used--;
+                ai_bang_use--;
+            }
             player->hands->push(player->hands, select_card);
         }
         // 3.check if someone died(only brown card used)
@@ -199,7 +204,7 @@ void game_next(Game *game) {
     while (player->hands->size > player->hp) {
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
-        DEBUG_PRINT("Discard: %s\n", card_name[select_card->type]);
+        DEBUG_PRINT("Discard: %s\n", select_card == NULL ? "NULL" : card_name[select_card->type]);
 
         if (select_card != NULL) game->discard->push(game->discard, select_card);
     }

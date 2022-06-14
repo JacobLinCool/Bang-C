@@ -26,7 +26,7 @@ i32      disgust[7][7];
 i32      ai_target;
 i8       ai_request_type;  // 0: play 1: discard
 CardType ai_request_card;
-bool     ai_bang_use;
+i8       ai_bang_use;
 
 i32  ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_disgust[10],
                     i32 max_dist_id[10]);
@@ -81,7 +81,7 @@ void ai_initialize(Game* game, i32 player_id) {
                 if (i == player_id) {
                     disgust[player_id][i] = -10000;
                 } else {
-                    disgust[player_id][i] = 2;
+                    disgust[player_id][i] = 5;
                 }
             }
             break;
@@ -195,8 +195,8 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
             game->players->data[ai_target]->role->type == Sheriff) {
             if (game->players->data[ai_target]->hp < 4) return 0;
         }
-        return max_disgust[max_distance] * (4 - game->players->data[ai_target]->hands->size) *
-               (4 - game->players->data[ai_target]->hands->size);
+        return max_disgust[max_distance] * (6 - game->players->data[ai_target]->hands->size) *
+               (6 - game->players->data[ai_target]->hands->size);
     }
     if (card == Missed) return 0;
     if (card == Gatling) {
@@ -222,7 +222,7 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
     }
     if (card == Panic || card == Cat_Balou) {
         ai_target = max_dist_id[1];
-        return max_disgust[1] * equip_total(game, ai_id, max_dist_id[1]);
+        return max_disgust[1] * (5 + equip_total(game, ai_id, max_dist_id[1]));
     }
     if (card == Stagecoach) return 5 * (ai->hp - ai->hands->size - 1);
     if (card == Wells_Fargo) return 5 * (ai->hp - ai->hands->size - 2);

@@ -216,7 +216,11 @@ bool bang(Game* game, i32 me_id) {
         weapon_distance += game->players->data[me_id]->weapon->type - Volcanic;
     // whether my weapon can reach the enemy
 
-    if (weapon_distance < enemy_distance) return FAIL;
+    if (weapon_distance < enemy_distance) {
+        DEBUG_PRINT("Your Weapon Distance: %d\n", weapon_distance);
+        DEBUG_PRINT("Enemy Distance: %d\n", enemy_distance);
+        return FAIL;
+    }
     bang_no_distance(game, me_id, enemy_id);
 
     return SUCCESS;

@@ -54,6 +54,7 @@ i32 computer_choose_enemy(Game* game, i32 me_id) {
 
     // determine AI disgust value
     ai_disgust_change(ai_target, me_id, 1);
+    DEBUG_PRINT("ai choose enemy %d\n", ai_target);
     return ai_target;
 }
 

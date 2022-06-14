@@ -139,6 +139,7 @@ bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
     while (!selected) {
         selected = me->take(game, me_id, enemy_id);
     }
+    DEBUG_PRINT("%d->%d select [%s]\n", me_id, enemy_id, card_name[selected->type]);
 
     me->hands->push(me->hands, selected);
 
