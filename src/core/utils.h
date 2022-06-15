@@ -95,7 +95,6 @@ bool alive(Game* game, RoleType role) {
  * @return Card*
  */
 Card* get_deck_top(Game* game) {
-    DEBUG_PRINT("(before)");
     check_discard(game);
     if (game->deck->size == 0) {
         transfer(game->discard, game->deck);
