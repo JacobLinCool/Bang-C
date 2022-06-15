@@ -4,7 +4,7 @@
 
     type MessageType = "ask" | "chat";
 
-    const ws = new WebSocket(window.location.hostname === "localhost" ? "ws://localhost:8080/ws" : "wss://bang-ws.jacoblin.cool");
+    const ws = new WebSocket(window.location.hostname === "localhost" ? "ws://localhost:8080/" : "wss://bang-ws.jacoblin.cool");
 
     const name = ref("");
     const message = ref("");
@@ -17,34 +17,31 @@
     ws.onmessage = (event) => {
         const message: { type: MessageType; payload: any } = JSON.parse(event.data);
 
-        if (message.type === "chat") {
-            messages.push(message.payload);
-        } else if (message.type === "ask") {
-            const answer = prompt(message.payload.question);
-            name.value = answer || "";
-            ws.send(JSON.stringify({ action: "name", name: answer }));
-        } else if (message.type === "players") {
-            players.splice(0, players.length, ...message.payload.players);
-        } else if (message.type === "join") {
-            if (!players.includes(message.payload.name)) {
-                players.push(message.payload.name);
-            }
-        }
+        console.log(message);
+
+        // if (message.type === "chat") {
+        //     messages.push(message.payload);
+        // } else if (message.type === "ask") {
+        //     const answer = prompt(message.payload.question);
+        //     name.value = answer || "";
+        //     ws.send(JSON.stringify({ action: "name", name: answer }));
+        // } else if (message.type === "players") {
+        //     players.splice(0, players.length, ...message.payload.players);
+        // } else if (message.type === "join") {
+        //     if (!players.includes(message.payload.name)) {
+        //         players.push(message.payload.name);
+        //     }
+        // }
+    };
+
+    // @ts-ignore
+    window.send = function (action: string, payload: any) {
+        ws.send(JSON.stringify({ action, payload }));
     };
 
     function send_message() {
         ws.send(JSON.stringify({ action: "chat", to: target.value, message: message.value }));
         message.value = "";
-    }
-
-    function color(n: string) {
-        if (n === "SERVER") {
-            return "deepskyblue";
-        } else if (n === name.value) {
-            return "darkorange";
-        } else {
-            return "darkgreen";
-        }
     }
 </script>
 
