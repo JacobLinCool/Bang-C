@@ -19,19 +19,14 @@
 
         console.log(message);
 
-        // if (message.type === "chat") {
-        //     messages.push(message.payload);
-        // } else if (message.type === "ask") {
-        //     const answer = prompt(message.payload.question);
-        //     name.value = answer || "";
-        //     ws.send(JSON.stringify({ action: "name", name: answer }));
-        // } else if (message.type === "players") {
-        //     players.splice(0, players.length, ...message.payload.players);
-        // } else if (message.type === "join") {
-        //     if (!players.includes(message.payload.name)) {
-        //         players.push(message.payload.name);
-        //     }
-        // }
+        switch (message.type) {
+            case "chat":
+                // ...
+                break;
+
+            default:
+                break;
+        }
     };
 
     // @ts-ignore
@@ -46,30 +41,7 @@
 </script>
 
 <template>
-    <div id="wrap">
-        <h1>Message</h1>
-        <div>
-            <span v-for="player in players" :key="player" class="mx-1" :style="{ color: color(player) }">{{ player }}</span>
-        </div>
-        <div>
-            <div v-for="message in messages" class="my-4 grid grid-cols-2">
-                <div class="text-right pr-2 border-r-1 border-gray">
-                    <span :style="{ color: color(message.from) }">{{ message.from }}</span> >
-                    <span :style="{ color: color(message.to) }">{{ message.to }}</span>
-                </div>
-                <div class="text-left pl-2">
-                    <span>{{ message.message }}</span>
-                </div>
-            </div>
-        </div>
-        <div>
-            <select v-model="target">
-                <option v-for="target in targets" :key="target" :value="target">{{ target }}</option>
-            </select>
-            <input v-model="message" />
-            <button @click="send_message">Send</button>
-        </div>
-    </div>
+    <div id="wrap"></div>
 </template>
 
 <style>
