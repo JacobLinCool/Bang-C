@@ -50,12 +50,12 @@ setup:
 	cd $(third_dir) && curl -L https://github.com/DaveGamble/cJSON/archive/master.zip -o cJSON.zip && unzip cJSON.zip && rm cJSON.zip && mv cJSON-master cJSON && cd cJSON && make && cd ../..
 
 	rm -rf $(third_dir)/libwebsockets
-	cd $(third_dir) && curl -L https://github.com/warmcat/libwebsockets/archive/main.zip -o libwebsockets.zip && unzip libwebsockets.zip && rm libwebsockets.zip && mv libwebsockets-main libwebsockets && cd libwebsockets && mkdir build && cd build && cmake .. -DLWS_WITH_SSL=OFF && make && make install && cd ../../..
+	cd $(third_dir) && curl -L https://github.com/warmcat/libwebsockets/archive/main.zip -o libwebsockets.zip && unzip libwebsockets.zip && rm libwebsockets.zip && mv libwebsockets-main libwebsockets && cd libwebsockets && mkdir build && cd build && cmake .. -DLWS_WITH_SSL=OFF -DLWS_WITH_MINIMAL_EXAMPLES=OFF -DLWS_WITHOUT_CLIENT=ON -DLWS_WITHOUT_TESTAPPS=ON && make && make install && cd ../../..
 
 	chmod -R 777 $(third_dir)
 
 dockerfile: force
-	docker buildx build --push --platform linux/arm64/v8 --tag jacoblincool/bang-dev .
+	docker buildx build --push --platform linux/arm64/v8,linux/amd64 --tag jacoblincool/bang-dev .
 
 docker: force
 	docker run --rm -it -p 8080:8080 jacoblincool/bang-dev bash -c '/app/server'
