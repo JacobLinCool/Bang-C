@@ -15,7 +15,7 @@ i32 main() {
     // srand(1481);210909
     // printf("ok\n");
     // time_t seed = time(NULL);
-    time_t seed = 1655270219;
+    time_t seed = 910909;
     printf("seed: %ld\n", seed);
     fflush(stdout);
     srand(seed);

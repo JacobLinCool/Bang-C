@@ -8,7 +8,7 @@
 #include "roles.h"
 #include "types.h"
 i32  debug_num = 0;
-i32  debug_stop = 5;
+i32  debug_stop = 0;
 void print_status(Game *game, FILE *fp);
 bool equip_weapon(Game *game, i32 player_id, Card *card);
 bool valid_assign_role(Role *role, i32 player_total) {
@@ -133,6 +133,7 @@ void game_next(Game *game) {
         game->deck->insert(game->deck, 0, debug_card);
         cards->free(cards);
     } else if (player->character->type == Pedro_Ramirez) {
+        ai_bang_use = 0;
         player_draw_deck(game, player->id, 2 - player->ramirez(game, player->id));
     } else {
         player_draw_deck(game, player->id, 2);
