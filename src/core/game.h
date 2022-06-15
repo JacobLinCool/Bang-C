@@ -8,8 +8,8 @@
 #include "roles.h"
 #include "types.h"
 
-i32  debug_num = 0;
-i32  debug_stop = 0;
+i32 debug_num = 0;
+i32 debug_stop = 0;
 
 void print_status(Game *game, FILE *fp);
 bool equip_weapon(Game *game, i32 player_id, Card *card);
