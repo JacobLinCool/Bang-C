@@ -16,6 +16,7 @@ i32 main() {
     // printf("ok\n");
     time_t seed = time(NULL);  // 1655305214
     // time_t seed = 1655282672;
+
     printf("seed: %ld\n", seed);
     fflush(stdout);
     srand(seed);
@@ -33,6 +34,7 @@ i32 main() {
     // game->join(game, "Computer E", true);
     // game->join(game, "Computer F", true);
     // game->join(game, "Computer G", true);
+
 
     VectorShuffle(game->players);
 

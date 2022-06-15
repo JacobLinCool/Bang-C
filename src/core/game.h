@@ -7,8 +7,10 @@
 #include "player.h"
 #include "roles.h"
 #include "types.h"
+
 i32  debug_num = 0;
 i32  debug_stop = 0;
+
 void print_status(Game *game, FILE *fp);
 bool equip_weapon(Game *game, i32 player_id, Card *card);
 bool valid_assign_role(Role *role, i32 player_total) {
@@ -77,6 +79,7 @@ void game_start(Game *game) {
 void game_next(Game *game) {
     FILE *fp;
     fp = fopen("/dev/pts/5", "w+");
+
     Player *player = game->players->data[game->turn % game->players->size];
     // if player has died, then skip.
     i32 t = 0;
@@ -85,6 +88,7 @@ void game_next(Game *game) {
         player = game->players->data[(game->turn) % game->players->size];
     }
     game->turn++;
+
 
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
     // print_status(game);
