@@ -89,7 +89,6 @@ void game_next(Game *game) {
     }
     game->turn++;
 
-
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
     // print_status(game);
 
