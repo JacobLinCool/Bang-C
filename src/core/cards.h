@@ -135,6 +135,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
                     ai_request_setting(AI_DISCARD, 0);
                     Card* card = game->players->data[enemy_id]->request(game, enemy_id);
                     if (card == NULL) {
+                        goto sid_ketchum_fail;
                         break;
                     }
                     game->discard->push(game->discard, card);
@@ -153,6 +154,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             }
         }
     }
+sid_ketchum_fail:
     // determine AI hate value
     ai_hate_change(game, me_id, enemy_id, 1);
     // dead

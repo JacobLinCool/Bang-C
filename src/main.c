@@ -14,8 +14,8 @@ i32 main() {
     // setup_catcher();
     // srand(1481);210909
     // printf("ok\n");
-    // time_t seed = time(NULL);
-    time_t seed = 1655282672;
+    time_t seed = time(NULL);  // 1655305214
+    // time_t seed = 1655282672;
     printf("seed: %ld\n", seed);
     fflush(stdout);
     srand(seed);
@@ -30,7 +30,9 @@ i32 main() {
     game->join(game, "Computer B", true);
     game->join(game, "Computer C", true);
     game->join(game, "Computer D", true);
-    game->join(game, "Computer E", true);
+    // game->join(game, "Computer E", true);
+    // game->join(game, "Computer F", true);
+    // game->join(game, "Computer G", true);
 
     VectorShuffle(game->players);
 
