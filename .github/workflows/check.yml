@@ -29,3 +29,12 @@ jobs:
 
             - name: Build Server
               run: make server
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2.2.2
+              with:
+                  version: latest
+                  run_install: true
+
+            - name: Check Client
+              run: cd web && pnpm build
