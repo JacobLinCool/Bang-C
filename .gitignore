@@ -8,5 +8,6 @@
 
 *.o
 *.exe
+*.out
 src/third/*/
 **/.DS_Store

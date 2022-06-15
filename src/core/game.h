@@ -10,7 +10,7 @@
 void print_status(Game *game);
 bool valid_assign_role(Role *role, i32 player_total) {
     if (role == NULL) return false;
-    printf("assign: %s\n", role_name[role->type]);
+    // printf("assign: %s\n", role_name[role->type]);
     if (game_start_role_in_players[player_total - 4][role->type] <= 0) return false;
     game_start_role_in_players[player_total - 4][role->type]--;
     return true;
@@ -97,7 +97,7 @@ void game_next(Game *game) {
     }
     game->turn++;
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
-    print_status(game);
+    // print_status(game);
 
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
@@ -147,7 +147,7 @@ void game_next(Game *game) {
     } else {
         player_draw_deck(game, player->id, 2);
     }
-    print_status(game);
+    // print_status(game);
 
     // 2.Play any number of cards
     i8 bang_used = 0;

@@ -20,7 +20,7 @@ build:
 	@echo "Build complete"
 
 debug:
-	@$(cc) -o main $(src_dir)/main.c -fsanitize=address -g -D DEBUG
+	@$(cc) -o main $(src_dir)/main.c -D DEBUG
 	@echo "Build complete"
 
 test: $(test_files)
