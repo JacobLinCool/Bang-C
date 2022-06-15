@@ -8,7 +8,7 @@
 #include "roles.h"
 #include "types.h"
 i32  debug_num = 0;
-i32  debug_stop = 29;
+i32  debug_stop = 100000000;
 void print_status(Game *game, FILE *fp);
 bool equip_weapon(Game *game, i32 player_id, Card *card);
 bool valid_assign_role(Role *role, i32 player_total) {
@@ -75,8 +75,8 @@ void game_start(Game *game) {
 }
 
 void game_next(Game *game) {
-    FILE *fp;
-    fp = fopen("/dev/pts/3", "w+");
+    FILE *fp = stdout;
+    // fp = fopen("/dev/pts/6", "w+");
     Player *player = game->players->data[game->turn % game->players->size];
     // if player has died, then skip.
     i32 t = 0;
@@ -84,6 +84,7 @@ void game_next(Game *game) {
         game->turn++;
         player = game->players->data[(game->turn) % game->players->size];
     }
+    game->turn++;
 
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
     // print_status(game);
@@ -96,9 +97,6 @@ void game_next(Game *game) {
     if (player->hp <= 0) return;
     if (player->jail != NULL) {
         DEBUG_PRINT("judge: jail\n");
-        Card *card = player->jail;
-        player->jail = NULL;
-        game->discard->push(game->discard, card);
         if (!jail_judge(game, player->id)) {
             return;
         }
@@ -195,10 +193,10 @@ void game_next(Game *game) {
         }
         if (game->finished) return;
 #if (DEBUG)
-        fprintf(fp, "after operation:\n");
-        print_status(game, fp);
-        fflush(fp);
-        printf("Enter any key to continue.(%d)\n", debug_num);
+        // fprintf(fp, "after operation:\n");
+        // print_status(game, fp);
+        // fflush(fp);
+        // printf("Enter any key to continue.(%d)\n", debug_num);
         if (debug_num++ >= debug_stop) getchar();
 #endif
     }
@@ -213,10 +211,10 @@ void game_next(Game *game) {
         if (select_card != NULL) game->discard->push(game->discard, select_card);
     }
 #if (DEBUG)
-    fprintf(fp, "after discard card:\n");
-    print_status(game, fp);
-    fflush(fp);
-    printf("Enter any key to continue.(%d)\n", debug_num);
+    // fprintf(fp, "after discard card:\n");
+    // print_status(game, fp);
+    // fflush(fp);
+    // printf("Enter any key to continue.(%d)\n", debug_num);
     if (debug_num++ >= debug_stop) getchar();
 #endif
 }

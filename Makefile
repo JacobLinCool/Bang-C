@@ -23,6 +23,10 @@ debug:
 	@$(cc) -o main $(src_dir)/main.c -D DEBUG
 	@echo "Build complete"
 
+mdebug:
+	@$(cc) -o main $(src_dir)/main.c -fsanitize=address -D DEBUG
+	@echo "Build complete"
+
 test: $(test_files)
 	@echo "Tests Passed"
 
