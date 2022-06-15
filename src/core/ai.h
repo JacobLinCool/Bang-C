@@ -226,19 +226,22 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hat
     }
     if (card == Missed) return 0;
     if (card == Gatling) {
-        if (ai->role->type == Sheriff) return 20;
+        if (ai->role->type == Sheriff || ai->role->type == Deputy) return 20;
         if (ai->role->type == Traitor) {
             if (player_cnt <= 2) return 20;
             if (game->players->data[Sheriff_id]->hp >
                 (4 + Sheriff_id - ai_id) % game->players->size)
                 return 20;
-            return 0;
+            return 6;
         }
         if (ai->role->type == Criminal) {
+            i32 total = 0;
             for (int i = 0; i < game->players->size; i++) {
-                if (i != ai_id && hate[ai_id][i] < BAD_GUY) return 0;
-                return 20;
+                if (i != ai_id && hate[ai_id][i] < BAD_GUY) continue;
+                if (game->players->data[i]->hands->size < 5) total++;
             }
+            if (total > game->players->size / 2) return 20;
+            return 6;
         }
     }
     if (card == Indians) {
@@ -253,7 +256,8 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hat
     }
     if (card == Panic || card == Cat_Balou) {
         ai_target = max_dist_id[1];
-        return max_hate[1] * (5 + equip_total(game, ai_id, max_dist_id[1]));
+        if (max_hate[1] < BAD_GUY) return 5;
+        return equip_total(game, ai_id, max_dist_id[1]);
     }
     if (card == Stagecoach) return 5 * (ai->hp - ai->hands->size - 1);
     if (card == Wells_Fargo) return 5 * (ai->hp - ai->hands->size - 2);
@@ -286,9 +290,18 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hat
         if (enemy_hands < 2) return 50;
         return (3 * (ai_bang_cnt + 1) - enemy_hands) * (3 * (ai_bang_cnt + 1) - enemy_hands);
     }
-    if (card == Barrel) return 500;
-    if (card == Scope) return 400;
-    if (card == Mustang) return 450;
+    if (card == Barrel) {
+        if (ai->barrel != NULL) return -1000;
+        return 500;
+    }
+    if (card == Scope) {
+        if (ai->scope != NULL) return -1000;
+        return 400;
+    }
+    if (card == Mustang) {
+        if (ai->mustang != NULL) return -1000;
+        return 450;
+    }
     if (card == Jail) {
         i32 max_jail = 0;
         if (max_hate[9] < BAD_GUY) return 0;

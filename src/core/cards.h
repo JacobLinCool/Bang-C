@@ -166,10 +166,10 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     i32     missed_total = 0;
     Player* enemy = game->players->data[enemy_id];
     if (enemy->barrel != NULL) {
-        if (judge(game, enemy_id, 201, 213)) missed_total++;
+        if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
     }
     if (enemy->character->type == Jourdonnais) {
-        if (judge(game, enemy_id, 201, 213)) missed_total++;
+        if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
     }
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
@@ -217,7 +217,7 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
 
 bool dynamite_judge(Game* game, i32 me_id) {
     Player* me = game->players->data[me_id];
-    if (judge(game, me_id, 102, 109)) {
+    if (judge(game, me_id, 102, 109, Dynamite)) {
         game->discard->push(game->discard, me->dynamite);
         me->dynamite = NULL;
         attack_player(game, -1, me_id);
@@ -237,8 +237,8 @@ bool dynamite_judge(Game* game, i32 me_id) {
 bool jail_judge(Game* game, i32 me_id) {
     game->discard->push(game->discard, game->players->data[me_id]->jail);
     game->players->data[me_id]->jail = NULL;
-    if (judge(game, me_id, 201, 213)) return SUCCESS;  // SUCCESS escapes from jail
-    return FAIL;                                       // FAIL escapes from jail
+    if (judge(game, me_id, 201, 213, Jail)) return SUCCESS;  // SUCCESS escapes from jail
+    return FAIL;                                             // FAIL escapes from jail
 }
 
 bool bang(Game* game, i32 me_id) {
