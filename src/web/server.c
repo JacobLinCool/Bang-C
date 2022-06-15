@@ -38,7 +38,7 @@ Clients *clients = NULL;
 Message *create_message(const char *payload) {
     Message *msg = malloc(sizeof(Message));
     msg->len = strlen(payload);
-    msg->payload = malloc(msg->len + LWS_PRE + 16);
+    msg->payload = calloc(msg->len + LWS_PRE + 16, sizeof(char));
     memcpy(msg->payload, payload, msg->len);
 
     return msg;
@@ -250,6 +250,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         cJSON_Delete(list);
 
         lws_close_reason(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked", strlen("Kicked"));
+        lws_close_free_wsi(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked");
 
         cJSON_Delete(payload);
         return;
