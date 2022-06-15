@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { computed, reactive, ref } from "vue";
+    import { action } from "./action";
 
     type MessageType = "ask" | "chat";
 
