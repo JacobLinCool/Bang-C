@@ -8,7 +8,7 @@
 #include "roles.h"
 #include "types.h"
 i32  debug_num = 0;
-i32  debug_stop = 4;
+i32  debug_stop = 5;
 void print_status(Game *game, FILE *fp);
 bool equip_weapon(Game *game, i32 player_id, Card *card);
 bool valid_assign_role(Role *role, i32 player_total) {

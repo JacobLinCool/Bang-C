@@ -362,9 +362,11 @@ bool duel(Game* game, i32 me_id) {
             }
             if (card->type == Bang) {
                 game->discard->push(game->discard, card);
+                break;
             } else if (card->type == Missed &&
                        game->players->data[enemy_id]->character->type == Calamity_Janet) {
                 game->discard->push(game->discard, card);
+                break;
             } else {
                 game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands,
                                                            card);
@@ -381,9 +383,11 @@ bool duel(Game* game, i32 me_id) {
             }
             if (card->type == Bang) {
                 game->discard->push(game->discard, card);
+                break;
             } else if (card->type == Missed &&
                        game->players->data[me_id]->character->type == Calamity_Janet) {
                 game->discard->push(game->discard, card);
+                break;
             } else {
                 game->players->data[me_id]->hands->push(game->players->data[me_id]->hands, card);
             }
