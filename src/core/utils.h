@@ -5,6 +5,24 @@
 #include "constants.h"
 #include "types.h"
 
+void check_deck(Game* game) {
+    for (int i = 0; i < game->deck->size; i++) {
+        if (game->deck->data[i] == NULL) {
+            DEBUG_PRINT("NULL on deck[%d]\n", i);
+            exit(1);
+        }
+    }
+}
+
+void check_discard(Game* game) {
+    for (int i = 0; i < game->discard->size; i++) {
+        if (game->discard->data[i] == NULL) {
+            DEBUG_PRINT("NULL on discard[%d]\n", i);
+            exit(1);
+        }
+    }
+}
+
 /**
  * @brief Transfer all cards from a Cards to another Cards.
  *
@@ -77,15 +95,10 @@ bool alive(Game* game, RoleType role) {
  * @return Card*
  */
 Card* get_deck_top(Game* game) {
+    check_discard(game);
     if (game->deck->size == 0) {
         transfer(game->discard, game->deck);
         game->deck->shuffle(game->deck);
-    }
-    for (int i = 0; i < game->deck->size; i++) {
-        if (game->deck->data[i] == NULL) {
-            DEBUG_PRINT("(after)NULL on deck[%d]\n", i);
-            exit(1);
-        }
     }
     Card* top_card = game->deck->pop(game->deck);
     return top_card;
@@ -115,14 +128,18 @@ bool judge(Game* game, i32 me_id, i32 lower, i32 higher, CardType type) {
     CharacterType char_type = game->players->data[me_id]->character->type;
     DEBUG_PRINT("result: %u,", top_card->priority);
     if (lower <= top_card->priority && top_card->priority <= higher) {
-        game->discard->push(game->discard, top_card);
         DEBUG_PRINT("In range\n");
         if (char_type == Lucky_Duke) {
-            if (type != Dynamite) return SUCCESS;
+            if (type != Dynamite) {
+                game->discard->push(game->discard, top_card);
+                return SUCCESS;
+            }
         } else {
+            game->discard->push(game->discard, top_card);
             return SUCCESS;
         }
     } else if (char_type == Lucky_Duke && type == Dynamite) {
+        game->discard->push(game->discard, top_card);
         return FAIL;
     }
     game->discard->push(game->discard, top_card);
