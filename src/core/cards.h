@@ -77,6 +77,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* me = game->players->data[me_id];
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
+        DEBUG_PRINT("Penalty: discard all cards\n");
         discard_card = game->discard;
         transfer(me->hands, discard_card);
         if (NULL != me->weapon) {
@@ -104,7 +105,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             me->dynamite = NULL;
         }
     } else if (enemy->role->type == Criminal) {
-        DEBUG_PRINT("enemy->role->type == Criminal\n");
+        DEBUG_PRINT("Reward: draw 3 cards\n");
         player_draw_deck(game, me_id, 3);
     }
     return;
@@ -152,8 +153,8 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             }
         }
     }
-    // determine AI disgust value
-    ai_disgust_change(me_id, enemy_id, 1);
+    // determine AI hate value
+    ai_hate_change(game, me_id, enemy_id, 1);
     // dead
     // died_player(game, me_id, enemy_id);
 
@@ -165,10 +166,10 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     i32     missed_total = 0;
     Player* enemy = game->players->data[enemy_id];
     if (enemy->barrel != NULL) {
-        if (judge(game, enemy_id, 201, 213)) missed_total++;
+        if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
     }
     if (enemy->character->type == Jourdonnais) {
-        if (judge(game, enemy_id, 201, 213)) missed_total++;
+        if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
     }
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
@@ -216,7 +217,7 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
 
 bool dynamite_judge(Game* game, i32 me_id) {
     Player* me = game->players->data[me_id];
-    if (judge(game, me_id, 102, 109)) {
+    if (judge(game, me_id, 102, 109, Dynamite)) {
         game->discard->push(game->discard, me->dynamite);
         me->dynamite = NULL;
         attack_player(game, -1, me_id);
@@ -236,8 +237,8 @@ bool dynamite_judge(Game* game, i32 me_id) {
 bool jail_judge(Game* game, i32 me_id) {
     game->discard->push(game->discard, game->players->data[me_id]->jail);
     game->players->data[me_id]->jail = NULL;
-    if (judge(game, me_id, 201, 213)) return SUCCESS;  // SUCCESS escapes from jail
-    return FAIL;                                       // FAIL escapes from jail
+    if (judge(game, me_id, 201, 213, Jail)) return SUCCESS;  // SUCCESS escapes from jail
+    return FAIL;                                             // FAIL escapes from jail
 }
 
 bool bang(Game* game, i32 me_id) {
@@ -361,9 +362,11 @@ bool duel(Game* game, i32 me_id) {
             }
             if (card->type == Bang) {
                 game->discard->push(game->discard, card);
+                break;
             } else if (card->type == Missed &&
                        game->players->data[enemy_id]->character->type == Calamity_Janet) {
                 game->discard->push(game->discard, card);
+                break;
             } else {
                 game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands,
                                                            card);
@@ -380,9 +383,11 @@ bool duel(Game* game, i32 me_id) {
             }
             if (card->type == Bang) {
                 game->discard->push(game->discard, card);
+                break;
             } else if (card->type == Missed &&
                        game->players->data[me_id]->character->type == Calamity_Janet) {
                 game->discard->push(game->discard, card);
+                break;
             } else {
                 game->players->data[me_id]->hands->push(game->players->data[me_id]->hands, card);
             }
@@ -407,12 +412,7 @@ bool mustang(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
-bool jail(Game* game, i32 me_id) {
-    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
-    if (enemy_id == -1) return FAIL;
-    if (game->players->data[enemy_id]->role->type == Sheriff) return FAIL;
-    return SUCCESS;
-}
+bool jail(Game* game, i32 me_id) { return SUCCESS; }
 
 bool dynamite(Game* game, i32 me_id) {
     if (game->players->data[me_id]->dynamite != NULL) return FAIL;
@@ -475,7 +475,8 @@ bool general_store(Game* game, i32 me_id) {
 bool is_weapon(Card* card) {
     if (card->type == Volcanic || card->type == Schofield || card->type == Remington ||
         card->type == Rev_Carabine || card->type == Remington || card->type == Barrel ||
-        card->type == Mustang || card->type == Scope || card->type == Dynamite) {
+        card->type == Winchester || card->type == Mustang || card->type == Scope ||
+        card->type == Dynamite || card->type == Jail) {
         return true;
     }
     return false;

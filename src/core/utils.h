@@ -110,21 +110,32 @@ bool player_draw_deck(Game* game, i32 me_id, i32 count) {
  * @return true
  * @return false
  */
-bool judge(Game* game, i32 me_id, i32 lower, i32 higher) {
-    Card* top_card = get_deck_top(game);
+bool judge(Game* game, i32 me_id, i32 lower, i32 higher, CardType type) {
+    Card*         top_card = get_deck_top(game);
+    CharacterType char_type = game->players->data[me_id]->character->type;
+    DEBUG_PRINT("result: %u,", top_card->priority);
     if (lower <= top_card->priority && top_card->priority <= higher) {
         game->discard->push(game->discard, top_card);
-        return SUCCESS;
+        DEBUG_PRINT("In range\n");
+        if (char_type == Lucky_Duke) {
+            if (type != Dynamite) return SUCCESS;
+        } else {
+            return SUCCESS;
+        }
+    } else if (char_type == Lucky_Duke && type == Dynamite) {
+        return FAIL;
     }
     game->discard->push(game->discard, top_card);
-    if (game->players->data[me_id]->character->type == Lucky_Duke) {
+    if (char_type == Lucky_Duke) {
         top_card = get_deck_top(game);
         if (lower <= top_card->priority && top_card->priority <= higher) {
             game->discard->push(game->discard, top_card);
+            DEBUG_PRINT("In range\n");
             return SUCCESS;
         }
         game->discard->push(game->discard, top_card);
     }
+    DEBUG_PRINT("Out of range\n");
     return FAIL;
 }
 
