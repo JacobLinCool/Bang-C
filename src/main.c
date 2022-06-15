@@ -35,7 +35,6 @@ i32 main() {
     // game->join(game, "Computer F", true);
     // game->join(game, "Computer G", true);
 
-
     VectorShuffle(game->players);
 
     game->start(game);
