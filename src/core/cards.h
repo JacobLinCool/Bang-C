@@ -77,6 +77,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* me = game->players->data[me_id];
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
+        DEBUG_PRINT("Penalty: discard all cards\n");
         discard_card = game->discard;
         transfer(me->hands, discard_card);
         if (NULL != me->weapon) {
@@ -104,7 +105,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             me->dynamite = NULL;
         }
     } else if (enemy->role->type == Criminal) {
-        DEBUG_PRINT("enemy->role->type == Criminal\n");
+        DEBUG_PRINT("Reward: draw 3 cards\n");
         player_draw_deck(game, me_id, 3);
     }
     return;
@@ -152,8 +153,8 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             }
         }
     }
-    // determine AI disgust value
-    ai_disgust_change(me_id, enemy_id, 1);
+    // determine AI hate value
+    ai_hate_change(game, me_id, enemy_id, 1);
     // dead
     // died_player(game, me_id, enemy_id);
 
@@ -407,12 +408,7 @@ bool mustang(Game* game, i32 me_id) {
     return SUCCESS;
 }
 
-bool jail(Game* game, i32 me_id) {
-    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
-    if (enemy_id == -1) return FAIL;
-    if (game->players->data[enemy_id]->role->type == Sheriff) return FAIL;
-    return SUCCESS;
-}
+bool jail(Game* game, i32 me_id) { return SUCCESS; }
 
 bool dynamite(Game* game, i32 me_id) {
     if (game->players->data[me_id]->dynamite != NULL) return FAIL;
@@ -475,7 +471,8 @@ bool general_store(Game* game, i32 me_id) {
 bool is_weapon(Card* card) {
     if (card->type == Volcanic || card->type == Schofield || card->type == Remington ||
         card->type == Rev_Carabine || card->type == Remington || card->type == Barrel ||
-        card->type == Mustang || card->type == Scope || card->type == Dynamite) {
+        card->type == Mustang || card->type == Scope || card->type == Dynamite ||
+        card->type == Jail) {
         return true;
     }
     return false;

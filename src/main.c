@@ -7,14 +7,15 @@
 //     Game* game = event->game;
 //     Console.cyan("It's %s's turn!", game->players->data[game->turn % game->players->size]->name);
 // }
+
 void main_win(Game* game);
 
 i32 main() {
     // setup_catcher();
     // srand(1481);210909
     // printf("ok\n");
-    time_t seed = time(NULL);
-    // time_t seed = 1655227962;
+    // time_t seed = time(NULL);
+    time_t seed = 1655270219;
     printf("seed: %ld\n", seed);
     fflush(stdout);
     srand(seed);
@@ -29,6 +30,7 @@ i32 main() {
     game->join(game, "Computer B", true);
     game->join(game, "Computer C", true);
     game->join(game, "Computer D", true);
+    game->join(game, "Computer E", true);
 
     VectorShuffle(game->players);
 

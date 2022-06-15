@@ -7,7 +7,10 @@
 #include "player.h"
 #include "roles.h"
 #include "types.h"
-void print_status(Game *game);
+i32  debug_num = 0;
+i32  debug_stop = 4;
+void print_status(Game *game, FILE *fp);
+bool equip_weapon(Game *game, i32 player_id, Card *card);
 bool valid_assign_role(Role *role, i32 player_total) {
     if (role == NULL) return false;
     // printf("assign: %s\n", role_name[role->type]);
@@ -71,24 +74,9 @@ void game_start(Game *game) {
     }
 }
 
-void equip_weapon(Game *game, i32 player_id, Card *card) {
-    Player *player = game->players->data[player_id];
-    if (card->type == Barrel || card->type == Mustang || card->type == Scope ||
-        card->type == Dynamite) {
-        if (card->type == Barrel) player->barrel = card;
-        if (card->type == Mustang) player->mustang = card;
-        if (card->type == Scope) player->scope = card;
-        if (card->type == Dynamite) player->dynamite = card;
-        return;
-    }
-    if (player->weapon != NULL) {
-        game->discard->push(game->discard, player->weapon);
-    }
-    player->weapon = card;
-    return;
-}
-
 void game_next(Game *game) {
+    FILE *fp;
+    fp = fopen("/dev/pts/3", "w+");
     Player *player = game->players->data[game->turn % game->players->size];
     // if player has died, then skip.
     i32 t = 0;
@@ -101,10 +89,12 @@ void game_next(Game *game) {
 
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
+        DEBUG_PRINT("judge: dynamite\n");
         dynamite_judge(game, player->id);
     }
     if (player->hp <= 0) return;
     if (player->jail != NULL) {
+        DEBUG_PRINT("judge: jail\n");
         Card *card = player->jail;
         player->jail = NULL;
         game->discard->push(game->discard, card);
@@ -148,13 +138,15 @@ void game_next(Game *game) {
         player_draw_deck(game, player->id, 2);
     }
     // print_status(game);
-
+#if (DEBUG)
+    fprintf(fp, "after draw card:\n");
+    print_status(game, fp);
+#endif
     // 2.Play any number of cards
     i8 bang_used = 0;
     ai_bang_use = 0;
     while (true) {
         DEBUG_PRINT("player %d, choose your card\n", player->id);
-
         ai_request_setting(AI_PLAY, 0);
         Card *select_card = player->request(game, player->id);
         if (select_card == NULL) break;
@@ -173,7 +165,10 @@ void game_next(Game *game) {
         // (a)blue card
         DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (is_weapon(select_card)) {
-            equip_weapon(game, player->id, select_card);
+            if (equip_weapon(game, player->id, select_card) == FAIL) {
+                DEBUG_PRINT("Error Use\n");
+                player->hands->push(player->hands, select_card);
+            }
             continue;
         }
         // (b)brown card
@@ -197,6 +192,13 @@ void game_next(Game *game) {
                 died_player(game, player->id, i);
         }
         if (game->finished) return;
+#if (DEBUG)
+        fprintf(fp, "after operation:\n");
+        print_status(game, fp);
+        fflush(fp);
+        printf("Enter any key to continue.(%d)\n", debug_num);
+        if (debug_num++ >= debug_stop) getchar();
+#endif
     }
     //  3.Discard excess cards
     DEBUG_PRINT("Now: Discard cards.\n");
@@ -208,6 +210,13 @@ void game_next(Game *game) {
 
         if (select_card != NULL) game->discard->push(game->discard, select_card);
     }
+#if (DEBUG)
+    fprintf(fp, "after discard card:\n");
+    print_status(game, fp);
+    fflush(fp);
+    printf("Enter any key to continue.(%d)\n", debug_num);
+    if (debug_num++ >= debug_stop) getchar();
+#endif
 }
 
 Game *new_game() {
@@ -238,25 +247,62 @@ Game *new_game() {
     return game;
 }
 
-void print_status(Game *game) {
-    printf("------------------------------------------\n");
+bool equip_weapon(Game *game, i32 player_id, Card *card) {
+    Player *player = game->players->data[player_id];
+    if (card->type == Barrel || card->type == Mustang || card->type == Scope ||
+        card->type == Dynamite) {
+        if (card->type == Barrel && player->barrel == NULL) {
+            player->barrel = card;
+            return SUCCESS;
+        }
+        if (card->type == Mustang && player->mustang == NULL) {
+            player->mustang = card;
+            return SUCCESS;
+        }
+        if (card->type == Scope && player->scope == NULL) {
+            player->scope = card;
+            return SUCCESS;
+        }
+        if (card->type == Dynamite && player->dynamite == NULL) {
+            player->dynamite = card;
+            return SUCCESS;
+        }
+        return FAIL;
+    } else if (card->type == Jail) {
+        i32 enemy_id = game->players->data[player_id]->choose_enemy(game, player_id);
+        if (enemy_id == -1) return FAIL;
+        if (game->players->data[enemy_id]->role->type == Sheriff) return FAIL;
+        if (game->players->data[enemy_id]->jail != NULL) return FAIL;
+        game->players->data[enemy_id]->jail = card;
+        return SUCCESS;
+    }
+    if (player->weapon != NULL) {
+        game->discard->push(game->discard, player->weapon);
+    }
+    player->weapon = card;
+    return SUCCESS;
+}
+
+void print_status(Game *game, FILE *fp) {
+    fprintf(fp, "------------------------------------------\n");
     for (int i = 0; i < game->players->size; i++) {
         Player *player = game->players->data[i];
-        printf("player %d(%s),role: %s,character: %s:\n", player->id, player->name,
-               role_name[player->role->type], character_name[player->character->type]);
-        printf("hp: %d(max: %d)\n", player->hp, player->bullet);
+        fprintf(fp, "player %d(%s),role: %s,character: %s:\n", player->id, player->name,
+                role_name[player->role->type], character_name[player->character->type]);
+        fprintf(fp, "hp: %d(max: %d)\n", player->hp, player->bullet);
         if (player->hands == NULL) return;
-        printf("Cards(%ld):", player->hands->size);
+        fprintf(fp, "Cards(%ld):", player->hands->size);
         for (int i = 0; i < player->hands->size; i++) {
-            printf("[%s] ", card_name[player->hands->data[i]->type]);
+            fprintf(fp, "[%s] ", card_name[player->hands->data[i]->type]);
         }
-        printf("\nWeapon: [%s]\n", player->weapon == NULL ? "N" : card_name[player->weapon->type]);
-        printf("Barrel: %s,", player->barrel == NULL ? "N" : "Y");
-        printf("Mustang: %s,", player->mustang == NULL ? "N" : "Y");
-        printf("Scope: %s,", player->scope == NULL ? "N" : "Y");
-        printf("Jail: %s,", player->jail == NULL ? "N" : "Y");
-        printf("Dynamite: %s\n", player->dynamite == NULL ? "N" : "Y");
-        printf("------------------------------------------\n");
+        fprintf(fp, "\nWeapon: [%s]\n",
+                player->weapon == NULL ? "N" : card_name[player->weapon->type]);
+        fprintf(fp, "Barrel: %s,", player->barrel == NULL ? "N" : "Y");
+        fprintf(fp, "Mustang: %s,", player->mustang == NULL ? "N" : "Y");
+        fprintf(fp, "Scope: %s,", player->scope == NULL ? "N" : "Y");
+        fprintf(fp, "Jail: %s,", player->jail == NULL ? "N" : "Y");
+        fprintf(fp, "Dynamite: %s\n", player->dynamite == NULL ? "N" : "Y");
+        fprintf(fp, "------------------------------------------\n");
     }
 }
 #endif  // __CORE_GAME_H

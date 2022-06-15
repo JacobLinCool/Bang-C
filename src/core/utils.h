@@ -112,8 +112,10 @@ bool player_draw_deck(Game* game, i32 me_id, i32 count) {
  */
 bool judge(Game* game, i32 me_id, i32 lower, i32 higher) {
     Card* top_card = get_deck_top(game);
+    DEBUG_PRINT("result: %u,", top_card->priority);
     if (lower <= top_card->priority && top_card->priority <= higher) {
         game->discard->push(game->discard, top_card);
+        DEBUG_PRINT("In range\n");
         return SUCCESS;
     }
     game->discard->push(game->discard, top_card);
@@ -125,6 +127,7 @@ bool judge(Game* game, i32 me_id, i32 lower, i32 higher) {
         }
         game->discard->push(game->discard, top_card);
     }
+    DEBUG_PRINT("Out of range\n");
     return FAIL;
 }
 

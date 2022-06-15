@@ -36,8 +36,8 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
         enemy_id = -1;
         printf("Wrong Player id!\n");
     }
-    // determine AI disgust value
-    ai_disgust_change(me_id, enemy_id, 1);
+    // determine AI hate value
+    ai_hate_change(game, me_id, enemy_id, 1);
     return enemy_id;
 }
 
@@ -50,8 +50,8 @@ i32 computer_choose_enemy(Game* game, i32 me_id) {
     }
     return enemy_id;*/
 
-    // determine AI disgust value
-    ai_disgust_change(me_id, ai_target, 1);
+    // determine AI hate value
+    ai_hate_change(game, me_id, ai_target, 1);
     DEBUG_PRINT("ai choose enemy %d\n", ai_target);
     return ai_target;
 }

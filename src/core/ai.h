@@ -22,19 +22,19 @@ typedef struct _Weight {
     i32 target;
     i32 id;
 } Weight;
-i32      disgust[7][7];
+i32      hate[7][7];
 i32      ai_target;
 i8       ai_request_type;  // 0: play 1: discard
 CardType ai_request_card;
 i8       ai_bang_use;
 
-i32  ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_disgust[10],
+i32  ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hate[10],
                     i32 max_dist_id[10]);
 i32  equip_total(Game* game, i32 me_id, i32 player_id);
 i32  card_count(Game* game, i32 player_id, i32 card);
 void print_weight_card(Game* game, i32 me_id, Weight weight[], Cards* candi_card) {
     for (int i = 0; i < 4; i++) {
-        printf("%d(%s): %d,", i, role_name[game->players->data[i]->role->type], disgust[me_id][i]);
+        printf("%d(%s): %d,", i, role_name[game->players->data[i]->role->type], hate[me_id][i]);
     }
     printf("\n");
     for (int i = 0; i < candi_card->size; i++) {
@@ -60,48 +60,74 @@ int ai_weight_cmp(const void* a, const void* b) {
     return (*(Weight*)b).weight - (*(Weight*)a).weight;
 }
 
-void ai_disgust_change(i32 ai_id, i32 target_id, i32 value) {
+void ai_hate_change(Game* game, i32 ai_id, i32 target_id, i32 value) {
     if (ai_id == -1) return;
-    disgust[target_id][ai_id] += value;
+    hate[target_id][ai_id] += value;
+    if (target_id == Sheriff) {
+        for (int i = 0; i < game->players->size; i++) {
+            if (game->players->data[i]->role->type == Deputy &&
+                game->players->data[i]->role->type != Sheriff) {
+                // Deputy hate who attack Sheriff
+                hate[i][ai_id] += value;
+            } else if (game->players->data[i]->role->type != Sheriff) {
+                hate[i][ai_id] -= value;
+            }
+        }
+    }
     return;
 }
 
 void ai_initialize(Game* game, i32 player_id) {
-    // disgust initialize
+    // hate initialize
     /*
         警長	    others: 2
         歹徒	    警長:5
         叛徒	    警長:A 歹徒:5	A預設6，針對他一次後減少1
     */
-    for (int i = 0; i < 7; i++) disgust[player_id][i] = 0;
+    for (int i = 0; i < 7; i++) hate[player_id][i] = 0;
     Player* my = game->players->data[player_id];
     switch (my->role->type) {
         case Sheriff:
             for (int i = 0; i < game->players->size; i++) {
                 if (i == player_id) {
-                    disgust[player_id][i] = -10000;
+                    hate[player_id][i] = -10000;
                 } else {
-                    disgust[player_id][i] = 5;
+                    hate[player_id][i] = 4;
+                }
+            }
+            break;
+        case Deputy:
+            for (int i = 0; i < game->players->size; i++) {
+                if (i == player_id) {
+                    hate[player_id][i] = -10000;
+                } else if (game->players->data[i]->role->type == Sheriff) {
+                    hate[player_id][i] = -1000;
+                } else {
+                    hate[player_id][i] = 5;
                 }
             }
             break;
         case Criminal:
             for (int i = 0; i < game->players->size; i++) {
                 if (i == player_id) {
-                    disgust[player_id][i] = -10000;
+                    hate[player_id][i] = -10000;
                 } else if (game->players->data[i]->role->type == Sheriff) {
-                    disgust[player_id][i] = 5;
+                    hate[player_id][i] = 5;
                 }
             }
             break;
         case Traitor:
             for (int i = 0; i < game->players->size; i++) {
                 if (i == player_id) {
-                    disgust[player_id][i] = -10000;
+                    hate[player_id][i] = -10000;
                 } else if (game->players->data[i]->role->type == Sheriff) {
-                    disgust[player_id][i] = 6;
+                    if (game->players->size > 4) {
+                        hate[player_id][i] = 0;
+                    } else {
+                        hate[player_id][i] = 6;
+                    }
                 } else {
-                    disgust[player_id][i] = 5;
+                    hate[player_id][i] = 5;
                 }
             }
             break;
@@ -112,20 +138,20 @@ void ai_initialize(Game* game, i32 player_id) {
 i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     if (candi_card->size == 0) return -1;
     Player* ai = game->players->data[player_id];
-    i32     max_disgust[10] = {0};
+    i32     max_hate[10] = {0};
     i32     max_dist_id[10] = {0};
 
     for (int i = 0; i < game->players->size; i++) {
         if (game->players->data[i]->hp <= 0 || i == player_id) continue;
         i32 dist = (distance(game, player_id, i) > 0 ? distance(game, player_id, i) : 0);
-        if (disgust[player_id][i] > max_disgust[dist]) {
-            max_disgust[dist] = disgust[player_id][i];
+        if (hate[player_id][i] > max_hate[dist]) {
+            max_hate[dist] = hate[player_id][i];
             max_dist_id[dist] = i;
         }
     }
     for (int i = 1; i < 10; i++) {
-        if (max_disgust[i - 1] > max_disgust[i]) {
-            max_disgust[i] = max_disgust[i - 1];
+        if (max_hate[i - 1] > max_hate[i]) {
+            max_hate[i] = max_hate[i - 1];
             max_dist_id[i] = max_dist_id[i - 1];
         }
     }
@@ -133,7 +159,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     for (int i = 0; i < candi_card->size; i++) {
         // DEBUG_PRINT("(size: %d,ai: %d)card: %s\n", candi_card->size, player_id,
         //             card_name[candi_card->data[i]->type]);
-        weight[i].weight = ai_card_weight(game, candi_card, player_id, i, max_disgust, max_dist_id);
+        weight[i].weight = ai_card_weight(game, candi_card, player_id, i, max_hate, max_dist_id);
         weight[i].id = i;
         weight[i].target = ai_target;
     }
@@ -160,7 +186,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     if (ai->role->type == Traitor && game->players->data[ai_target]->role->type == Sheriff) {
         i32 card_type = candi_card->data[weight[0].id]->type;
         if (card_type == Bang || card_type == Indians || card_type == Duel) {
-            disgust[player_id][ai_target] -= 2;
+            hate[player_id][ai_target] -= 2;
         }
     }
     return weight[0].id;
@@ -174,7 +200,7 @@ i32 ai_player_cnt(Game* game) {
     return cnt;
 }
 
-i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_disgust[10],
+i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hate[10],
                    i32 max_dist_id[10]) {
     Player*  ai = game->players->data[ai_id];
     CardType card = cards->data[card_id]->type;
@@ -182,7 +208,7 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
     i32      player_cnt = ai_player_cnt(game);
     for (int i = 0; i < game->players->size; i++) {
         if (game->players->data[i]->role->type == Sheriff) Sheriff_id = i;
-        if (player_cnt == 2 && i != ai_id) disgust[ai_id][i] = 10;
+        if (player_cnt == 2 && i != ai_id) hate[ai_id][i] = 10;
     }
     i32 max_distance = 1;
     if (ai->weapon != NULL) max_distance += ai->weapon->type - Volcanic;
@@ -195,7 +221,7 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
             game->players->data[ai_target]->role->type == Sheriff) {
             if (game->players->data[ai_target]->hp < 4) return 0;
         }
-        return max_disgust[max_distance] * (6 - game->players->data[ai_target]->hands->size) *
+        return max_hate[max_distance] * (6 - game->players->data[ai_target]->hands->size) *
                (6 - game->players->data[ai_target]->hands->size);
     }
     if (card == Missed) return 0;
@@ -210,19 +236,24 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
         }
         if (ai->role->type == Criminal) {
             for (int i = 0; i < game->players->size; i++) {
-                if (i != ai_id && disgust[ai_id][i] < BAD_GUY) return 0;
+                if (i != ai_id && hate[ai_id][i] < BAD_GUY) return 0;
                 return 20;
             }
         }
     }
     if (card == Indians) {
-        ai_target = max_dist_id[9];
-        return max_disgust[9] * (4 - game->players->data[max_dist_id[9]]->hands->size) *
-               (4 - game->players->data[max_dist_id[9]]->hands->size);
+        i32 total = 0;
+        for (int i = 0; i < game->players->size; i++) {
+            if (game->players->data[i]->hp <= 0) continue;
+            if (hate[ai_id][i] >= BAD_GUY) {
+                total += hate[ai_id][i] * (5 - game->players->data[i]->hands->size);
+            }
+        }
+        return total;
     }
     if (card == Panic || card == Cat_Balou) {
         ai_target = max_dist_id[1];
-        return max_disgust[1] * (5 + equip_total(game, ai_id, max_dist_id[1]));
+        return max_hate[1] * (5 + equip_total(game, ai_id, max_dist_id[1]));
     }
     if (card == Stagecoach) return 5 * (ai->hp - ai->hands->size - 1);
     if (card == Wells_Fargo) return 5 * (ai->hp - ai->hands->size - 2);
@@ -230,7 +261,7 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
         i32 total = 0;
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->hp <= 0) continue;
-            if (disgust[ai_id][i] < BAD_GUY) {
+            if (hate[ai_id][i] < BAD_GUY) {
                 total += (i == ai_id ? 5 : 2) * (5 - game->players->data[i]->hands->size);
             }
         }
@@ -241,7 +272,7 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
         i32 total = 0;
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->hp <= 0) continue;
-            if (disgust[ai_id][i] < BAD_GUY) {
+            if (hate[ai_id][i] < BAD_GUY) {
                 total += (i == ai_id ? 5 : 2) * (5 - game->players->data[i]->hp);
             }
         }
@@ -259,30 +290,38 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_dis
     if (card == Scope) return 400;
     if (card == Mustang) return 450;
     if (card == Jail) {
-        if (max_disgust[9] < BAD_GUY) return 0;
-        ai_target = max_dist_id[9];
-        if (ai_target == Sheriff_id) return 0;  // should be modified
-        return 2 * max_disgust[9];
+        i32 max_jail = 0;
+        if (max_hate[9] < BAD_GUY) return 0;
+        for (int i = 0; i < game->players->size; i++) {
+            if (game->players->data[i]->hp <= 0 || i == Sheriff_id ||
+                (game->players->data[i]->jail != NULL))
+                continue;
+            if (hate[ai_id][i] >= BAD_GUY && 2 * hate[ai_id][i] > max_jail) {
+                max_jail = 2 * hate[ai_id][i];
+                ai_target = i;
+            }
+        }
+        return 2 * max_jail;
     }
     if (card == Dynamite) return 10;
     if (card == Volcanic) return 200;
     if (card == Schofield) {
-        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
+        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_hate[1] >= BAD_GUY)
             return -100;
         return 120 * (1 - 2 * ((ai->weapon != NULL ? ai->weapon->type : 0) > card));
     }
     if (card == Remington) {
-        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
+        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_hate[1] >= BAD_GUY)
             return -100;
         return 130 * (1 - 2 * ((ai->weapon != NULL ? ai->weapon->type : 0) > card));
     }
     if (card == Rev_Carabine) {
-        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
+        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_hate[1] >= BAD_GUY)
             return -100;
         return 140 * (1 - 2 * ((ai->weapon != NULL ? ai->weapon->type : 0) > card));
     }
     if (card == Winchester) {
-        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_disgust[1] >= BAD_GUY)
+        if (ai->weapon != NULL && ai->weapon->type == Volcanic && max_hate[1] >= BAD_GUY)
             return -100;
         return 150 * (1 - 2 * ((ai->weapon != NULL ? ai->weapon->type : 0) > card));
     }
