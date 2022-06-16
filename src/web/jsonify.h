@@ -45,6 +45,7 @@ player json
     "tail": boolean,
     "dynamite": boolean,
     "hands_size": number
+    "display_hands" boolean
     "hands": [
         card_json,
         card_json,
@@ -53,7 +54,7 @@ player json
     ]
 }
 */
-cJSON *player_jsonify(Player *player) {
+cJSON *player_jsonify(Player *player, bool itself) {
     if (!player) return NULL;
     cJSON *root = cJSON_CreateObject();
 
@@ -70,6 +71,7 @@ cJSON *player_jsonify(Player *player) {
     cJSON *jail = cJSON_CreateBool(player->jail != NULL);
     cJSON *dynamite = cJSON_CreateBool(player->dynamite != NULL);
     cJSON *hands_size = cJSON_CreateNumber(player->hands->size);
+    cJSON *display_hands = cJSON_CreateBool(itself);
     cJSON *hands = cJSON_CreateArray();
 
     cJSON_AddItemToObject(root, "name", name);
@@ -85,12 +87,15 @@ cJSON *player_jsonify(Player *player) {
     cJSON_AddItemToObject(root, "jail", jail);
     cJSON_AddItemToObject(root, "dynamite", dynamite);
     cJSON_AddItemToObject(root, "hands_size", hands_size);
+    cJSON_AddItemToObject(root, "display_hands", display_hands);
     cJSON_AddItemToObject(root, "hand", hands);
 
-    for (i32 i = 0; i < player->hands->size; i++) {
-        Card  *cur_card = player->hands->get(player->hands, i);
-        cJSON *json_card = card_jsonlfy(&cur_card);
-        cJSON_AddItemToArray(hands, json_card);
+    if (itself) {
+        for (i32 i = 0; i < player->hands->size; i++) {
+            Card  *cur_card = player->hands->get(player->hands, i);
+            cJSON *json_card = card_jsonlfy(&cur_card);
+            cJSON_AddItemToArray(hands, json_card);
+        }
     }
 
     return root;
@@ -117,9 +122,8 @@ game_json
         .
     ]
 }
-
 */
-cJSON *game_jsonify(Game *game) {
+cJSON *get_game_jsonify(Game *game, i32 player_id) {
     if (!game) return NULL;
     cJSON *root = cJSON_CreateObject();
 
@@ -141,7 +145,7 @@ cJSON *game_jsonify(Game *game) {
 
     for (i32 i = 0; i < game->players->size; i++) {
         Player *cur_player = game->players->get(game->players, i);
-        cJSON  *json_player = player_jsonify(cur_player);
+        cJSON  *json_player = player_jsonify(cur_player, (player_id == i));
         cJSON_AddItemToArray(players, json_player);
     }
 
@@ -150,14 +154,6 @@ cJSON *game_jsonify(Game *game) {
         cJSON *json_discard = card_jsonlfy(&cur_discard);
         cJSON_AddItemToArray(discards, json_discard);
     }
-
-    return root;
-}
-
-cJSON *filter_player_perspective(cJSON *raw) {
-    cJSON *root = cJSON_CreateObject();
-
-    // filter out others' information
 
     return root;
 }
