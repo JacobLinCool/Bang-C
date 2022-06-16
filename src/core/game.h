@@ -76,9 +76,10 @@ void game_start(Game *game) {
     for (int i = 0; i < game->players->size; i++) {
         ai_initialize(game, i);
     }
-
+    // P2S game start
     for (int i = 0; i < game->players->size; i++) {
-        respond(clients->get(clients, i), "game_start", game_jsonify(game, clients->get(clients, i)->player_id));
+        respond(clients->get(clients, i), "game_start",
+                game_jsonify(game, clients->get(clients, i)->player_id));
     }
 }
 
@@ -96,7 +97,11 @@ void game_next(Game *game) {
     game->turn++;
 
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
-    // print_status(game);
+    // P2S game status
+    for (int i = 0; i < game->players->size; i++) {
+        respond(clients->get(clients, i), "game_status",
+                game_jsonify(game, clients->get(clients, i)->player_id));
+    }
 
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
