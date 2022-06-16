@@ -5,21 +5,27 @@
 #include "../third/cJSON/cJSON.h"
 #include "../third/cimple/all.h"
 
+#ifdef DEBUG
+#define DEBUG_DISPLAY true
+#else
+#define DEBUG_DISPLAY false
+#endif
+
 /*
 card_json
 {
     "address": number,
-    "type": number,
+    "type": number, //0 is hidden
     "pirority": number
 }
 */
-cJSON *card_jsonlfy(Card **card) {
+cJSON *card_jsonlfy(Card **card, bool itself) {
     if (!(*card)) return NULL;
     cJSON *root = cJSON_CreateObject();
 
     u64    address = (u64)card;
     cJSON *pointer = cJSON_CreateNumber(address);
-    cJSON *type = cJSON_CreateNumber((*card)->type);
+    cJSON *type = cJSON_CreateNumber(itself ? (*card)->type : -1);
     cJSON *priority = cJSON_CreateNumber((*card)->priority);
 
     cJSON_AddItemToObject(root, "address", pointer);
@@ -36,7 +42,7 @@ player json
     "id": number,
     "hp": number,
     "dead": boolean,
-    "role": number,
+    "role": number,//-1 is hidden
     "character": number,
     "weapon": boolean,
     "barrel": boolean,
@@ -63,7 +69,7 @@ cJSON *player_jsonify(Player *player, bool itself) {
     cJSON *hp = cJSON_CreateNumber(player->hp);
     cJSON *dead = cJSON_CreateBool(player->dead);
     cJSON *role = cJSON_CreateNumber(player->role->type);
-    cJSON *character = cJSON_CreateNumber(player->character->type);
+    cJSON *character = cJSON_CreateNumber(itself ? player->character->type : -1);
     cJSON *weapon = cJSON_CreateBool(player->weapon != NULL);
     cJSON *barrel = cJSON_CreateBool(player->barrel != NULL);
     cJSON *mustang = cJSON_CreateBool(player->mustang != NULL);
@@ -93,7 +99,7 @@ cJSON *player_jsonify(Player *player, bool itself) {
     if (itself) {
         for (i32 i = 0; i < player->hands->size; i++) {
             Card  *cur_card = player->hands->get(player->hands, i);
-            cJSON *json_card = card_jsonlfy(&cur_card);
+            cJSON *json_card = card_jsonlfy(&cur_card, itself);
             cJSON_AddItemToArray(hands, json_card);
         }
     }
@@ -123,7 +129,7 @@ game_json
     ]
 }
 */
-cJSON *get_game_jsonify(Game *game, i32 player_id) {
+cJSON *game_jsonify(Game *game, i32 player_id) {
     if (!game) return NULL;
     cJSON *root = cJSON_CreateObject();
 
@@ -151,7 +157,7 @@ cJSON *get_game_jsonify(Game *game, i32 player_id) {
 
     for (i32 i = 0; i < game->discard->size; i++) {
         Card  *cur_discard = game->discard->get(game->discard, i);
-        cJSON *json_discard = card_jsonlfy(&cur_discard);
+        cJSON *json_discard = card_jsonlfy(&cur_discard, (player_id == i) || DEBUG_DISPLAY);
         cJSON_AddItemToArray(discards, json_discard);
     }
 
