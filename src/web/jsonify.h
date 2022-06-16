@@ -1,15 +1,16 @@
 #ifndef __JSONIFY_H
 #define __JSONIFY_H
 
-#include "../core/game.h"
-#include "../third/cJSON/cJSON.h"
-#include "../third/cimple/all.h"
-
 #ifdef DEBUG
 #define DEBUG_DISPLAY true
 #else
 #define DEBUG_DISPLAY false
 #endif
+
+#include "../core/cards.h"
+#include "../core/types.h"
+#include "../third/cJSON/cJSON.h"
+#include "../third/cimple/all.h"
 
 /*
 card_json
