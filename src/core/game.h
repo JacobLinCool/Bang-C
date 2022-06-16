@@ -2,6 +2,8 @@
 #define __CORE_GAME_H
 
 #include "../utils/all.h"
+#include "../web/jsonify.h"
+#include "../web/server.h"
 #include "cards.h"
 #include "constants.h"
 #include "player.h"
@@ -73,6 +75,10 @@ void game_start(Game *game) {
     // ai initialize
     for (int i = 0; i < game->players->size; i++) {
         ai_initialize(game, i);
+    }
+
+    for (int i = 0; i < game->players->size; i++) {
+        respond(clients->get(clients, i), "game_start", game_jsonify(game, clients->get(clients, i)->player_id));
     }
 }
 

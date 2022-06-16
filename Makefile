@@ -16,7 +16,7 @@ server-debug: force
 	@echo "Build complete"
 
 build:
-	@$(cc) -o main $(src_dir)/main.c
+	@$(cc) -o main $(src_dir)/main.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
 	@echo "Build complete"
 
 debug:
