@@ -159,6 +159,9 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
     if (strcmp("join", action) == 0) {
         cJSON *list = create_player_list();
         for (size_t i = 0; i < clients->size; i++) {
+            respond_chat(clients->get(clients, i),
+                         $(String.format("%s join the game.", sender->name)));
+
             respond(clients->get(clients, i), "players", list);
         }
         cJSON_Delete(list);
@@ -189,14 +192,17 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             }
         }
 
+        for (size_t i = 0; i < clients->size; i++) {
+            respond_chat(
+                clients->get(clients, i),
+                $(String.format("%s is now known as %s.", sender->name, name_token->valuestring)));
+        }
+
         strncpy(sender->name, name_token->valuestring, 255);
         sender->named = true;
 
         cJSON *list = create_player_list();
         for (size_t i = 0; i < clients->size; i++) {
-            respond_chat(clients->get(clients, i),
-                         $(String.format("%s has joined the game.", sender->name)));
-
             respond(clients->get(clients, i), "players", list);
         }
         cJSON_Delete(list);
@@ -476,8 +482,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 
             Console.yellow("[%p] Connection closed", instance);
             for (size_t i = 0; i < clients->size; i++) {
-                Client *client = clients->get(clients, i);
-                if (client->instance == instance) {
+                if (clients->get(clients, i)->instance == instance) {
                     clients->remove(clients, i);
                 }
             }
@@ -486,6 +491,15 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
                 Message *msg = client->msg_queue->shift(client->msg_queue);
                 free_message(msg);
             }
+
+            cJSON *list = create_player_list();
+            for (size_t i = 0; i < clients->size; i++) {
+                respond_chat(clients->get(clients, i),
+                             $(String.format("%s leave the game.", client->name)));
+
+                respond(clients->get(clients, i), "players", list);
+            }
+            cJSON_Delete(list);
 
             client->msg_queue->free(client->msg_queue);
             free(client);
