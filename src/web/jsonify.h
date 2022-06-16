@@ -92,7 +92,7 @@ cJSON *player_jsonify(Player *player, bool itself) {
     cJSON_AddItemToObject(root, "jail", jail);
     cJSON_AddItemToObject(root, "dynamite", dynamite);
     cJSON_AddItemToObject(root, "hands_size", hands_size);
-    cJSON_AddItemToObject(root, "hand", hands);
+    cJSON_AddItemToObject(root, "hands", hands);
 
     if (itself) {
         for (i32 i = 0; i < player->hands->size; i++) {

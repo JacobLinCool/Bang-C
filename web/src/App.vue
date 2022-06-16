@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { state, game, logs } from "./composables/game";
+import { state, game, logs, ws } from "./composables/game";
 import Fade from "./components/Fade.vue";
 import WaitingRoom from "./components/WaitingRoom.vue";
 import { computed } from "vue";
@@ -9,6 +9,11 @@ const rev_logs = computed(() =>
         .map((l: { type: "chat" | "error"; message: string }, i: number) => ({ ...l, i }))
         .reverse(),
 );
+
+ws.addEventListener("close", (event) => {
+    alert("Connection closed. Reason: " + (event.reason || "No reason, it just don't like you."));
+    window.location.reload();
+});
 </script>
 
 <template>

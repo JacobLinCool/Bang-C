@@ -76,13 +76,6 @@ void game_start(Game *game) {
     for (int i = 0; i < game->players->size; i++) {
         ai_initialize(game, i);
     }
-    // P2S game start
-    for (int i = 0; i < clients->size; i++) {
-        cJSON *base = cJSON_CreateObject();
-        cJSON_AddItemToObject(base, "game",
-                              game_jsonify(game, clients->get(clients, i)->player_id));
-        respond(clients->get(clients, i), "game_start", base);
-    }
 }
 
 void game_next(Game *game) {
