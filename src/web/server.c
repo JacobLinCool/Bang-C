@@ -71,6 +71,11 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             return;
         }
 
+        if (strncmp("Computer", name_token->valuestring, 8) == 0) {
+            respond_error(sender, "You can't use that name");
+            return;
+        }
+
         for (int i = 0; i < clients->size; i++) {
             Client *other = clients->data[i];
             if (strcmp(other->name, name_token->valuestring) == 0) {
@@ -116,9 +121,15 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             return;
         }
 
+        bool    is_computer = false;
+        Client *target = NULL;
+
         char *name = name_token->valuestring;
 
-        Client *target = NULL;
+        if (strncmp("Computer", name, 8) == 0) {
+            computer_count--;
+            is_computer = true;
+        }
 
         for (size_t i = 0; i < clients->size; i++) {
             Client *c = clients->get(clients, i);
@@ -129,7 +140,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             }
         }
 
-        if (target == NULL) {
+        if (target == NULL && is_computer == false) {
             respond_error(sender, $(String.format("No player named %s", name)));
             return;
         }
@@ -137,14 +148,17 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         cJSON *list = create_player_list();
         for (size_t i = 0; i < clients->size; i++) {
             respond_chat(clients->get(clients, i),
-                         $(String.format("%s has been kicked by %s", target->name, sender->name)));
+                         $(String.format("%s has been kicked by %s",
+                                         is_computer ? name : target->name, sender->name)));
 
             respond(clients->get(clients, i), "players", list);
         }
         cJSON_Delete(list);
 
-        lws_close_reason(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked", strlen("Kicked"));
-        lws_close_free_wsi(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked");
+        if (target != NULL) {
+            lws_close_reason(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked", strlen("Kicked"));
+            lws_close_free_wsi(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked");
+        }
 
         cJSON_Delete(payload);
         return;
@@ -254,7 +268,8 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             respond_chat(clients->get(clients, i),
                          $(String.format("%s has started the game", sender->name)));
 
-            respond(clients->get(clients, i), "start", list);
+            respond(clients->get(clients, i), "start",
+                    game_jsonify(game, clients->get(clients, i)->player_id));
         }
         cJSON_Delete(list);
 
