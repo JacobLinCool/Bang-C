@@ -16,7 +16,7 @@
 card_json
 {
     "address": number,
-    "type": number, //0 is hidden
+    "type": number, //-1 is hidden
     "pirority": number
 }
 */
@@ -52,7 +52,6 @@ player json
     "tail": boolean,
     "dynamite": boolean,
     "hands_size": number
-    "display_hands" boolean
     "hands": [
         card_json,
         card_json,

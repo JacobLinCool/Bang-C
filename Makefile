@@ -20,7 +20,7 @@ build:
 	@echo "Build complete"
 
 debug:
-	@$(cc) -o main $(src_dir)/main.c -D DEBUG
+	@$(cc) -o main $(src_dir)/main.c -D DEBUG $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
 	@echo "Build complete"
 
 mdebug:
