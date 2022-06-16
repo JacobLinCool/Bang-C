@@ -218,9 +218,11 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     return;
 }
 
-bool dynamite_judge(Game* game, i32 me_id) {
+void dynamite_judge(Game* game, i32 me_id) {
     Player* me = game->players->data[me_id];
-    if (judge(game, me_id, 102, 109, Dynamite)) {
+    bool    dynamite_judge_result = judge(game, me_id, 102, 109, Dynamite);
+
+    if (dynamite_judge_result) {
         game->discard->push(game->discard, me->dynamite);
         me->dynamite = NULL;
         attack_player(game, -1, me_id);
@@ -234,14 +236,13 @@ bool dynamite_judge(Game* game, i32 me_id) {
         game->players->data[left_player_id]->dynamite = me->dynamite;
         me->dynamite = NULL;
     }
-    return SUCCESS;
 }
 
 bool jail_judge(Game* game, i32 me_id) {
     game->discard->push(game->discard, game->players->data[me_id]->jail);
     game->players->data[me_id]->jail = NULL;
-    if (judge(game, me_id, 201, 213, Jail)) return SUCCESS;  // SUCCESS escapes from jail
-    return FAIL;                                             // FAIL escapes from jail
+    bool jail_judge_result = judge(game, me_id, 201, 213, Jail);
+    return jail_judge_result ? SUCCESS : FAIL;
 }
 
 bool bang(Game* game, i32 me_id) {
