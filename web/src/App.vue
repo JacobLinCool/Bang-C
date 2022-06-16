@@ -1,62 +1,61 @@
 <script setup lang="ts">
-    import { computed, reactive, ref } from "vue";
-    import { action } from "./action";
+import { state, game, logs } from "./composables/game";
+import Fade from "./components/Fade.vue";
+import WaitingRoom from "./components/WaitingRoom.vue";
+import { computed } from "vue";
 
-    type MessageType = "ask" | "chat";
-
-    const ws = new WebSocket(window.location.hostname === "localhost" ? "ws://localhost:8080/" : "wss://bang-ws.jacoblin.cool");
-
-    const name = ref("");
-    const message = ref("");
-    const messages: { from: string; to: string; message: string }[] = reactive([]);
-    const players: string[] = reactive([]);
-
-    const targets = computed(() => ["SERVER", ...players]);
-    const target = ref("SERVER");
-
-    ws.onmessage = (event) => {
-        const message: { type: MessageType; payload: any } = JSON.parse(event.data);
-
-        console.log(message);
-
-        switch (message.type) {
-            case "chat":
-                // ...
-                break;
-
-            default:
-                break;
-        }
-    };
-
-    // @ts-ignore
-    window.send = function (action: string, payload: any) {
-        ws.send(JSON.stringify({ action, payload }));
-    };
-
-    function send_message() {
-        ws.send(JSON.stringify({ action: "chat", to: target.value, message: message.value }));
-        message.value = "";
-    }
+const rev_logs = computed(() =>
+    JSON.parse(JSON.stringify(logs))
+        .map((l: { type: "chat" | "error"; message: string }, i: number) => ({ ...l, i }))
+        .reverse(),
+);
 </script>
 
 <template>
-    <div id="wrap"></div>
+    <div class="w-full h-full overflow-hidden m-0 p-0 bg-amber-100 flex">
+        <div class="w-4/5 h-full">
+            <Fade>
+                <WaitingRoom v-if="state === 0" />
+            </Fade>
+        </div>
+        <div class="w-1/5 h-full bg-white/50 flex flex-col-reverse overflow-y-auto">
+            <TransitionGroup name="logs">
+                <div v-for="log of rev_logs" :key="log.i" class="p-2">
+                    <span :class="[log.type === 'chat' ? 'text-gray-600' : 'text-red-600']">{{
+                        log.message
+                    }}</span>
+                </div>
+            </TransitionGroup>
+        </div>
+    </div>
 </template>
 
 <style>
-    #app {
-        font-family: Avenir, Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        margin-top: 60px;
-    }
+html,
+body,
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
-    #wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+    @apply w-full h-full overflow-hidden m-0 p-0;
+}
+
+.logs-move, /* apply transition to moving elements */
+.logs-enter-active,
+.logs-leave-active {
+    transition: all 0.5s ease;
+}
+
+.logs-enter-from,
+.logs-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.logs-leave-active {
+    position: absolute;
+}
 </style>
