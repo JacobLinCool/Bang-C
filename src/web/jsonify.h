@@ -145,7 +145,7 @@ cJSON *get_game_jsonify(Game *game, i32 player_id) {
 
     for (i32 i = 0; i < game->players->size; i++) {
         Player *cur_player = game->players->get(game->players, i);
-        cJSON  *json_player = player_jsonify(cur_player, (player_id == i));
+        cJSON  *json_player = player_jsonify(cur_player, (player_id == i) || DEBUG_DISPLAY);
         cJSON_AddItemToArray(players, json_player);
     }
 
