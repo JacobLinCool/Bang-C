@@ -334,15 +334,6 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         }
 
         for (size_t i = 0; i < clients->size; i++) {
-            respond_chat(clients->get(clients, i),
-                         $(String.format("%s has started the game", sender->name)));
-
-            cJSON *list = create_player_list();
-            respond(clients->get(clients, i), "start", list);
-            cJSON_Delete(list);
-        }
-
-        for (size_t i = 0; i < clients->size; i++) {
             game->join(game, clients->get(clients, i)->name, false);
         }
 
@@ -350,7 +341,28 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             game->join(game, $(String.format("Computer %zu", i + 1)), true);
         }
 
+        game->players->shuffle(game->players);
+
         game->start(game);
+
+        for (size_t i = 0; i < game->players->size; i++) {
+            Player *player = game->players->get(game->players, i);
+            for (size_t j = 0; j < clients->size; j++) {
+                Client *client = clients->get(clients, j);
+                if (strcmp(player->name, client->name) == 0) {
+                    client->player_id = player->id;
+                }
+            }
+        }
+
+        cJSON *list = create_player_list();
+        for (size_t i = 0; i < clients->size; i++) {
+            respond_chat(clients->get(clients, i),
+                         $(String.format("%s has started the game", sender->name)));
+
+            respond(clients->get(clients, i), "start", list);
+        }
+        cJSON_Delete(list);
 
         cJSON_Delete(payload);
         return;
