@@ -1,21 +1,20 @@
+#ifndef __SERVER_H
+#define __SERVER_H
+
 #include <libwebsockets.h>
 #include <unistd.h>
 
-#include "../core/game.h"
 #include "../third/cJSON/cJSON.h"
 #include "../third/cimple/all.h"
 #include "../third/uds/deque.h"
 #include "../third/uds/vector.h"
 #include "../utils/all.h"
-#include "jsonify.h"
 #include "random_string.h"
 #define BUFFER_SIZE (64 * 1024)
 #define TIME_OUT_SECONDS 60
 #define cJSON_Delete(json) ({})
 
-bool  game_started = false;
-int   computer_count = 0;
-Game *game;
+int computer_count = 0;
 
 typedef struct Message {
     char  *payload;
@@ -117,3 +116,5 @@ cJSON *create_player_list() {
     cJSON_AddItemToObject(obj, "players", players);
     return obj;
 }
+
+#endif  // __SERVER_H

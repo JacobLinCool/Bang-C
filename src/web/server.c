@@ -1,5 +1,10 @@
 #include "server.h"
 
+#include "../core/game.h"
+
+bool  game_started = false;
+Game *game;
+
 void start_server(int port, lws_callback_function callback) {
     struct lws_protocols protocols[] = {{.id = 2048,
                                          .name = "cool-protocol",
