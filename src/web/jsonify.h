@@ -78,7 +78,6 @@ cJSON *player_jsonify(Player *player, bool itself) {
     cJSON *jail = cJSON_CreateBool(player->jail != NULL);
     cJSON *dynamite = cJSON_CreateBool(player->dynamite != NULL);
     cJSON *hands_size = cJSON_CreateNumber(player->hands->size);
-    cJSON *display_hands = cJSON_CreateBool(itself);
     cJSON *hands = cJSON_CreateArray();
 
     cJSON_AddItemToObject(root, "name", name);
@@ -94,8 +93,7 @@ cJSON *player_jsonify(Player *player, bool itself) {
     cJSON_AddItemToObject(root, "jail", jail);
     cJSON_AddItemToObject(root, "dynamite", dynamite);
     cJSON_AddItemToObject(root, "hands_size", hands_size);
-    cJSON_AddItemToObject(root, "display_hands", display_hands);
-    cJSON_AddItemToObject(root, "hand", hands);
+    cJSON_AddItemToObject(root, "hands", hands);
 
     if (itself) {
         for (i32 i = 0; i < player->hands->size; i++) {
@@ -147,7 +145,7 @@ cJSON *game_jsonify(Game *game, i32 player_id) {
     cJSON_AddItemToObject(root, "turn", turn);
     cJSON_AddItemToObject(root, "finished", finished);
     cJSON_AddItemToObject(root, "deck_size", deck_size);
-    cJSON_AddItemToObject(root, "discord_size", discard_size);
+    cJSON_AddItemToObject(root, "discard_size", discard_size);
     cJSON_AddItemToObject(root, "discards", discards);
 
     for (i32 i = 0; i < game->players->size; i++) {
