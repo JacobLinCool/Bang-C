@@ -65,7 +65,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     i64 offset = (i64)share_offset;
     i32 input = -1;
     for (int i = 0; i < cards->size; i++) {
-        if (&(cards->data[i]) == card_base + offset) {
+        if (cards->data[i] == (Card*)(card_base + offset)) {
             input = i;
             break;
         }
@@ -101,7 +101,7 @@ Card* real_player_request(Game* game, i32 player_id) {
     i64 offset = (i64)share_offset;
     i32 input = -1;
     for (int i = 0; i < player->hands->size; i++) {
-        if (&(player->hands->data[i]) == card_base + offset) {
+        if (player->hands->data[i] == (Card*)(card_base + offset)) {
             input = i;
             break;
         }
@@ -152,7 +152,7 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     i64 offset = (i64)share_offset;
     i32 input = -1;
     for (int i = 0; i < target->hands->size; i++) {
-        if (&(target->hands->data[i]) == card_base + offset) {
+        if (target->hands->data[i] == (Card*)(card_base + offset)) {
             input = i;
             break;
         }
@@ -164,27 +164,27 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
         }
         return target->hands->remove(target->hands, input);
     } else {
-        if (target->barrel && target->barrel == card_base + offset) {
+        if (target->barrel && target->barrel == (Card*)(card_base + offset)) {
             Card* x = target->barrel;
             target->barrel = NULL;
             return x;
-        } else if (target->mustang && target->mustang == card_base + offset) {
+        } else if (target->mustang && target->mustang == (Card*)(card_base + offset)) {
             Card* x = target->mustang;
             target->mustang = NULL;
             return x;
-        } else if (target->scope && target->scope == card_base + offset) {
+        } else if (target->scope && target->scope == (Card*)(card_base + offset)) {
             Card* x = target->scope;
             target->scope = NULL;
             return x;
-        } else if (target->weapon && target->weapon == card_base + offset) {
+        } else if (target->weapon && target->weapon == (Card*)(card_base + offset)) {
             Card* x = target->weapon;
             target->weapon = NULL;
             return x;
-        } else if (target->jail && target->jail == card_base + offset) {
+        } else if (target->jail && target->jail == (Card*)(card_base + offset)) {
             Card* x = target->jail;
             target->jail = NULL;
             return x;
-        } else if (target->dynamite && target->dynamite == card_base + offset) {
+        } else if (target->dynamite && target->dynamite == (Card*)(card_base + offset)) {
             Card* x = target->dynamite;
             target->dynamite = NULL;
             return x;
