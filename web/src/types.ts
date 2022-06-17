@@ -29,7 +29,7 @@ export enum CharacterType {
 }
 
 export enum CardType {
-    CARD_LOW_BOUND,
+    Card_Back,
     Bang,
     Missed,
     Gatling,
@@ -70,11 +70,11 @@ export interface Player {
     hp: number;
     role: RoleType;
     character: CharacterType;
-    weapon: boolean;
-    barrel: boolean;
-    mustang: boolean;
-    scope: boolean;
-    jail: boolean;
-    dynamite: boolean;
+    weapon: Card | null;
+    barrel: Card | null;
+    mustang: Card | null;
+    scope: Card | null;
+    jail: Card | null;
+    dynamite: Card | null;
     hands: Card[];
 }
