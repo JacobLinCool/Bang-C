@@ -35,7 +35,7 @@ function select_card(x: number) {
                 />
             </ListTransition>
         </div>
-        <Role class="w-1/5 p-1" :type="props.self ? props.player.role : 0"></Role>
+        <Role class="w-1/5 p-1" :type="props.player.role"></Role>
         <Character class="w-1/5 p-1" :type="props.player.character"></Character>
     </div>
 </template>
