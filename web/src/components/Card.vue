@@ -13,14 +13,16 @@ const suits = ["", "♠", "♥", "♦", "♣"];
 <template>
     <div
         :title="t(CardType[props.type])"
-        class="p-1t ransition-all duration-100 ease-in-out transform hover:scale-110 opacity-75 hover:opacity-100"
+        class="transition-all duration-100 ease-in-out transform hover:scale-110 hover:opacity-100 hover:z-10 hover:-translate-y-5 cursor-pointer"
     >
         <img
             class="w-full"
             style="aspect-ratio: 9 / 16"
             :src="`/card/${CardType[props.type]}.png`"
         />
-        <div v-if="props.number" class="absolute bottom-[5%] left-[5%]">{{ props.number }}</div>
+        <div v-if="props.number" class="absolute bottom-[5%] left-[5%]">
+            {{ props.number }}
+        </div>
         <div v-if="props.suit" class="absolute bottom-[5%] left-[17%]">
             {{ suits[props.suit] }}
         </div>
