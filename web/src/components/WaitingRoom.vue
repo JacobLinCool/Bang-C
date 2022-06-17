@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { players, ws, send } from "../composables/game";
+import ListTransition from "./ListTransition.vue";
 
 const name = ref("");
 const name_input = ref<HTMLInputElement | null>(null);
@@ -61,86 +62,34 @@ onBeforeUnmount(() => {
                 v-model="name"
                 @keyup.enter="set_name"
                 placeholder="Enter your name, then press enter. Name is unchangable."
-                class="
-                    w-120
-                    p-2
-                    bg-white/50
-                    border-2 border-amber-200
-                    rounded-lg
-                    focus:outline-none
-                    text-center
-                "
+                class="w-120 p-2 bg-white/50 border-2 border-amber-200 rounded-lg focus:outline-none text-center"
             />
         </div>
         <div class="w-full m-4 flex justify-center items-center">
-            <TransitionGroup name="players">
+            <ListTransition>
                 <div
                     v-for="player in players"
                     :key="player"
                     @click="kick(player)"
-                    class="
-                        m-4
-                        p-4
-                        min-h-20
-                        bg-white/30
-                        rounded-lg
-                        flex
-                        justify-center
-                        items-center
-                        border-1 border-amber-300
-                        cursor-pointer
-                    "
+                    class="m-4 p-4 min-h-20 bg-white/30 rounded-lg flex justify-center items-center border-1 border-amber-300 cursor-pointer"
                 >
                     <span>{{ player }}</span>
                 </div>
-            </TransitionGroup>
+            </ListTransition>
         </div>
         <div v-if="players[0] === name && name_input?.disabled">
             <button
                 @click="add_computer"
-                class="
-                    w-48
-                    p-2
-                    m-4
-                    bg-white/40
-                    border-2 border-amber-200
-                    rounded-lg
-                    focus:outline-none
-                "
+                class="w-48 p-2 m-4 bg-white/40 border-2 border-amber-200 rounded-lg focus:outline-none"
             >
                 Add Computer
             </button>
             <button
                 @click="start"
-                class="
-                    w-48
-                    p-2
-                    m-4
-                    bg-white/40
-                    border-2 border-amber-200
-                    rounded-lg
-                    focus:outline-none
-                "
+                class="w-48 p-2 m-4 bg-white/40 border-2 border-amber-200 rounded-lg focus:outline-none"
             >
                 Start Game
             </button>
         </div>
     </div>
 </template>
-
-<style scoped>
-.players-move,
-.players-enter-active,
-.players-leave-active {
-    transition: all 0.35s ease;
-}
-
-.players-enter-from,
-.players-leave-to {
-    opacity: 0;
-}
-
-.players-leave-active {
-    position: absolute;
-}
-</style>
