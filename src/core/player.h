@@ -1,6 +1,10 @@
 #ifndef __CORE_PLAYER_H
 #define __CORE_PLAYER_H
+#include <pthread.h>
+#include <semaphore.h>
+
 #include "../utils/all.h"
+#include "../web/server.h"
 #include "ai.h"
 #include "cards.h"
 #include "constants.h"
@@ -23,19 +27,19 @@ void computer_player(Game* game, i32 player_id) {
 // choose enemy, if not vaild people, return -1
 i32 player_choose_enemy(Game* game, i32 me_id) {
     i32 enemy_id;
-    i32 plyaer_size = game->players->size;
-    printf("Choose enemy: \n");
-    printf("-1)cancel\n");
-    for (i32 i = 0, k = 1; i < plyaer_size; i++) {
-        printf("%d)Player %d hp: %d\n", k++, i, get_player_hp(game, i));
-    }
-    scanf("%d", &enemy_id);
-    enemy_id--;
-    if ((enemy_id < 0 || enemy_id >= plyaer_size) || get_player_hp(game, enemy_id) <= 0 ||
+    i32 player_size = game->players->size;
+
+    respond_client(game, "player_choose_enemy", me_id);
+
+    sem_wait(&waiting_for_input);
+    enemy_id = share_num;
+
+    if ((enemy_id < 0 || enemy_id >= player_size) || get_player_hp(game, enemy_id) <= 0 ||
         enemy_id == me_id) {
         enemy_id = -1;
-        printf("Wrong Player id!\n");
+        respond_error(find_client_by_id(me_id), "Wrong Player!\n");
     }
+
     // determine AI hate value
     ai_hate_change(game, me_id, enemy_id, 1);
     return enemy_id;
@@ -59,17 +63,23 @@ i32 computer_choose_enemy(Game* game, i32 me_id) {
 bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     Player* player = game->players->get(game->players, player_id);
 
-    Console.cyan("Please select a card: ");
-    for (i32 i = 0; i < cards->size; i++) {
-        Console.yellow("%d. %s\n", i + 1, card_name[cards->data[i]->type]);
+    respond_client_with_cards(game, "player_select_card", player_id, cards);
+
+    sem_wait(&waiting_for_input);
+    i64 offset = (i64)share_offset;
+    i32 input = -1;
+    for (int i = 0; i < cards->size; i++) {
+        if (&(cards->data[i]) == card_base + offset) {
+            input = i;
+            break;
+        }
     }
-    i32 input = 0;
-    scanf("%d", &input);
-    if (input < 1 || input > cards->size) {
+    if (input < 0 || input >= cards->size) {
+        respond_error(find_client_by_id(player_id), "Wrong Card!\n");
         return false;
     }
 
-    player->hands->push(player->hands, cards->remove(cards, input - 1));
+    player->hands->push(player->hands, cards->remove(cards, input));
 
     return true;
 }
@@ -89,21 +99,27 @@ bool computer_player_select(Game* game, i32 player_id, Cards* cards) {
 Card* real_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
 
-    Console.cyan("Please select a card from your hand: ");
-    for (i32 i = 0; i < player->hands->size; i++) {
-        Console.yellow("%d. %s\n", i + 1, card_name[player->hands->data[i]->type]);
+    respond_client(game, "player_request_card", player_id);
+
+    sem_wait(&waiting_for_input);
+    i64 offset = (i64)share_offset;
+    i32 input = -1;
+    for (int i = 0; i < player->hands->size; i++) {
+        if (&(player->hands->data[i]) == card_base + offset) {
+            input = i;
+            break;
+        }
     }
 
-    i32 input = 0;
-    scanf("%d", &input);
     if (input < 1 || input > player->hands->size) {
+        respond_error(find_client_by_id(player_id), "Wrong Card!\n");
         return NULL;
     }
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
     }
 
-    return player->hands->remove(player->hands, input - 1);
+    return player->hands->remove(player->hands, input);
 }
 
 Card* computer_player_request(Game* game, i32 player_id) {
@@ -134,58 +150,51 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     Player* player = game->players->get(game->players, player_id);
     Player* target = game->players->get(game->players, target_id);
 
-    Console.cyan("Please select a card from target: ");
-    i32 i = 1;
-    for (; i <= target->hands->size; i++) {
-        Console.yellow("%d. %s\n", i, card_name[0]);
-    }
-    if (target->barrel) Console.yellow("%d. %s\n", i++, card_name[target->barrel->type]);
-    if (target->mustang) Console.yellow("%d. %s\n", i++, card_name[target->mustang->type]);
-    if (target->scope) Console.yellow("%d. %s\n", i++, card_name[target->scope->type]);
-    if (target->weapon) Console.yellow("%d. %s\n", i++, card_name[target->weapon->type]);
-    if (target->jail) Console.yellow("%d. %s\n", i++, card_name[target->jail->type]);
-    if (target->dynamite) Console.yellow("%d. %s\n", i++, card_name[target->dynamite->type]);
+    respond_client(game, "player_take_card", player_id);
 
-    i32 input = 0;
-    scanf("%d", &input);
-    if (input < 1 || input >= i) {
-        return NULL;
+    sem_wait(&waiting_for_input);
+    i64 offset = (i64)share_offset;
+    i32 input = -1;
+    for (int i = 0; i < target->hands->size; i++) {
+        if (&(target->hands->data[i]) == card_base + offset) {
+            input = i;
+            break;
+        }
     }
 
-    if (input <= target->hands->size) {
-        return target->hands->remove(target->hands, input - 1);
+    if (0 <= input && input < target->hands->size) {
+        if (target->hands->size == 1 && target->character->type == Suzy_Lafayette) {
+            player_draw_deck(game, target->id, 1);
+        }
+        return target->hands->remove(target->hands, input);
     } else {
-        input -= target->hands->size;
-
-        if (input == 0 && target->barrel) {
+        if (target->barrel && target->barrel == card_base + offset) {
             Card* x = target->barrel;
             target->barrel = NULL;
             return x;
-        } else if (input == 1 && target->mustang) {
+        } else if (target->mustang && target->mustang == card_base + offset) {
             Card* x = target->mustang;
             target->mustang = NULL;
             return x;
-        } else if (input == 2 && target->scope) {
+        } else if (target->scope && target->scope == card_base + offset) {
             Card* x = target->scope;
             target->scope = NULL;
             return x;
-        } else if (input == 3 && target->weapon) {
+        } else if (target->weapon && target->weapon == card_base + offset) {
             Card* x = target->weapon;
             target->weapon = NULL;
             return x;
-        } else if (input == 4 && target->jail) {
+        } else if (target->jail && target->jail == card_base + offset) {
             Card* x = target->jail;
             target->jail = NULL;
             return x;
-        } else if (input == 5 && target->dynamite) {
+        } else if (target->dynamite && target->dynamite == card_base + offset) {
             Card* x = target->dynamite;
             target->dynamite = NULL;
             return x;
         }
     }
-    if (target->hands->size == 1 && target->character->type == Suzy_Lafayette) {
-        player_draw_deck(game, target->id, 1);
-    }
+    respond_error(find_client_by_id(player_id), "Wrong Card!\n");
     return NULL;
 }
 
@@ -216,17 +225,16 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
 bool real_player_ramirez(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
 
-    Console.cyan("Do you want to take the top card from the discard pile? (y/n)");
+    respond_client(game, "player_ramirez", player_id);
+    sem_wait(&waiting_for_input);
+    i32 input = share_num;
 
     if (game->discard->size == 0) {
-        Console.blue("Sadly, there is no card to take.");
+        respond_error(find_client_by_id(player_id), "Sadly, there is no card to take.\n");
         return false;
     }
 
-    char input = 0;
-    scanf("%c", &input);
-
-    if (input == 'y') {
+    if (input == 1) {
         player->hands->push(player->hands, game->discard->pop(game->discard));
         return true;
     } else {

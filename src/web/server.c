@@ -1,17 +1,14 @@
 
 #include "server.h"
 
-#include <pthread.h>
-#include <semaphore.h>
-
 #include "../core/game.h"
 
 bool  game_started = false;
 Game *game;
 
 pthread_t gm, sv;
-void     *server_thread_start() { start_server(8080, event_handler); }
-void     *gm_thread_start() { game->start(game); }
+
+void *gm_thread_start() { game->start(game); }
 
 void start_server(int port, lws_callback_function callback) {
     struct lws_protocols protocols[] = {{.id = 2048,
@@ -49,6 +46,8 @@ void start_server(int port, lws_callback_function callback) {
 
     Console.info("WebSocket server stopped");
 }
+
+void *server_thread_start() { start_server(8080, event_handler); }
 
 void handle_action(Client *sender, char *action, cJSON *payload) {
     if (strcmp("join", action) == 0) {
@@ -284,6 +283,83 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         cJSON_Delete(payload);
         return;
     }
+    // after game started
+    /*
+        game.h          |   action          |   payload
+        ------------------------------------------------------
+        choose enemy    |   select_player   |   player
+        select          |   select_card     |   card
+        request         |   select_card     |   card
+        take            |   select_card     |   card
+        ramirez         |   yes_no          |   y/n
+
+    */
+
+    // {"player" : int}
+    if (strcmp("select_player", action) == 0) {
+        if (!game_started) {
+            respond_error(sender, "Game has not started");
+            return;
+        }
+
+        cJSON *player = cJSON_GetObjectItem(payload, "player");
+        if (player == NULL) {
+            respond_error(sender, "Not choose player");
+            return;
+        }
+        if (cJSON_IsNumber(player) == false) {
+            respond_error(sender, "Player id should be a number");
+            return;
+        }
+        int number = (int)cJSON_GetNumberValue(player);
+        share_num = number;
+        sem_post(&waiting_for_input);
+    }
+
+    // {"card" : int}
+    if (strcmp("select_card", action) == 0) {
+        if (!game_started) {
+            respond_error(sender, "Game has not started");
+            return;
+        }
+
+        cJSON *card = cJSON_GetObjectItem(payload, "card");
+        if (card == NULL) {
+            respond_error(sender, "No choose card");
+            return;
+        }
+        if (cJSON_IsNumber(card) == false) {
+            respond_error(sender, "Card offset should be a number");
+            return;
+        }
+
+        int number = (int)cJSON_GetNumberValue(card);
+
+        share_offset = number;
+        sem_post(&waiting_for_input);
+    }
+
+    // {"y/n" : int}
+    if (strcmp("yes_no", action) == 0) {
+        if (!game_started) {
+            respond_error(sender, "Game has not started");
+            return;
+        }
+
+        cJSON *yn = cJSON_GetObjectItem(payload, "y/n");
+        if (yn == NULL) {
+            respond_error(sender, "Not make dicision");
+            return;
+        }
+        if (cJSON_IsNumber(yn) == false) {
+            respond_error(sender, "dicision should be a number");
+            return;
+        }
+
+        int number = (int)cJSON_GetNumberValue(yn);
+        share_num = number;
+        sem_post(&waiting_for_input);
+    }
 }
 
 static int event_handler(struct lws *instance, enum lws_callback_reasons reason, void *user,
@@ -438,6 +514,7 @@ int main(void) {
     srand(time(NULL));
     clients = create_Clients();
 
+    sem_init(&waiting_for_input, 0, 0);
     pthread_create(&sv, NULL, server_thread_start, NULL);
 
     pthread_join(sv, NULL);

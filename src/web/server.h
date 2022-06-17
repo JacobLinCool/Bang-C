@@ -2,6 +2,8 @@
 #define __SERVER_H
 
 #include <libwebsockets.h>
+#include <pthread.h>
+#include <semaphore.h>
 #include <unistd.h>
 
 #include "../third/cJSON/cJSON.h"
@@ -15,6 +17,10 @@
 #define cJSON_Delete(json) ({})
 
 int computer_count = 0;
+
+sem_t waiting_for_input;
+int   share_num;     // pthread
+i32   share_offset;  // pthread
 
 typedef struct Message {
     char  *payload;

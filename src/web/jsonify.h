@@ -105,6 +105,16 @@ cJSON *player_jsonify(Player *player, bool itself) {
     return root;
 }
 
+Client *find_client_by_id(int id) {
+    for (int i = 0; i < clients->size; i++) {
+        Client *client = clients->data[i];
+        if (client->player_id == id) {
+            return client;
+        }
+    }
+    return NULL;
+}
+
 /*
 game_json
 {
@@ -160,6 +170,57 @@ cJSON *game_jsonify(Game *game, i32 player_id) {
     }
 
     return root;
+}
+
+cJSON *cards_jsonify(Game *game, i32 player_id, Cards *pool) {
+    cJSON *root = cJSON_CreateObject();
+
+    cJSON *cards_size = cJSON_CreateNumber(pool->size);
+    cJSON *cards = cJSON_CreateArray();
+
+    cJSON_AddItemToObject(root, "cards_size", cards_size);
+    cJSON_AddItemToObject(root, "cards", cards);
+
+    for (i32 i = 0; i < pool->size; i++) {
+        Card  *cur_card = pool->get(pool, i);
+        cJSON *json_card = card_jsonlfy(&cur_card, true);
+        cJSON_AddItemToArray(cards, json_card);
+    }
+    return root;
+}
+
+void respond_all(Game *game, char *type) {
+    for (int i = 0; i < clients->size; i++) {
+        cJSON *base = cJSON_CreateObject();
+        cJSON_AddItemToObject(base, "game",
+                              game_jsonify(game, clients->get(clients, i)->player_id));
+        respond(clients->get(clients, i), type, base);
+    }
+}
+
+void respond_all_end(Game *game, char *type, i32 winner) {
+    for (int i = 0; i < clients->size; i++) {
+        cJSON *base = cJSON_CreateObject();
+        cJSON *win = cJSON_CreateNumber(winner);
+
+        cJSON_AddItemToObject(base, "winner", win);
+        cJSON_AddItemToObject(base, "game",
+                              game_jsonify(game, clients->get(clients, i)->player_id));
+        respond(clients->get(clients, i), type, base);
+    }
+}
+
+void respond_client(Game *game, char *type, i32 player_id) {
+    cJSON *base = cJSON_CreateObject();
+    cJSON_AddItemToObject(base, "game", game_jsonify(game, player_id));
+    respond(find_client_by_id(player_id), type, base);
+}
+
+void respond_client_with_cards(Game *game, char *type, i32 player_id, Cards *cards) {
+    cJSON *base = cJSON_CreateObject();
+    cJSON_AddItemToObject(base, "cards", cards_jsonify(game, player_id, cards));
+    cJSON_AddItemToObject(base, "game", game_jsonify(game, player_id));
+    respond(find_client_by_id(player_id), type, base);
 }
 
 #endif  // __JSONIFY_H
