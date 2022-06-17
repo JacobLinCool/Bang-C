@@ -3,7 +3,6 @@
 
 #include "../third/cimple/all.h"
 #include "../utils/all.h"
-#include "cards.h"
 
 typedef struct Game Game;
 typedef void (*CharacterSkill)(Game* game, i32 player_id);

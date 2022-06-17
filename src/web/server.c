@@ -1,9 +1,14 @@
+
 #include "server.h"
 
 #include "../core/game.h"
 
 bool  game_started = false;
 Game *game;
+
+pthread_t gm, sv;
+
+void *gm_thread_start() { game->start(game); }
 
 void start_server(int port, lws_callback_function callback) {
     struct lws_protocols protocols[] = {{.id = 2048,
@@ -251,7 +256,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
         game->players->shuffle(game->players);
 
-        game->start(game);
+        pthread_create(&gm, NULL, gm_thread_start, NULL);
 
         for (size_t i = 0; i < game->players->size; i++) {
             Player *player = game->players->get(game->players, i);
@@ -275,6 +280,83 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
         cJSON_Delete(payload);
         return;
+    }
+    // after game started
+    /*
+        game.h          |   action          |   payload
+        ------------------------------------------------------
+        choose enemy    |   select_player   |   player
+        select          |   select_card     |   card
+        request         |   select_card     |   card
+        take            |   select_card     |   card
+        ramirez         |   yes_no          |   y/n
+
+    */
+
+    // {"player" : int}
+    if (strcmp("select_player", action) == 0) {
+        if (!game_started) {
+            respond_error(sender, "Game has not started");
+            return;
+        }
+
+        cJSON *player = cJSON_GetObjectItem(payload, "player");
+        if (player == NULL) {
+            respond_error(sender, "Not choose player");
+            return;
+        }
+        if (cJSON_IsNumber(player) == false) {
+            respond_error(sender, "Player id should be a number");
+            return;
+        }
+        int number = (int)cJSON_GetNumberValue(player);
+        share_num = number;
+        sem_post(&waiting_for_input);
+    }
+
+    // {"card" : int}
+    if (strcmp("select_card", action) == 0) {
+        if (!game_started) {
+            respond_error(sender, "Game has not started");
+            return;
+        }
+
+        cJSON *card = cJSON_GetObjectItem(payload, "card");
+        if (card == NULL) {
+            respond_error(sender, "No choose card");
+            return;
+        }
+        if (cJSON_IsNumber(card) == false) {
+            respond_error(sender, "Card offset should be a number");
+            return;
+        }
+
+        int number = (int)cJSON_GetNumberValue(card);
+
+        share_offset = number;
+        sem_post(&waiting_for_input);
+    }
+
+    // {"y/n" : int}
+    if (strcmp("yes_no", action) == 0) {
+        if (!game_started) {
+            respond_error(sender, "Game has not started");
+            return;
+        }
+
+        cJSON *yn = cJSON_GetObjectItem(payload, "y/n");
+        if (yn == NULL) {
+            respond_error(sender, "Not make dicision");
+            return;
+        }
+        if (cJSON_IsNumber(yn) == false) {
+            respond_error(sender, "dicision should be a number");
+            return;
+        }
+
+        int number = (int)cJSON_GetNumberValue(yn);
+        share_num = number;
+        sem_post(&waiting_for_input);
     }
 }
 
@@ -426,13 +508,19 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
     return 0;
 }
 
+void *server_thread_start() { start_server(8080, event_handler); }
+
 int main(void) {
     time_t seed = time(NULL);
     Console.info("Random Seed: %ld", seed);
     srand(seed);
     clients = create_Clients();
 
-    start_server(8080, event_handler);
+    sem_init(&waiting_for_input, 0, 0);
+    pthread_create(&sv, NULL, server_thread_start, NULL);
+
+    pthread_join(sv, NULL);
+    pthread_join(gm, NULL);
 
     return EXIT_SUCCESS;
 }

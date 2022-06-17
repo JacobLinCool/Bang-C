@@ -5,16 +5,18 @@
 #include "../web/jsonify.h"
 #include "../web/server.h"
 #include "cards.h"
-#include "constants.h"
 #include "player.h"
-#include "roles.h"
-#include "types.h"
+#include "utils.h"
 
 i32 debug_num = 0;
 i32 debug_stop = 0;
 
 void print_status(Game *game, FILE *fp);
 bool equip_weapon(Game *game, i32 player_id, Card *card);
+void game_start(Game *game);
+void game_loop(Game *game);
+void game_win(Game *game);
+
 bool valid_assign_role(Role *role, i32 player_total) {
     if (role == NULL) return false;
     // printf("assign: %s\n", role_name[role->type]);
@@ -48,6 +50,18 @@ void game_join(Game *game, const char *name, bool is_computer) {
                }){game, player});
 }
 
+void game_loop(Game *game) {
+    while (game->finished == false) {
+        game->next(game);
+        for (int i = 0; i < game->players->size; i++) {
+            if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
+                died_player(game, i, i);
+        }
+    }
+    game_win(game);
+    pthread_exit(NULL);
+}
+
 void game_start(Game *game) {
     // shuffle cards, roles, characters
     VectorShuffle(game->deck);
@@ -76,11 +90,12 @@ void game_start(Game *game) {
     for (int i = 0; i < game->players->size; i++) {
         ai_initialize(game, i);
     }
+    game_loop(game);
 }
 
 void game_next(Game *game) {
-    FILE *fp;
-    fp = fopen("/dev/pts/5", "w+");
+    /*FILE *fp;
+    fp = fopen("/dev/pts/5", "w+");*/
 
     // P2S game status
     for (int i = 0; i < clients->size; i++) {
@@ -101,12 +116,7 @@ void game_next(Game *game) {
 
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
     // P2S someone round start
-    for (int i = 0; i < clients->size; i++) {
-        cJSON *base = cJSON_CreateObject();
-        cJSON_AddItemToObject(base, "game",
-                              game_jsonify(game, clients->get(clients, i)->player_id));
-        respond(clients->get(clients, i), "someone_round_start", base);
-    }
+    respond_all(game, "someone_round_start");
 
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
@@ -199,14 +209,6 @@ void game_next(Game *game) {
     ai_bang_use = 0;
     while (true) {
         DEBUG_PRINT("player %d, choose your card\n", player->id);
-
-        // P2S player using card
-        {
-            cJSON *base = cJSON_CreateObject();
-            cJSON_AddItemToObject(base, "game",
-                                  game_jsonify(game, clients->get(clients, player->id)->player_id));
-            respond(clients->get(clients, player->id), "player_using_card", base);
-        }
 
         ai_request_setting(AI_PLAY, 0);
         Card *select_card = player->request(game, player->id);
@@ -335,6 +337,27 @@ void game_next(Game *game) {
 #endif
 }
 
+void game_win(Game *game) {
+    i32 live_player[5] = {0};
+    for (int i = 0; i < game->players->size; i++) {
+        if (game->players->data[i]->hp > 0) {
+            live_player[game->players->data[i]->role->type]++;
+        }
+    }
+    if (live_player[Sheriff] == 0) {
+        if (live_player[Criminal] == 0) {
+            Console.green("Traitor win!");
+            respond_all_end(game, "end", Traitor);
+        } else {
+            Console.green("Criminal win!");
+            respond_all_end(game, "end", Criminal);
+        }
+    } else {
+        Console.green("Sheriff and Deputy win!");
+        respond_all_end(game, "end", Sheriff);
+    }
+}
+
 Game *new_game() {
     Game *game = $(calloc(1, sizeof(Game)));
 
@@ -342,6 +365,7 @@ Game *new_game() {
     game->turn = 0;
     game->finished = false;
     game->deck = create_Cards();
+    card_base = &decks[0];
     for (size_t i = 0; i < CARD_COUNT; i++) {
         game->deck->push(game->deck, &decks[i]);
     }
