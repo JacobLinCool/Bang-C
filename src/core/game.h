@@ -98,12 +98,7 @@ void game_next(Game *game) {
     fp = fopen("/dev/pts/5", "w+");*/
 
     // P2S game status
-    for (int i = 0; i < clients->size; i++) {
-        cJSON *base = cJSON_CreateObject();
-        cJSON_AddItemToObject(base, "game",
-                              game_jsonify(game, clients->get(clients, i)->player_id));
-        respond(clients->get(clients, i), "game_status", base);
-    }
+    respond_all(game, "game_status");
 
     Player *player = game->players->data[game->turn % game->players->size];
     // if player has died, then skip.
@@ -158,23 +153,13 @@ void game_next(Game *game) {
         player->select(game, player->id, cards);
 
         // P2S game status
-        for (int i = 0; i < clients->size; i++) {
-            cJSON *base = cJSON_CreateObject();
-            cJSON_AddItemToObject(base, "game",
-                                  game_jsonify(game, clients->get(clients, i)->player_id));
-            respond(clients->get(clients, i), "game_status", base);
-        }
+        respond_all(game, "game_status");
 
         ai_request_setting(AI_FORCE_PLAY, 0);
         player->select(game, player->id, cards);
 
         // P2S game status
-        for (int i = 0; i < clients->size; i++) {
-            cJSON *base = cJSON_CreateObject();
-            cJSON_AddItemToObject(base, "game",
-                                  game_jsonify(game, clients->get(clients, i)->player_id));
-            respond(clients->get(clients, i), "game_status", base);
-        }
+        respond_all(game, "game_status");
 
         Card *debug_card = cards->pop(cards);
         for (int i = 0; i < game->deck->size; i++) {
@@ -193,12 +178,7 @@ void game_next(Game *game) {
     }
 
     // P2S game status
-    for (int i = 0; i < clients->size; i++) {
-        cJSON *base = cJSON_CreateObject();
-        cJSON_AddItemToObject(base, "game",
-                              game_jsonify(game, clients->get(clients, i)->player_id));
-        respond(clients->get(clients, i), "game_status", base);
-    }
+    respond_all(game, "game_status");
 
 #if (DEBUG)
     fprintf(fp, "after draw card:\n");
@@ -223,14 +203,7 @@ void game_next(Game *game) {
                 player->hands->push(player->hands, select_card);
 
                 // player use bang again
-                {
-                    cJSON *base = cJSON_CreateObject();
-                    cJSON_AddItemToObject(
-                        base, "game",
-                        game_jsonify(game, clients->get(clients, player->id)->player_id));
-                    respond(clients->get(clients, player->id), "player_use_bang_again", base);
-                }
-
+                respond_client(game, "player_use_bang_again", player->id);
                 continue;
             } else {
                 bang_used++;
@@ -246,13 +219,7 @@ void game_next(Game *game) {
                 player->hands->push(player->hands, select_card);
 
                 // P2S player error use
-                {
-                    cJSON *base = cJSON_CreateObject();
-                    cJSON_AddItemToObject(
-                        base, "game",
-                        game_jsonify(game, clients->get(clients, player->id)->player_id));
-                    respond(clients->get(clients, player->id), "player_error_use", base);
-                }
+                respond_client(game, "player_error_use", player->id);
             }
 
             // P2S equip weapon
@@ -280,12 +247,7 @@ void game_next(Game *game) {
             }
             player->hands->push(player->hands, select_card);
             // P2S player error use
-            {
-                cJSON *base = cJSON_CreateObject();
-                cJSON_AddItemToObject(
-                    base, "game", game_jsonify(game, clients->get(clients, player->id)->player_id));
-                respond(clients->get(clients, player->id), "player_error_use", base);
-            }
+            respond_client(game, "player_error_use", player->id);
         }
         // 3.check if someone died(only brown card used)
         for (int i = 0; i < game->players->size; i++) {
@@ -305,12 +267,7 @@ void game_next(Game *game) {
     DEBUG_PRINT("Now: Discard cards.\n");
 
     // P2S player start discard card
-    {
-        cJSON *base = cJSON_CreateObject();
-        cJSON_AddItemToObject(base, "game",
-                              game_jsonify(game, clients->get(clients, player->id)->player_id));
-        respond(clients->get(clients, player->id), "player_start_discard_card", base);
-    }
+    respond_client(game, "player_start_discard_card", player->id);
 
     while (player->hands->size > player->hp) {
         ai_request_setting(AI_DISCARD, 0);
