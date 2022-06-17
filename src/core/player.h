@@ -4,13 +4,9 @@
 #include <semaphore.h>
 
 #include "../utils/all.h"
+#include "../web/jsonify.h"
 #include "../web/server.h"
 #include "ai.h"
-#include "cards.h"
-#include "constants.h"
-#include "game.h"
-#include "types.h"
-#include "utils.h"
 
 void real_player(Game* game, i32 player_id) {
     printf("We didn't implement anything yet, so just enter anything: ");

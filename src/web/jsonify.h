@@ -7,7 +7,6 @@
 #define DEBUG_DISPLAY false
 #endif
 
-#include "../core/cards.h"
 #include "../core/types.h"
 #include "../third/cJSON/cJSON.h"
 #include "../third/cimple/all.h"

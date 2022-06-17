@@ -47,8 +47,6 @@ void start_server(int port, lws_callback_function callback) {
     Console.info("WebSocket server stopped");
 }
 
-void *server_thread_start() { start_server(8080, event_handler); }
-
 void handle_action(Client *sender, char *action, cJSON *payload) {
     if (strcmp("join", action) == 0) {
         cJSON *list = create_player_list();
@@ -509,6 +507,8 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 
     return 0;
 }
+
+void *server_thread_start() { start_server(8080, event_handler); }
 
 int main(void) {
     srand(time(NULL));

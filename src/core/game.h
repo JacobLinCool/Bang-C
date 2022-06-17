@@ -5,10 +5,8 @@
 #include "../web/jsonify.h"
 #include "../web/server.h"
 #include "cards.h"
-#include "constants.h"
 #include "player.h"
-#include "roles.h"
-#include "types.h"
+#include "utils.h"
 
 i32 debug_num = 0;
 i32 debug_stop = 0;
@@ -96,8 +94,8 @@ void game_start(Game *game) {
 }
 
 void game_next(Game *game) {
-    FILE *fp;
-    fp = fopen("/dev/pts/5", "w+");
+    /*FILE *fp;
+    fp = fopen("/dev/pts/5", "w+");*/
 
     // P2S game status
     for (int i = 0; i < clients->size; i++) {

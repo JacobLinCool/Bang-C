@@ -3,12 +3,8 @@
 #include <stdlib.h>
 
 #include "../utils/all.h"
-#include "cards.h"
-#include "constants.h"
-#include "player.h"
-#include "roles.h"
-#include "types.h"
 #include "utils.h"
+
 #define BAD_GUY 5
 #define AI_PLAY 0
 #define AI_DISCARD 1
