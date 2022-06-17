@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { state, game, logs, ws } from "./composables/game";
+import { state, logs, ws, waiting } from "./composables/game";
 import Fade from "./components/Fade.vue";
 import WaitingRoom from "./components/WaitingRoom.vue";
+import GameBoard from "./components/GameBoard.vue";
 import { computed } from "vue";
 
 const rev_logs = computed(() =>
@@ -11,8 +12,13 @@ const rev_logs = computed(() =>
 );
 
 ws.addEventListener("close", (event) => {
-    alert("Connection closed. Reason: " + (event.reason || "No reason, it just don't like you."));
-    window.location.reload();
+    if (state.value >= 0) {
+        alert(
+            "Connection closed. Reason: " +
+                (event.reason || "No reason, it just doesn't like you."),
+        );
+        window.location.reload();
+    }
 });
 </script>
 
@@ -21,6 +27,7 @@ ws.addEventListener("close", (event) => {
         <div class="w-4/5 h-full">
             <Fade>
                 <WaitingRoom v-if="state === 0" />
+                <GameBoard v-if="state === 1" />
             </Fade>
         </div>
         <div class="w-1/5 h-full bg-white/50 flex flex-col-reverse overflow-y-auto">
@@ -32,6 +39,12 @@ ws.addEventListener("close", (event) => {
                 </div>
             </TransitionGroup>
         </div>
+        <Fade enter-active-class="duration-100 ease-out" leave-active-class="duration-100 ease-in">
+            <div
+                class="w-full h-full overflow-hidden m-0 p-0 bg-black/10 fixed top-0 left-0"
+                v-if="state < 0 || waiting"
+            ></div>
+        </Fade>
     </div>
 </template>
 
