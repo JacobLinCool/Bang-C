@@ -427,7 +427,9 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 }
 
 int main(void) {
-    srand(time(NULL));
+    time_t seed = time(NULL);
+    Console.info("Random Seed: %ld", seed);
+    srand(seed);
     clients = create_Clients();
 
     start_server(8080, event_handler);
