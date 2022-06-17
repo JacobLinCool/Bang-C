@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from "vue";
-import { players, ws, send } from "../composables/game";
+import { players, ws, send, name } from "../composables/game";
 import ListTransition from "./ListTransition.vue";
 
-const name = ref("");
 const name_input = ref<HTMLInputElement | null>(null);
 
 function set_name() {
