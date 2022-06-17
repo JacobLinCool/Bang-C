@@ -1,9 +1,17 @@
+
 #include "server.h"
+
+#include <pthread.h>
+#include <semaphore.h>
 
 #include "../core/game.h"
 
 bool  game_started = false;
 Game *game;
+
+pthread_t gm, sv;
+void     *server_thread_start() { start_server(8080, event_handler); }
+void     *gm_thread_start() { game->start(game); }
 
 void start_server(int port, lws_callback_function callback) {
     struct lws_protocols protocols[] = {{.id = 2048,
@@ -251,7 +259,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
         game->players->shuffle(game->players);
 
-        game->start(game);
+        pthread_create(&gm, NULL, gm_thread_start, NULL);
 
         for (size_t i = 0; i < game->players->size; i++) {
             Player *player = game->players->get(game->players, i);
@@ -430,7 +438,10 @@ int main(void) {
     srand(time(NULL));
     clients = create_Clients();
 
-    start_server(8080, event_handler);
+    pthread_create(&sv, NULL, server_thread_start, NULL);
+
+    pthread_join(sv, NULL);
+    pthread_join(gm, NULL);
 
     return EXIT_SUCCESS;
 }
