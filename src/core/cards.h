@@ -2,10 +2,7 @@
 #define __CORE_CARD_H
 
 #include "../utils/all.h"
-#include "constants.h"
-#include "player.h"
-#include "types.h"
-#include "utils.h"
+#include "ai.h"
 
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
@@ -154,6 +151,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             }
         }
     }
+
 sid_ketchum_fail:
 
     // determine AI hate value

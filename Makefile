@@ -8,11 +8,11 @@ test_files = $(wildcard $(test_dir)/**/*.c)
 all: build
 
 server: force
-	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
+	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a -pthread
 	@echo "Build complete"
 
 server-debug: force
-	@$(cc) -pthread -fsanitize=address -g -D DEBUG -o server $(src_dir)/web/server.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
+	@$(cc) -pthread -D DEBUG -o server $(src_dir)/web/server.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
 	@echo "Build complete"
 
 build:

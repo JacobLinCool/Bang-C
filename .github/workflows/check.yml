@@ -30,8 +30,8 @@ jobs:
             - name: Setup
               run: sudo make setup
 
-            - name: Build
-              run: make -j4
+            # - name: Build
+            # run: make -j4
 
             - name: Build Server
               run: make server

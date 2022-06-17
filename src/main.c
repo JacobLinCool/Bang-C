@@ -38,13 +38,7 @@ i32 main() {
     VectorShuffle(game->players);
 
     game->start(game);
-    while (game->finished == false) {
-        game->next(game);
-        for (int i = 0; i < game->players->size; i++) {
-            if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
-                died_player(game, i, i);
-        }
-    }
+
     DEBUG_PRINT("Game End!\n");
 
     // Todo: who is win, GUI(show all roles.)

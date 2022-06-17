@@ -3,12 +3,8 @@
 #include <stdlib.h>
 
 #include "../utils/all.h"
-#include "cards.h"
-#include "constants.h"
-#include "player.h"
-#include "roles.h"
-#include "types.h"
 #include "utils.h"
+
 #define BAD_GUY 5
 #define AI_PLAY 0
 #define AI_DISCARD 1
@@ -61,7 +57,7 @@ int ai_weight_cmp(const void* a, const void* b) {
 }
 
 void ai_hate_change(Game* game, i32 ai_id, i32 target_id, i32 value) {
-    if (ai_id == -1) return;
+    if (ai_id < 0 || target_id < 0) return;
     hate[target_id][ai_id] += value;
     if (target_id == Sheriff) {
         for (int i = 0; i < game->players->size; i++) {

@@ -1,6 +1,8 @@
 #ifndef __CORE_CONSTANTS_H
 #define __CORE_CONSTANTS_H
 
+#include "../third/cimple/all.h"
+
 #define ROLE_COUNT 7
 #define CHARACTER_COUNT 16
 #define CARD_COUNT 80
@@ -38,5 +40,6 @@ char* card_name[] = {"Hidden",    "Bang",         "Missed",     "Gatling",     "
 int role_in_players[4][5] = {{0, 1, 0, 2, 1}, {0, 1, 1, 2, 1}, {0, 1, 1, 3, 1}, {0, 1, 2, 3, 1}};
 int game_start_role_in_players[4][5] = {
     {0, 1, 0, 2, 1}, {0, 1, 1, 2, 1}, {0, 1, 1, 3, 1}, {0, 1, 2, 3, 1}};
+u64 card_base;
 
 #endif  // __CORE_CONSTANTS_H
