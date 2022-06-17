@@ -8,7 +8,7 @@ Game *game;
 
 pthread_t gm, sv;
 
-void *gm_thread_start() { game->start(game); }
+void *gm_thread_start() { game_loop(game); }
 
 void start_server(int port, lws_callback_function callback) {
     struct lws_protocols protocols[] = {{.id = 2048,
@@ -256,7 +256,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
         game->players->shuffle(game->players);
 
-        pthread_create(&gm, NULL, gm_thread_start, NULL);
+        game->start(game);
 
         for (size_t i = 0; i < game->players->size; i++) {
             Player *player = game->players->get(game->players, i);
@@ -269,6 +269,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         }
 
         cJSON *list = create_player_list();
+        Console.log("client size: %d", clients->size);
         for (size_t i = 0; i < clients->size; i++) {
             respond_chat(clients->get(clients, i),
                          $(String.format("%s has started the game", sender->name)));
@@ -277,6 +278,8 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
                     game_jsonify(game, clients->get(clients, i)->player_id));
         }
         cJSON_Delete(list);
+
+        pthread_create(&gm, NULL, gm_thread_start, NULL);
 
         cJSON_Delete(payload);
         return;
@@ -366,7 +369,6 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 
     switch (reason) {
         case LWS_CALLBACK_ESTABLISHED: {
-            lws_set_timer_usecs(instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
             if (clients->size >= 7 - computer_count) {
                 Console.red("[%p] Room is full, Connection refused", instance);
                 lws_close_free_wsi(instance, LWS_CLOSE_STATUS_NORMAL, "Room is full");
@@ -387,8 +389,6 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
         }
 
         case LWS_CALLBACK_RECEIVE: {
-            lws_set_timer_usecs(instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
-
             if (client == NULL) {
                 Console.red("[%p] Client is NULL", instance);
                 break;
@@ -449,7 +449,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             lws_write(instance, (unsigned char *)msg->payload, msg->len, LWS_WRITE_TEXT);
 
             // free_message(msg);
-            free(msg);
+            // free(msg);
 
             if (client->msg_queue->size > 0) {
                 lws_callback_on_writable(instance);
@@ -485,18 +485,34 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             }
             cJSON_Delete(list);
 
+            Player *player = game->players->get(game->players, client->player_id);
+            player->play = computer_player;
+            player->choose_enemy = computer_choose_enemy;
+            player->select = computer_player_select;
+            player->request = computer_player_request;
+            player->take = computer_player_take;
+            player->ramirez = computer_player_ramirez;
+
+            if (player->id == game->turn % game->players->size) {
+                share_num = -2;
+                share_offset = -2;
+                sem_post(&waiting_for_input);
+            }
+
             client->msg_queue->free(client->msg_queue);
-            free(client);
+            // free(client);
 
             break;
         }
 
         case LWS_CALLBACK_TIMER: {
-            lws_close_reason(instance, LWS_CLOSE_STATUS_NORMAL, (unsigned char *)"Timeout",
-                             strlen("Timeout"));
-            lws_close_free_wsi(instance, LWS_CLOSE_STATUS_NORMAL, "Timeout");
+            if (client && game && game->turn % game->players->size == client->player_id) {
+                lws_close_reason(instance, LWS_CLOSE_STATUS_NORMAL, (unsigned char *)"Timeout",
+                                 strlen("Timeout"));
+                lws_close_free_wsi(instance, LWS_CLOSE_STATUS_NORMAL, "Timeout");
 
-            Console.yellow("[%p] Connection timed out", instance);
+                Console.yellow("[%p] Connection timed out", instance);
+            }
 
             break;
         }
@@ -511,7 +527,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 void *server_thread_start() { start_server(8080, event_handler); }
 
 int main(void) {
-    time_t seed = time(NULL);
+    time_t seed = 1655497098;  // time(NULL);
     Console.info("Random Seed: %ld", seed);
     srand(seed);
     clients = create_Clients();

@@ -151,6 +151,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             }
         }
     }
+
 sid_ketchum_fail:
 
     // determine AI hate value

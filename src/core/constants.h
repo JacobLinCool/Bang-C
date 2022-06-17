@@ -1,6 +1,8 @@
 #ifndef __CORE_CONSTANTS_H
 #define __CORE_CONSTANTS_H
 
+#include "../third/cimple/all.h"
+
 #define ROLE_COUNT 7
 #define CHARACTER_COUNT 16
 #define CARD_COUNT 80

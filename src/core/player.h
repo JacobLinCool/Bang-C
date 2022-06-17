@@ -25,7 +25,8 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
     i32 enemy_id;
     i32 player_size = game->players->size;
 
-    respond_client(game, "player_choose_enemy", me_id);
+    respond_client(game, "choose_enemy", me_id);
+    lws_set_timer_usecs(find_client_by_id(me_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
 
     sem_wait(&waiting_for_input);
     enemy_id = share_num;
@@ -59,7 +60,8 @@ i32 computer_choose_enemy(Game* game, i32 me_id) {
 bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     Player* player = game->players->get(game->players, player_id);
 
-    respond_client_with_cards(game, "player_select_card", player_id, cards);
+    respond_client_with_cards(game, "select_card", player_id, cards);
+    lws_set_timer_usecs(find_client_by_id(player_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
 
     sem_wait(&waiting_for_input);
     i64 offset = (i64)share_offset;
@@ -95,7 +97,8 @@ bool computer_player_select(Game* game, i32 player_id, Cards* cards) {
 Card* real_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
 
-    respond_client(game, "player_request_card", player_id);
+    respond_client(game, "request_card", player_id);
+    lws_set_timer_usecs(find_client_by_id(player_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
 
     sem_wait(&waiting_for_input);
     i64 offset = (i64)share_offset;
@@ -146,7 +149,8 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     Player* player = game->players->get(game->players, player_id);
     Player* target = game->players->get(game->players, target_id);
 
-    respond_client(game, "player_take_card", player_id);
+    respond_client(game, "take_card", player_id);
+    lws_set_timer_usecs(find_client_by_id(player_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
 
     sem_wait(&waiting_for_input);
     i64 offset = (i64)share_offset;
@@ -221,7 +225,9 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
 bool real_player_ramirez(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
 
-    respond_client(game, "player_ramirez", player_id);
+    respond_client(game, "ramirez", player_id);
+    lws_set_timer_usecs(find_client_by_id(player_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
+
     sem_wait(&waiting_for_input);
     i32 input = share_num;
 
