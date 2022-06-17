@@ -365,7 +365,7 @@ Game *new_game() {
     game->turn = 0;
     game->finished = false;
     game->deck = create_Cards();
-    card_base = &decks[0];
+    card_base = (u64)(&decks[0]);
     for (size_t i = 0; i < CARD_COUNT; i++) {
         game->deck->push(game->deck, &decks[i]);
     }

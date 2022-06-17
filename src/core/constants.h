@@ -38,6 +38,6 @@ char* card_name[] = {"Hidden",    "Bang",         "Missed",     "Gatling",     "
 int role_in_players[4][5] = {{0, 1, 0, 2, 1}, {0, 1, 1, 2, 1}, {0, 1, 1, 3, 1}, {0, 1, 2, 3, 1}};
 int game_start_role_in_players[4][5] = {
     {0, 1, 0, 2, 1}, {0, 1, 1, 2, 1}, {0, 1, 1, 3, 1}, {0, 1, 2, 3, 1}};
-i64 card_base;
+u64 card_base;
 
 #endif  // __CORE_CONSTANTS_H
