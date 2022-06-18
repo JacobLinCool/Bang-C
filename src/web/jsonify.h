@@ -14,9 +14,7 @@
 #include "../third/cJSON/cJSON.h"
 #include "../third/cimple/all.h"
 
-
 cJSON *card_jsonify(Card *card, bool itself) {
-
     if (card == NULL) return NULL;
     cJSON *root = cJSON_CreateObject();
 
