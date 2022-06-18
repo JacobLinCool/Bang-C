@@ -53,7 +53,6 @@ void game_join(Game *game, const char *name, bool is_computer) {
 
 void game_loop(Game *game) {
     while (game->finished == false) {
-        Console.info("Turn %" PRIu64, game->turn);
         game->next(game);
         for (int i = 0; i < game->players->size; i++) {
             if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
@@ -110,6 +109,7 @@ void game_next(Game *game) {
         game->turn++;
         player = game->players->data[(game->turn) % game->players->size];
     }
+    Console.info("Turn %" PRIu64, game->turn);
 
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
     // P2S someone round start

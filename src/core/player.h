@@ -9,6 +9,8 @@
 #include "../web/server.h"
 #include "ai.h"
 
+int waiting_for_player = -1;
+
 void real_player(Game* game, i32 player_id) {
     printf("We didn't implement anything yet, so just enter anything: ");
     char* input = $(calloc(1024, sizeof(char)));
@@ -31,8 +33,10 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
 
     respond_client(game, "choose_enemy", me_id);
     lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
+    waiting_for_player = me_id;
 
     sem_wait(&waiting_for_input);
+    waiting_for_player = -1;
     enemy_id = share_num;
 
     if (enemy_id == -1) return -1;
@@ -70,8 +74,10 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
 
     respond_client_with_cards(game, "select_card", player_id, cards);
     lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
+    waiting_for_player = player_id;
 
     sem_wait(&waiting_for_input);
+    waiting_for_player = -1;
     i64 offset = (i64)share_offset;
 
     if (offset == -2) {
@@ -119,8 +125,10 @@ Card* real_player_request(Game* game, i32 player_id) {
 
     respond_client(game, "request_card", player_id);
     lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
+    waiting_for_player = player_id;
 
     sem_wait(&waiting_for_input);
+    waiting_for_player = -1;
     i64 offset = (i64)share_offset;
 
     if (offset == -2) {
@@ -184,8 +192,10 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
 
     respond_client(game, "take_card", player_id);
     lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
+    waiting_for_player = player_id;
 
     sem_wait(&waiting_for_input);
+    waiting_for_player = -1;
     i64 offset = (i64)share_offset;
 
     if (offset == -2) {
@@ -271,8 +281,10 @@ bool real_player_ramirez(Game* game, i32 player_id) {
 
     respond_client(game, "ramirez", player_id);
     lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
+    waiting_for_player = player_id;
 
     sem_wait(&waiting_for_input);
+    waiting_for_player = -1;
     i32 input = share_num;
 
     if (input == -2) {
