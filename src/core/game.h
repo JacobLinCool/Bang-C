@@ -180,7 +180,21 @@ void game_next(Game *game) {
     } else if (player->character->type == Pedro_Ramirez) {
         ai_bang_use = 0;
         player_draw_deck(game, player->id, 2 - player->ramirez(game, player->id));
-        respond_all_chat($(String.format("%s: %s get two card", player->name, "System")));
+    } else if (player->character->type == Jesse_Jones) {
+        i32 enemy_id = -2;
+        while (enemy_id < -1) {
+            enemy_id = player->choose_enemy(game, player->id);
+        }
+        if (enemy_id == -1) {
+            player_draw_deck(game, player->id, 2);
+        } else {
+            // choose an enemy
+            Player *target = game->players->data[enemy_id];
+            i32     random = rand() % target->hands->size;
+            Card   *enemy_card = target->hands->remove(target->hands, random);
+            player->hands->push(player->hands, enemy_card);
+            player_draw_deck(game, player->id, 1);
+        }
     } else {
         player_draw_deck(game, player->id, 2);
         respond_all_chat($(String.format("%s: %s get two card", player->name, "System")));
@@ -350,7 +364,7 @@ bool equip_weapon(Game *game, i32 player_id, Card *card) {
         return FAIL;
     } else if (card->type == Jail) {
         i32 enemy_id = game->players->data[player_id]->choose_enemy(game, player_id);
-        if (enemy_id == -1) return FAIL;
+        if (enemy_id < 0) return FAIL;
         if (game->players->data[enemy_id]->role->type == Sheriff) return FAIL;
         if (game->players->data[enemy_id]->jail != NULL) return FAIL;
         game->players->data[enemy_id]->jail = card;

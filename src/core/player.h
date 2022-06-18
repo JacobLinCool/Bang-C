@@ -22,6 +22,7 @@ void computer_player(Game* game, i32 player_id) {
 }
 
 // choose enemy, if not vaild people, return -1
+// [return value] -2: Wrong Player or Disconnected, -1: give up selecting
 i32 player_choose_enemy(Game* game, i32 me_id) {
     i32 enemy_id;
     i32 player_size = game->players->size;
@@ -32,10 +33,11 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
     sem_wait(&waiting_for_input);
     enemy_id = share_num;
 
-    if (enemy_id == -2) return -1;
+    if (enemy_id == -1) return -1;
+    if (enemy_id == -2) return -2;
     if ((enemy_id < 0 || enemy_id >= player_size) || get_player_hp(game, enemy_id) <= 0 ||
         enemy_id == me_id) {
-        enemy_id = -1;
+        enemy_id = -2;
         respond_error(find_client_by_id(me_id),
                       $(String.format("%s: You can't choose this player!", "System")));
     }

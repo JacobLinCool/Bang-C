@@ -286,13 +286,13 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
     }
     // after game started
     /*
-        game.h          |   action          |   payload
+        game.h          |   action          |   payload(type)
         ------------------------------------------------------
-        choose enemy    |   select_player   |   player
-        select          |   select_card     |   card
-        request         |   select_card     |   card
-        take            |   select_card     |   card
-        ramirez         |   yes_no          |   y/n
+        choose enemy    |   select_player   |   player(player id)
+        select          |   select_card     |   card(x)
+        request         |   select_card     |   card(x)
+        take            |   select_card     |   card(x)
+        ramirez         |   yes_no          |   y/n(0 or 1)
 
     */
 
@@ -485,18 +485,20 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             }
             cJSON_Delete(list);
 
-            Player *player = game->players->get(game->players, client->player_id);
-            player->play = computer_player;
-            player->choose_enemy = computer_choose_enemy;
-            player->select = computer_player_select;
-            player->request = computer_player_request;
-            player->take = computer_player_take;
-            player->ramirez = computer_player_ramirez;
+            if (game != NULL) {
+                Player *player = game->players->get(game->players, client->player_id);
+                player->play = computer_player;
+                player->choose_enemy = computer_choose_enemy;
+                player->select = computer_player_select;
+                player->request = computer_player_request;
+                player->take = computer_player_take;
+                player->ramirez = computer_player_ramirez;
 
-            if (player->id == game->turn % game->players->size) {
-                share_num = -2;
-                share_offset = -2;
-                sem_post(&waiting_for_input);
+                if (player->id == game->turn % game->players->size) {
+                    share_num = -2;
+                    share_offset = -2;
+                    sem_post(&waiting_for_input);
+                }
             }
 
             client->msg_queue->free(client->msg_queue);
