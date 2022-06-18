@@ -134,10 +134,6 @@ Card* real_player_request(Game* game, i32 player_id) {
     if (offset == -2) {
         return computer_player_request(game, player_id);
     } else if (offset == -1) {
-        respond_chat(
-            client,
-            $(String.format("It's time to discarding your cards, you can keep up to %d card%s!",
-                            player->hp, player->hp > 1 ? "s" : "")));
         return NULL;
     }
     i32 input = -1;

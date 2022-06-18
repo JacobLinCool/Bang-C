@@ -339,8 +339,11 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         }
 
         int number = (int)cJSON_GetNumberValue(card);
-
-        share_offset = number;
+        if (number >= 0) {
+            share_offset = number ^ key;
+        } else {
+            share_offset = number;
+        }
         sem_post(&waiting_for_input);
     }
 
@@ -547,6 +550,8 @@ int main(void) {
     pthread_create(&sv, NULL, server_thread_start, NULL);
 
     while (true) {
+        key = rand() % 1000000000;
+        Console.log("encrypt key is %u", key);
         sem_wait(&gm_created);
         pthread_join(gm, NULL);
 

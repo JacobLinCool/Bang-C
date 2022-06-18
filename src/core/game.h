@@ -275,12 +275,23 @@ void game_next(Game *game) {
     //  3.Discard excess cards
     DEBUG_PRINT("Now: Discard cards.\n");
 
-    while (player->hands->size > player->hp) {
+    i32 discard_cnt = 0;
+
+    while (1) {
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
         DEBUG_PRINT("Discard: %s\n", select_card == NULL ? "NULL" : card_name[select_card->type]);
-
-        if (select_card != NULL) game->discard->push(game->discard, select_card);
+        if (select_card == NULL && player->hands->size <= player->hp) {
+            break;
+        }
+        if (select_card != NULL) {
+            discard_cnt++;
+            game->discard->push(game->discard, select_card);
+            if (player->character->type == Sid_Ketchum && discard_cnt % 2 == 0) {
+                if (player->hp < player->character->health + (player->role->type == Sheriff))
+                    player->hp++;
+            }
+        }
     }
 #if (DEBUG)
     fprintf(fp, "after discard card:\n");

@@ -7,6 +7,33 @@
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
     if (enemy->hp > 0) return;
+    if (enemy->character->type == Sid_Ketchum) {
+        DEBUG_PRINT("enemy is Sid_Ketchum\n");
+        if (game->players->data[enemy_id]->hands->size >= 2) {
+            DEBUG_PRINT("enemy has 2 or more cards\n");
+            while (1) {
+                ai_request_setting(AI_DISCARD, 0);
+                Card* card = game->players->data[enemy_id]->request(game, enemy_id);
+                if (card == NULL) {
+                    goto sid_ketchum_fail;
+                    break;
+                }
+                game->discard->push(game->discard, card);
+                break;
+            }
+            DEBUG_PRINT("has discarded one card\n");
+            while (1) {
+                ai_request_setting(AI_DISCARD, 0);
+                Card* card = game->players->data[enemy_id]->request(game, enemy_id);
+                if (card != NULL) {
+                    game->discard->push(game->discard, card);
+                    break;
+                }
+            }
+            game->players->data[enemy_id]->hp++;
+        }
+    }
+sid_ketchum_fail:
 
     while (1) {
         ai_request_setting(AI_SPECIFY, Beer);
@@ -118,7 +145,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
     game->players->data[enemy_id]->hp--;
     // use character ablity(if valid)
     CharacterType enemy_type = game->players->data[enemy_id]->character->type;
-    if (enemy_type == Bart_Cassidy || enemy_type == El_Gringo || enemy_type == Sid_Ketchum) {
+    if (enemy_type == Bart_Cassidy || enemy_type == El_Gringo) {
         if (enemy_type == Bart_Cassidy) {
             Card* card = get_deck_top(game);
             game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
@@ -126,35 +153,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
         if (enemy_type == El_Gringo && me_id != -1) {
             draw_from_player(game, enemy_id, me_id);
         }
-        if (enemy_type == Sid_Ketchum) {
-            DEBUG_PRINT("enemy is Sid_Ketchum\n");
-            if (game->players->data[enemy_id]->hands->size >= 2) {
-                DEBUG_PRINT("enemy has 2 or more cards\n");
-                while (1) {
-                    ai_request_setting(AI_DISCARD, 0);
-                    Card* card = game->players->data[enemy_id]->request(game, enemy_id);
-                    if (card == NULL) {
-                        goto sid_ketchum_fail;
-                        break;
-                    }
-                    game->discard->push(game->discard, card);
-                    break;
-                }
-                DEBUG_PRINT("has discarded one card\n");
-                while (1) {
-                    ai_request_setting(AI_DISCARD, 0);
-                    Card* card = game->players->data[enemy_id]->request(game, enemy_id);
-                    if (card != NULL) {
-                        game->discard->push(game->discard, card);
-                        break;
-                    }
-                }
-                game->players->data[enemy_id]->hp++;
-            }
-        }
     }
-
-sid_ketchum_fail:
 
     // determine AI hate value
     ai_hate_change(game, me_id, enemy_id, 1);
