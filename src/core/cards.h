@@ -247,7 +247,7 @@ bool jail_judge(Game* game, i32 me_id) {
 
 bool bang(Game* game, i32 me_id) {
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
-    if (enemy_id == -1) return FAIL;
+    if (enemy_id < 0) return FAIL;
 
     // calculate distance between me and enemy
     i32 enemy_distance = distance(game, me_id, enemy_id);
@@ -306,7 +306,7 @@ bool indians(Game* game, i32 me_id) {
 
 bool panic(Game* game, i32 me_id) {
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
-    if (enemy_id == -1) return FAIL;
+    if (enemy_id < 0) return FAIL;
 
     // calculate distance between me and enemy
     if (distance(game, me_id, enemy_id) > 1) return FAIL;
@@ -317,7 +317,7 @@ bool panic(Game* game, i32 me_id) {
 
 bool cat_balou(Game* game, i32 me_id) {
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
-    if (enemy_id == -1) return FAIL;
+    if (enemy_id < 0) return FAIL;
 
     discard_from_enemy(game, me_id, enemy_id);
     return SUCCESS;
@@ -352,7 +352,7 @@ bool saloon(Game* game, i32 me_id) {
 
 bool duel(Game* game, i32 me_id) {
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
-    if (enemy_id == -1) return FAIL;
+    if (enemy_id < 0) return FAIL;
     // duel
     bool duel_finish = false;
     while (1) {
