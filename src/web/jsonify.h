@@ -111,7 +111,7 @@ cJSON *game_jsonify(Game *game, i32 player_id) {
 
     for (i32 i = 0; i < game->discard->size; i++) {
         Card  *cur_discard = game->discard->get(game->discard, i);
-        cJSON *json_discard = card_jsonify(cur_discard, (player_id == i) || DEBUG_DISPLAY);
+        cJSON *json_discard = card_jsonify(cur_discard, true);
         cJSON_AddItemToArray(discards, json_discard);
     }
 
@@ -177,6 +177,16 @@ void respond_all_with_card(Game *game, char *type, Card *card) {
 void respond_client_with_cards(Game *game, char *type, i32 player_id, Cards *cards) {
     cJSON *base = cJSON_CreateObject();
     cJSON_AddItemToObject(base, "cards", cards_jsonify(game, player_id, cards));
+    cJSON_AddItemToObject(base, "game", game_jsonify(game, player_id));
+    Client *client = find_client_by_id(player_id);
+    if (client != NULL) {
+        respond(client, type, base);
+    }
+}
+
+void respond_client_with_target(Game *game, char *type, i32 player_id, i32 target_id) {
+    cJSON *base = cJSON_CreateObject();
+    cJSON_AddItemToObject(base, "target", player_jsonify(game->players->data[target_id], true));
     cJSON_AddItemToObject(base, "game", game_jsonify(game, player_id));
     Client *client = find_client_by_id(player_id);
     if (client != NULL) {

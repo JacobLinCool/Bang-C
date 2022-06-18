@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { game, ws, send, name } from "../composables/game";
+import { game, ws, send, name, requesting } from "../composables/game";
 import Field from "./Field.vue";
 import { computed } from "vue";
 import Card from "./Card.vue";
@@ -58,19 +58,26 @@ const translates = [
         { right: "0%", top: "60%" },
     ],
 ];
+
+function skip_select_card() {
+    if (requesting.value) {
+        requesting.value = false;
+        send("select_card", { card: -1 });
+    }
+}
 </script>
 
 <template>
     <div class="w-full h-full" v-if="game.players">
         <Field
-            class="absolute bottom-0 w-2/5 left-3/10 bg-blue-300/20"
+            class="absolute bottom-0 w-2/5 left-3/10 transform scale-90"
             :player="game.players[my_idx]"
             :self="true"
         />
 
         <Field
             v-for="(player, i) in others"
-            :class="['absolute bg-blue-300/20 w-1/4 transform scale-90']"
+            :class="['absolute w-1/4 transform scale-85']"
             :style="translates[game.players.length - 2][i]"
             :player="player"
             :self="false"
@@ -93,6 +100,14 @@ const translates = [
             v-if="discard_top"
             :card="discard_top"
         ></Card>
+
+        <div
+            v-if="requesting"
+            class="absolute bottom-0 right-0 m-8 w-24 h-10 bg-indigo-600/80 rounded-md flex justify-center items-center cursor-pointer text-white hover:bg-indigo-700 transition-all"
+            @click="skip_select_card"
+        >
+            <span>Skip</span>
+        </div>
     </div>
 </template>
 

@@ -2,6 +2,7 @@
 import { CardType, Card, CharacterType, RoleType } from "../types";
 import { t } from "../i18n";
 import { inject, Ref } from "vue";
+import { requesting, send } from "../composables/game";
 const props = defineProps<{
     card: Card;
 }>();
@@ -10,6 +11,13 @@ const suits = ["", "♠", "♥", "♦", "♣"];
 
 const spotlight: Ref<Card | CharacterType | RoleType> | undefined = inject("spotlight");
 const spotlight_type: Ref<number> | undefined = inject("spotlight_type");
+
+function select_card(x: number) {
+    if (requesting.value) {
+        requesting.value = false;
+        send("select_card", { card: x });
+    }
+}
 </script>
 
 <template>
@@ -24,6 +32,7 @@ const spotlight_type: Ref<number> | undefined = inject("spotlight_type");
                 spotlight_type = 0;
             }
         "
+        @click="select_card(props.card.x)"
     >
         <img
             class="transition-all h-full transform group-hover:scale-105"

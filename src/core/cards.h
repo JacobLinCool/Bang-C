@@ -41,13 +41,20 @@ sid_ketchum_fail:
         if (card == NULL) break;
         if (card->type == Beer) {
             game->discard->push(game->discard, card);
+            respond_all_chat($(String.format("%s: I use Beer avoid died!", enemy->name)));
+            respond_all(game, "status");
             return;
         } else {
+            respond_error(find_client_by_id(enemy_id), "You only can use Beer avoid died");
             game->players->data[me_id]->hands->push(game->players->data[me_id]->hands, card);
         }
     }
     enemy->dead = true;
+    respond_all_chat($(String.format("%s kill %s", game->players->data[me_id]->name, enemy->name)));
     printf("Died player(%s) role is %s\n", enemy->name, role_name[enemy->role->type]);
+    respond_all_chat(
+        $(String.format("%s died, his role is %s", enemy->name, role_name[enemy->role->type])));
+    respond_all(game, "status");
 
     // END OF THE GAME detection
     // find Criminal, Traitor.
@@ -56,19 +63,30 @@ sid_ketchum_fail:
         // Sheriff died
         game->finished = true;
         DEBUG_PRINT("game finished.\n");
+        respond_all_chat("Sheriff died, game end!");
     } else if (alive(game, Criminal) == false && alive(game, Traitor) == false) {
         // Criminal and Traitor died
         game->finished = true;
+        respond_all_chat("All Criminal and Traitor died, game end!");
         DEBUG_PRINT("game finished.\n");
     }
+    respond_all(game, "status");
 
     if (game->finished) return;
     DEBUG_PRINT("game not finished.\n");
     // discard all cards
     Cards* discard_card = game->discard;
-    if (me_id != enemy_id && game->players->data[me_id]->character->type == Vulture_Sam)
-        discard_card = game->players->data[me_id]->hands;
-    transfer(enemy->hands, discard_card);
+    if (enemy->character->type != Vulture_Sam) {
+        for (int i = 0; i < game->players->size; i++) {
+            if (game->players->data[i]->character->type == Vulture_Sam) {
+                respond_all_chat($(String.format(
+                    "%s: Use Vulture Sam's skill! I can get cards from deid people!")));
+                discard_card = game->players->data[i]->hands;
+                transfer(enemy->hands, discard_card);
+                break;
+            }
+        }
+    }
     if (NULL != enemy->weapon) {
         discard_card->push(discard_card, enemy->weapon);
         enemy->weapon = NULL;
@@ -94,16 +112,21 @@ sid_ketchum_fail:
         enemy->dynamite = NULL;
     }
 
+    respond_all(game, "status");
     // Penalties and Rewards
+    Player* me = game->players->data[me_id];
     DEBUG_PRINT("Penalties and Rewards.\n");
     if (me_id == enemy_id) {
         DEBUG_PRINT("I killed myself.\n");
+        respond_all_chat($(String.format("%s: I killed myself...", me->name)));
         return;
     }
-    Player* me = game->players->data[me_id];
+    respond_all(game, "status");
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
         DEBUG_PRINT("Penalty: discard all cards\n");
+        respond_all_chat(
+            $(String.format("Sherif killed Deputy! He lose his all cards!", me->name)));
         discard_card = game->discard;
         transfer(me->hands, discard_card);
         if (NULL != me->weapon) {
@@ -130,27 +153,40 @@ sid_ketchum_fail:
             discard_card->push(discard_card, me->dynamite);
             me->dynamite = NULL;
         }
+        respond_all(game, "status");
     } else if (enemy->role->type == Criminal) {
         DEBUG_PRINT("Reward: draw 3 cards\n");
+        respond_all_chat(
+            $(String.format("%s kill Criminal, he get three cards for reward", me->name)));
         player_draw_deck(game, me_id, 3);
     }
+    respond_all(game, "status");
     return;
 }
 
 // If no me_id, me_id = player_id
 void attack_player(Game* game, i32 me_id, i32 enemy_id) {
     DEBUG_PRINT("%d attack %d\n", me_id, enemy_id);
-    if (get_player_hp(game, enemy_id) <= 0) return;  // avoid mustang_judge error
+    if (get_player_hp(game, enemy_id) <= 0) return;  // avoid dynamaite_judge error
+    respond_all_chat($(String.format("%s attack %s", game->players->data[me_id]->name,
+                                     game->players->data[enemy_id]->name)));
     // decrease player's hp
     game->players->data[enemy_id]->hp--;
+    respond_all(game, "status");
     // use character ablity(if valid)
     CharacterType enemy_type = game->players->data[enemy_id]->character->type;
     if (enemy_type == Bart_Cassidy || enemy_type == El_Gringo) {
         if (enemy_type == Bart_Cassidy) {
+            respond_all_chat($(
+                String.format("%s: Use Bart Cassidy's skill! I can get one card when I'm attacked",
+                              game->players->data[enemy_id]->name)));
             Card* card = get_deck_top(game);
             game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
         }
         if (enemy_type == El_Gringo && me_id != -1) {
+            respond_all_chat($(
+                String.format("%s: Use El Gringo's skill! I can get one card from attacking people",
+                              game->players->data[enemy_id]->name)));
             draw_from_player(game, enemy_id, me_id);
         }
     }
