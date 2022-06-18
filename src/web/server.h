@@ -13,7 +13,11 @@
 #include "../utils/all.h"
 #include "random_string.h"
 #define BUFFER_SIZE (64 * 1024)
+#ifdef DEBUG
+#define TIME_OUT_SECONDS 600
+#else
 #define TIME_OUT_SECONDS 60
+#endif
 #define cJSON_Delete(json) ({})
 
 int computer_count = 0;
