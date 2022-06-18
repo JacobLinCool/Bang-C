@@ -275,11 +275,12 @@ bool real_player_ramirez(Game* game, i32 player_id) {
     }
     if (game->discard->size == 0) {
         respond_error(find_client_by_id(player_id),
-                      $(String.format("%s: Sadly, this people has no card to take", "System")));
+                      $(String.format("%s: Sadly, discard deck has no card to take", "System")));
         return false;
     }
 
     if (input == 1) {
+        respond_all_chat($(String.format("%s: Use Kit Carlson skill", player->id)));
         player->hands->push(player->hands, game->discard->pop(game->discard));
         return true;
     } else {

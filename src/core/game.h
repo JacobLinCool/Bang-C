@@ -1,6 +1,7 @@
 #ifndef __CORE_GAME_H
 #define __CORE_GAME_H
 
+#include "../third/cimple/all.h"
 #include "../utils/all.h"
 #include "../web/jsonify.h"
 #include "../web/server.h"
@@ -112,15 +113,18 @@ void game_next(Game *game) {
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
     // P2S someone round start
     respond_all(game, "round_start");
+    respond_all_chat($(String.format("%s: %s round start", "System", player->name)));
 
     // determine bomb and jail, may just skip this turn
     if (player->dynamite != NULL) {
         DEBUG_PRINT("judge: dynamite\n");
+        respond_all_chat($(String.format("%s: Start dynamite judge", "System")));
         dynamite_judge(game, player->id);
     }
     if (player->hp <= 0) return;
     if (player->jail != NULL) {
         DEBUG_PRINT("judge: jail\n");
+        respond_all_chat($(String.format("%s: Start jail judge", "System")));
         if (!jail_judge(game, player->id)) {
             return;
         }
@@ -132,14 +136,22 @@ void game_next(Game *game) {
         player_draw_deck(game, player->id, 1);
         Card *second_card = get_deck_top(game);
         player->hands->push(player->hands, second_card);
+        respond_all_chat($(String.format("%s: Use Balck Jack skill", player->name)));
 
         // P2S Black_Jack show second card
-        // respond_all_with_card(game, "show card", second_card);
+        respond_all_with_card(game, "show card", second_card);
 
         if (second_card->priority / 100 == 2 || second_card->priority / 100 == 3) {
+            respond_all_chat(
+                $(String.format("%s: My second card is red, so I get another card", player->name)));
             player_draw_deck(game, player->id, 1);
+            respond_all_chat($(String.format("%s: %s get three card", player->name, "System")));
+        } else {
+            respond_all_chat($(String.format("%s: My second card is black", player->name)));
+            respond_all_chat($(String.format("%s: %s get two card", player->name, "System")));
         }
     } else if (player->character->type == Kit_Carlson) {
+        respond_all_chat($(String.format("%s: Use Kit Carlson skill", player->name)));
         Cards *cards = create_Cards();
         for (int i = 0; i < 3; i++) cards->push(cards, get_deck_top(game));
         ai_request_setting(AI_FORCE_PLAY, 0);
@@ -153,9 +165,6 @@ void game_next(Game *game) {
         while (player->select(game, player->id, cards) == false)
             ;
 
-        // P2S game status
-        respond_all(game, "status");
-
         Card *debug_card = cards->pop(cards);
         for (int i = 0; i < game->deck->size; i++) {
             if (game->deck->data[i] == NULL) {
@@ -165,13 +174,16 @@ void game_next(Game *game) {
         }
         game->deck->insert(game->deck, 0, debug_card);
         cards->free(cards);
+        respond_all_chat($(String.format("%s: %s get two card", player->name, "System")));
+
     } else if (player->character->type == Pedro_Ramirez) {
         ai_bang_use = 0;
         player_draw_deck(game, player->id, 2 - player->ramirez(game, player->id));
+        respond_all_chat($(String.format("%s: %s get two card", player->name, "System")));
     } else {
         player_draw_deck(game, player->id, 2);
+        respond_all_chat($(String.format("%s: %s get two card", player->name, "System")));
     }
-    // P2S game status
     respond_all(game, "status");
 
 #ifdef DEBUG
