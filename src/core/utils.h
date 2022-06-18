@@ -61,7 +61,7 @@ i32 distance(Game* game, i32 me_id, i32 enemy_id) {
     i32 special_card_dis = ((game->players->data[enemy_id]->mustang != NULL) -
                             (game->players->data[me_id]->scope != NULL));
     i32 special_character_dis = (game->players->data[enemy_id]->character->type == Paul_Regret) -
-                                (game->players->data[enemy_id]->character->type == Rose_Doolan);
+                                (game->players->data[me_id]->character->type == Rose_Doolan);
     // DEBUG_PRINT("f:%d,b:%d,card:%d,char:%d\n", front_dis, back_dis, special_card_dis,
     //             special_character_dis);
     return special_character_dis + special_card_dis + (front_dis < back_dis ? front_dis : back_dis);
