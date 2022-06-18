@@ -1,5 +1,5 @@
 import { reactive, ref } from "vue";
-import { Player } from "../types";
+import { Card, Player } from "../types";
 import { WSClient } from "./websocket";
 
 export const ws = WSClient();
@@ -7,9 +7,15 @@ export const ws = WSClient();
 export const name = ref("");
 export const state = ref(-1);
 export const waiting = ref(false);
-export const game: Partial<{ turn: number; players: Player[] }> = reactive({});
+export const game: Partial<{
+    turn: number;
+    players: Player[];
+    deck_size: number;
+    discards: Card[];
+}> = reactive({});
 export const players: string[] = reactive([]);
 export const logs: { type: "chat" | "error"; message: string }[] = reactive([]);
+export const selecting: Card[] = reactive([]);
 
 ws.addEventListener("open", () => {
     state.value = 0;
@@ -37,6 +43,16 @@ ws.addEventListener("message", (event) => {
         case "start":
             Object.assign(game, message.payload);
             state.value = 1;
+            break;
+
+        case "status":
+            Object.assign(game, message.payload.game);
+            break;
+
+        case "select_card":
+            // action "select_card", payload: { card }
+            Object.assign(game, message.payload.game);
+            selecting.splice(0, selecting.length, ...message.payload.cards.cards);
             break;
 
         default:

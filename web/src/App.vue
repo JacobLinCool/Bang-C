@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { state, logs, ws, waiting } from "./composables/game";
+import { state, logs, ws, waiting, selecting, send } from "./composables/game";
 import Fade from "./components/Fade.vue";
 import WaitingRoom from "./components/WaitingRoom.vue";
 import GameBoard from "./components/GameBoard.vue";
-import { computed } from "vue";
+import { computed, provide, ref } from "vue";
+import { Card as C, CharacterType, RoleType } from "./types";
+import Card from "./components/Card.vue";
+import Character from "./components/Character.vue";
+import Role from "./components/Role.vue";
 
 const rev_logs = computed(() =>
     JSON.parse(JSON.stringify(logs))
@@ -20,6 +24,17 @@ ws.addEventListener("close", (event) => {
         window.location.reload();
     }
 });
+
+const spotlight = ref<C | CharacterType | RoleType | null>(null);
+const spotlight_type = ref(0);
+
+provide("spotlight", spotlight);
+provide("spotlight_type", spotlight_type);
+
+function select_card(x: number) {
+    send("select_card", { card: x });
+    selecting.splice(0, selecting.length);
+}
 </script>
 
 <template>
@@ -39,9 +54,46 @@ ws.addEventListener("close", (event) => {
                 </div>
             </TransitionGroup>
         </div>
+        <Fade>
+            <div
+                v-if="spotlight"
+                class="fixed w-full h-full overflow-hidden m-0 p-0 bg-black/50 flex justify-center items-center z-30"
+                @click="spotlight = null"
+            >
+                <Card
+                    v-if="spotlight_type === 0 && typeof spotlight !== 'number' && true"
+                    :card="spotlight"
+                    class="h-4/5 rounded-2xl"
+                />
+                <Character
+                    v-if="spotlight_type === 1 && typeof spotlight === 'number' && true"
+                    :type="spotlight"
+                    class="h-4/5 rounded-2xl"
+                />
+                <Role
+                    v-if="spotlight_type === 2 && typeof spotlight === 'number' && true"
+                    :type="spotlight"
+                    class="h-4/5 rounded-2xl"
+                />
+            </div>
+        </Fade>
+        <Fade>
+            <div
+                v-if="selecting.length"
+                class="fixed w-full h-full overflow-hidden m-0 p-0 bg-black/50 flex justify-around items-center z-30"
+            >
+                <Card
+                    v-for="card of selecting"
+                    :key="card.x"
+                    :card="card"
+                    class="h-3/5"
+                    @click="select_card(card.x)"
+                />
+            </div>
+        </Fade>
         <Fade enter-active-class="duration-100 ease-out" leave-active-class="duration-100 ease-in">
             <div
-                class="w-full h-full overflow-hidden m-0 p-0 bg-black/10 fixed top-0 left-0"
+                class="w-full h-full overflow-hidden m-0 p-0 bg-black/10 fixed top-0 left-0 z-100"
                 v-if="state < 0 || waiting"
             ></div>
         </Fade>
