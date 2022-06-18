@@ -112,7 +112,7 @@ window.send = send;
 window.game = game;
 
 function timer_start() {
-    timer.value = 60;
+    timer.value = 60 - 5;
     timer_id && clearInterval(timer_id);
     timer_id = window.setInterval(timer_interval, 1000);
 }
