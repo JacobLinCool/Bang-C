@@ -15,6 +15,7 @@ export const game: Partial<{
 }> = reactive({});
 export const players: string[] = reactive([]);
 export const logs: { type: "chat" | "error"; message: string }[] = reactive([]);
+export const selecting: Card[] = reactive([]);
 
 ws.addEventListener("open", () => {
     state.value = 0;
@@ -46,6 +47,12 @@ ws.addEventListener("message", (event) => {
 
         case "status":
             Object.assign(game, message.payload.game);
+            break;
+
+        case "select_card":
+            // action "select_card", payload: { card }
+            Object.assign(game, message.payload.game);
+            selecting.splice(0, selecting.length, ...message.payload.cards.cards);
             break;
 
         default:
