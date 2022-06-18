@@ -110,6 +110,16 @@ void respond_chat(Client *client, const char *message) {
     cJSON_Delete(payload);
 }
 
+void respond_all_chat(const char *message) {
+    cJSON *payload = cJSON_CreateObject();
+    cJSON_AddItemToObject(payload, "message", cJSON_CreateStringReference(message));
+    for (int i = 0; i < clients->size; i++) {
+        respond(clients->get(clients, i), "chat", payload);
+    }
+
+    cJSON_Delete(payload);
+}
+
 cJSON *create_player_list() {
     cJSON *players = cJSON_CreateArray();
     for (size_t i = 0; i < clients->size; i++) {
