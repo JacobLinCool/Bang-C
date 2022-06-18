@@ -296,7 +296,7 @@ void game_next(Game *game) {
         }
         DEBUG_PRINT("Using Done\n");
         respond_all(game, "status");
-        respond_chat(find_client_by_id(player->id), "You stop use card");
+
         for (int i = 0; i < game->players->size; i++) {
             if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0) {
                 respond_all(game, "status");
