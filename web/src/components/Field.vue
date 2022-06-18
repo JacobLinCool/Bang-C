@@ -23,6 +23,7 @@ function select_player() {
             (game.turn || 0) % (game.players?.length || 10) === props.player.id
                 ? 'bg-orange-300/20 border border-orange-300'
                 : 'bg-blue-300/20',
+            props.player?.hp ? '' : 'filter brightness-50',
         ]"
         style="aspect-ratio: 16 / 9"
     >
@@ -86,7 +87,11 @@ function select_player() {
         ></Character>
 
         <div class="text-xl text-red-500">
-            <span class="text-black text-sm"> {{ props.player.name }} </span> <br />
+            <span v-if="props.player?.hp" class="text-black text-sm">
+                {{ props.player.name }}
+            </span>
+            <del v-else class="text-black text-sm"> {{ props.player.name }} </del>
+            <br />
             <span v-for="i in props.player.hp">♥</span>
         </div>
     </div>

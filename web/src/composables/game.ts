@@ -66,6 +66,21 @@ ws.addEventListener("message", (event) => {
             choosing.value = true;
             break;
 
+        case "take_card":
+            Object.assign(game, message.payload.game);
+            if (message.payload.target) {
+                const player = message.payload.target;
+                const cards = player.hands;
+                player.weapon && cards.push(player.weapon);
+                player.scope && cards.push(player.scope);
+                player.barrel && cards.push(player.barrel);
+                player.mustang && cards.push(player.mustang);
+                player.jail && cards.push(player.jail);
+                player.dynamite && cards.push(player.dynamite);
+                selecting.splice(0, selecting.length, ...cards);
+            }
+            break;
+
         default:
             break;
     }

@@ -412,7 +412,7 @@ bool equip_weapon(Game *game, i32 player_id, Card *card) {
         if (enemy->role->type == Sheriff) return FAIL;
         if (enemy->jail != NULL) return FAIL;
         enemy->jail = card;
-        respond_all_chat($(String.format("%s: I use Jail to %s!", player->name, enemy)));
+        respond_all_chat($(String.format("%s: I use Jail to %s!", player->name, enemy->name)));
         return SUCCESS;
     }
     if (player->weapon != NULL) {
