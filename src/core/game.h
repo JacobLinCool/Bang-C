@@ -52,6 +52,7 @@ void game_join(Game *game, const char *name, bool is_computer) {
 
 void game_loop(Game *game) {
     while (game->finished == false) {
+        Console.info("Turn %" PRIu64, game->turn);
         game->next(game);
         for (int i = 0; i < game->players->size; i++) {
             if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
