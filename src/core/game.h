@@ -296,7 +296,7 @@ void game_next(Game *game) {
         }
         DEBUG_PRINT("Using Done\n");
         respond_all(game, "status");
-        respond_chat(find_client_by_id(player->id), "You stop use card");
+
         for (int i = 0; i < game->players->size; i++) {
             if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0) {
                 respond_all(game, "status");
@@ -454,8 +454,14 @@ bool equip_weapon(Game *game, i32 player_id, Card *card) {
         i32     enemy_id = game->players->data[player_id]->choose_enemy(game, player_id);
         Player *enemy = game->players->data[enemy_id];
         if (enemy_id < 0) return FAIL;
-        if (enemy->role->type == Sheriff) return FAIL;
-        if (enemy->jail != NULL) return FAIL;
+        if (enemy->role->type == Sheriff) {
+            respond_error(find_client_by_id(enemy_id), "You can't use jail on Sheriff");
+            return FAIL;
+        }
+        if (enemy->jail != NULL) {
+            respond_error(find_client_by_id(enemy_id), "He has Jail already");
+            return FAIL;
+        }
         enemy->jail = card;
         respond_all(game, "status");
         respond_all_chat($(String.format("%s: I use Jail to %s!", player->name, enemy->name)));
