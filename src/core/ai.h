@@ -30,10 +30,12 @@ i8       ai_request_type;  // 0: play 1: discard
 CardType ai_request_card;
 i8       ai_bang_use;
 
-i32  ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hate[10],
-                    i32 max_hate_id[10]);
-i32  equip_total(Game* game, i32 me_id, i32 player_id);
-i32  card_count(Game* game, i32 player_id, i32 card);
+i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hate[10],
+                   i32 max_hate_id[10]);
+i32 equip_total(Game* game, i32 me_id, i32 player_id);
+i32 card_count(Game* game, i32 player_id, i32 card);
+i32 ai_player_cnt(Game* game);
+
 void print_weight_card(Game* game, i32 me_id, Weight weight[], Cards* candi_card) {
     for (int i = 0; i < 4; i++) {
         printf("%d(%s): %d,", i, role_name[game->players->data[i]->role->type], hate[me_id][i]);
