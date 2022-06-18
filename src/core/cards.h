@@ -381,6 +381,7 @@ bool saloon(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
         if (game->players->data[i]->hp <= 0) continue;
         recover(game, i);
+        ai_saloon(game, i, me_id);
     }
     return SUCCESS;
 }
