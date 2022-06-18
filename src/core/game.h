@@ -153,7 +153,9 @@ void game_next(Game *game) {
                 "%s: My second card is black, I didn't get extra thing", player->name)));
         }
     } else if (player->character->type == Kit_Carlson) {
-        respond_all_chat($(String.format("%s: Use Kit Carlson's skill!", player->name)));
+        respond_all_chat($(
+            String.format("%s: Use Kit Carlson's skill! I cant choose two cards from three cards!",
+                          player->name)));
         Cards *cards = create_Cards();
         for (int i = 0; i < 3; i++) cards->push(cards, get_deck_top(game));
         ai_request_setting(AI_FORCE_PLAY, 0);
@@ -192,7 +194,9 @@ void game_next(Game *game) {
             respond_all_chat($(String.format("%s gets two cards from deck", player->name)));
         } else {
             // choose an enemy
-            respond_all_chat($(String.format("%s: Use Jesse_Jones's skill!", player->name)));
+            respond_all_chat($(
+                String.format("%s: Use Jesse_Jones's skill! I can get one card from other player!",
+                              player->name)));
             Player *target = game->players->data[enemy_id];
             i32     random = rand() % target->hands->size;
             Card   *enemy_card = target->hands->remove(target->hands, random);
@@ -258,7 +262,8 @@ void game_next(Game *game) {
         // (b)brown card
         if (select_card->use(game, player->id) == SUCCESS) {
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
-                respond_all_chat($(String.format("%s: Use Calamity Janet skill!")));
+                respond_all_chat($(String.format(
+                    "%s: Use Calamity Janet's skill! Missed can be used as same as Bang!")));
                 bang(game, player->id);
             }
             game->discard->push(game->discard, select_card);
@@ -293,16 +298,22 @@ void game_next(Game *game) {
     respond_all(game, "status");
     //  3.Discard excess cards
     DEBUG_PRINT("Now: Discard cards.\n");
-    respond_chat(find_client_by_id(player->id), "Select a card to discard");
-    while (player->hands->size > player->hp) {
-        ai_request_setting(AI_DISCARD, 0);
-        Card *select_card = player->request(game, player->id);
-        DEBUG_PRINT("Discard: %s\n", select_card == NULL ? "NULL" : card_name[select_card->type]);
+    if (player->hands->size > player->hp) {
+        respond_chat(find_client_by_id(player->id), "Select a card to discard");
+        while (player->hands->size > player->hp) {
+            ai_request_setting(AI_DISCARD, 0);
+            Card *select_card = player->request(game, player->id);
+            DEBUG_PRINT("Discard: %s\n",
+                        select_card == NULL ? "NULL" : card_name[select_card->type]);
 
-        if (select_card != NULL) game->discard->push(game->discard, select_card);
-        respond_all_chat(
-            $(String.format("%s: I discard %s!", player->name, card_name[select_card->type])));
+            if (select_card != NULL) game->discard->push(game->discard, select_card);
+            respond_all_chat(
+                $(String.format("%s: I discard %s!", player->name, card_name[select_card->type])));
+        }
+    } else {
+        respond_chat(find_client_by_id(player->id), "Your number of card has lower than your life");
     }
+    respond_all_chat($(String.format("%s round end", player->name)));
 #if (DEBUG)
     fprintf(fp, "after discard card:\n");
     print_status(game, fp);
