@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { game, ws, send, name, requesting } from "../composables/game";
+import { game, send, name, selecting, requesting, choosing, timer } from "../composables/game";
 import Field from "./Field.vue";
 import { computed } from "vue";
 import Card from "./Card.vue";
@@ -108,6 +108,15 @@ function skip_select_card() {
         >
             <span>Skip</span>
         </div>
+
+        <Fade>
+            <div
+                v-if="selecting || requesting || choosing"
+                class="absolute bottom-0 left-0 m-8 w-24 h-10 bg-indigo-600/80 rounded-md flex justify-center items-center cursor-pointer text-white border border-indigo-700"
+            >
+                <span>{{ timer }}</span>
+            </div>
+        </Fade>
     </div>
 </template>
 
