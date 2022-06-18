@@ -19,6 +19,7 @@ export const selecting: Card[] = reactive([]);
 export const requesting = ref(false);
 export const choosing = ref(false);
 export const timer = ref(0);
+export const winner = ref(-1);
 let timer_id: number;
 
 ws.addEventListener("open", () => {
@@ -85,6 +86,12 @@ ws.addEventListener("message", (event) => {
                 selecting.splice(0, selecting.length, ...cards);
             }
             timer_start();
+            break;
+
+        case "end":
+            Object.assign(game, message.payload.game);
+            winner.value = message.payload.winner;
+            state.value = 2;
             break;
 
         default:
