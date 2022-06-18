@@ -183,4 +183,14 @@ void respond_client_with_cards(Game *game, char *type, i32 player_id, Cards *car
     }
 }
 
+void respond_client_with_target(Game *game, char *type, i32 player_id, i32 target_id) {
+    cJSON *base = cJSON_CreateObject();
+    cJSON_AddItemToObject(base, "target", player_jsonify(game->players->data[target_id], true));
+    cJSON_AddItemToObject(base, "game", game_jsonify(game, player_id));
+    Client *client = find_client_by_id(player_id);
+    if (client != NULL) {
+        respond(client, type, base);
+    }
+}
+
 #endif  // __JSONIFY_H
