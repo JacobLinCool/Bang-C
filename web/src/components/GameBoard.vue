@@ -8,6 +8,7 @@ import {
     choosing,
     timer,
     showing,
+    ramirezing,
 } from "../composables/game";
 import Field from "./Field.vue";
 import { computed } from "vue";
@@ -119,6 +120,31 @@ function skip_select_card() {
             @click="skip_select_card"
         >
             <span>Skip</span>
+        </div>
+
+        <div v-if="ramirezing" class="absolute bottom-0 right-0 m-8 flex">
+            <div
+                class="w-24 h-10 bg-indigo-500 rounded-l-md flex justify-center items-center cursor-pointer text-white hover:bg-indigo-700 transition-all"
+                @click="
+                    () => {
+                        send('yes_no', { 'y/n': 1 });
+                        ramirezing = false;
+                    }
+                "
+            >
+                YES
+            </div>
+            <div
+                class="w-24 h-10 bg-indigo-500 rounded-r-md flex justify-center items-center cursor-pointer text-white hover:bg-indigo-700 transition-all"
+                @click="
+                    () => {
+                        send('yes_no', { 'y/n': 0 });
+                        ramirezing = false;
+                    }
+                "
+            >
+                NO
+            </div>
         </div>
 
         <Fade>

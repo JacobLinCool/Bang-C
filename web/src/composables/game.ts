@@ -21,6 +21,7 @@ export const choosing = ref(false);
 export const timer = ref(0);
 export const winner = ref(-1);
 export const showing = ref<Card | null>(null);
+export const ramirezing = ref(false);
 let timer_id: number;
 let show_timer_id: number;
 
@@ -93,6 +94,12 @@ ws.addEventListener("message", (event) => {
         case "show card":
             Object.assign(game, message.payload.game);
             show_card(message.payload.card);
+            break;
+
+        case "ramirez":
+            Object.assign(game, message.payload.game);
+            logs.push({ type: "chat", message: "Do you want to use Ramirez's skill?" });
+            ramirezing.value = true;
             break;
 
         case "end":
