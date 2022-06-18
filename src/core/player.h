@@ -285,6 +285,8 @@ bool real_player_ramirez(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
     Client* client = find_client_by_id(player_id);
 
+    respond_char(client, "You can use your charactor skill");
+
     respond_client(game, "ramirez", player_id);
     lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
     waiting_for_player = player_id;
