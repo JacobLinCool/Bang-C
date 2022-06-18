@@ -158,14 +158,16 @@ void game_next(Game *game) {
                             player->name)));
         Cards *cards = create_Cards();
         for (int i = 0; i < 3; i++) cards->push(cards, get_deck_top(game));
+        respond_all(game, "status");
         ai_request_setting(AI_FORCE_PLAY, 0);
+        respond_all(game, "status");
         while (player->select(game, player->id, cards) == false)
             ;
 
         // P2S game status
         respond_all(game, "status");
-
         ai_request_setting(AI_FORCE_PLAY, 0);
+        respond_all(game, "status");
         while (player->select(game, player->id, cards) == false)
             ;
 
@@ -176,7 +178,9 @@ void game_next(Game *game) {
                 exit(1);
             }
         }
+        respond_all(game, "status");
         game->deck->insert(game->deck, 0, debug_card);
+        respond_all(game, "status");
         cards->free(cards);
         respond_all_chat($(String.format("%s gets two cards from deck", player->name)));
 
@@ -229,8 +233,10 @@ void game_next(Game *game) {
     while (true) {
         DEBUG_PRINT("player %d, choose your card\n", player->id);
         respond_chat(find_client_by_id(player->id), "Select a card to use");
+        respond_all(game, "status");
         ai_request_setting(AI_PLAY, 0);
         Card *select_card = player->request(game, player->id);
+        respond_all(game, "status");
 
         if (select_card == NULL) {
             break;
@@ -240,8 +246,10 @@ void game_next(Game *game) {
             !(player->weapon != NULL && player->weapon->type == Volcanic)) {
             // only one BANG! card may be played per turn
             if (bang_used && player->character->type != Willy_the_Kid) {
+                respond_all(game, "status");
                 player->hands->push(player->hands, select_card);
                 respond_error(find_client_by_id(player->id), "You can't use Bang again");
+                respond_all(game, "status");
                 continue;
             } else {
                 bang_used++;
@@ -250,11 +258,14 @@ void game_next(Game *game) {
         }
         // 2.use card
         // (a)blue card
+        respond_all(game, "status");
         DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (is_weapon(select_card)) {
             if (equip_weapon(game, player->id, select_card) == FAIL) {
+                respond_all(game, "status");
                 DEBUG_PRINT("Error Use\n");
                 player->hands->push(player->hands, select_card);
+                respond_all(game, "status");
                 // P2S player error use
             }
             continue;
@@ -262,29 +273,38 @@ void game_next(Game *game) {
         // (b)brown card
         if (select_card->use(game, player->id) == SUCCESS) {
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
+                respond_all(game, "status");
                 respond_all_chat($(String.format(
                     "%s: Use Calamity Janet's skill! My Missed can be used as Bang!")));
                 bang(game, player->id);
+                respond_all(game, "status");
             }
             game->discard->push(game->discard, select_card);
+            respond_all(game, "status");
         } else {
             if (select_card->type == Bang ||
                 (select_card->type == Missed && player->character->type == Calamity_Janet)) {
                 bang_used--;
                 ai_bang_use--;
             }
+            respond_all(game, "status");
             player->hands->push(player->hands, select_card);
             DEBUG_PRINT("Error Use\n");
             respond_error(find_client_by_id(player->id), "You can't use this card");
+            respond_all(game, "status");
             // P2S player error use
         }
         DEBUG_PRINT("Using Done\n");
         respond_all(game, "status");
         respond_chat(find_client_by_id(player->id), "You stop use card");
         for (int i = 0; i < game->players->size; i++) {
-            if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
+            if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0) {
+                respond_all(game, "status");
                 died_player(game, player->id, i);
+                respond_all(game, "status");
+            }
         }
+        respond_all(game, "status");
         if (game->finished) return;
         respond_all(game, "status");
 #if (DEBUG)
@@ -302,24 +322,31 @@ void game_next(Game *game) {
     i32 discard_cnt = 0;
 
     while (1) {
+        respond_all(game, "status");
         respond_chat(find_client_by_id(player->id), "Select a card to dscard");
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
+        respond_all(game, "status");
         DEBUG_PRINT("Discard: %s\n", select_card == NULL ? "NULL" : card_name[select_card->type]);
         if (select_card == NULL && player->hands->size <= player->hp) {
             break;
         }
+        respond_all(game, "status");
         if (select_card != NULL) {
             discard_cnt++;
+            respond_all(game, "status");
             game->discard->push(game->discard, select_card);
+            respond_all(game, "status");
             respond_all_chat(
                 $(String.format("%s discard %s", player->name, card_name[select_card->type])));
             if (player->character->type == Sid_Ketchum && discard_cnt % 2 == 0) {
                 if (player->hp < player->character->health + (player->role->type == Sheriff)) {
+                    respond_all(game, "status");
                     player->hp++;
                     respond_all_chat($(String.format(
                         "%s: Use Sid Ketchum's skill! I discard two cards to heal myself",
                         player->name)));
+                    respond_all(game, "status");
                 }
             }
         }
@@ -345,15 +372,18 @@ void game_win(Game *game) {
     }
     if (live_player[Sheriff] == 0) {
         if (live_player[Criminal] == 0 && live_player[Deputy] == 0) {
+            respond_all(game, "status");
             Console.green("Traitor win!");
             respond_all_chat("Traitor win!");
             respond_all_end(game, "end", Traitor);
         } else {
+            respond_all(game, "status");
             Console.green("Criminal win!");
             respond_all_chat("Criminal win!");
             respond_all_end(game, "end", Criminal);
         }
     } else {
+        respond_all(game, "status");
         Console.green("Police win!");
         respond_all_chat("Police win!");
         respond_all_end(game, "end", Sheriff);
@@ -393,42 +423,53 @@ bool equip_weapon(Game *game, i32 player_id, Card *card) {
     Player *player = game->players->data[player_id];
     if (card->type == Barrel || card->type == Mustang || card->type == Scope ||
         card->type == Dynamite) {
+        respond_all(game, "status");
         if (card->type == Barrel && player->barrel == NULL) {
             player->barrel = card;
+            respond_all(game, "status");
             respond_all_chat($(String.format("%s: I equip Barrel!", player->name)));
             return SUCCESS;
         }
         if (card->type == Mustang && player->mustang == NULL) {
             player->mustang = card;
+            respond_all(game, "status");
             respond_all_chat($(String.format("%s: I equip Mustang!", player->name)));
             return SUCCESS;
         }
         if (card->type == Scope && player->scope == NULL) {
             player->scope = card;
+            respond_all(game, "status");
             respond_all_chat($(String.format("%s: I equip Scope!", player->name)));
             return SUCCESS;
         }
         if (card->type == Dynamite && player->dynamite == NULL) {
             player->dynamite = card;
+            respond_all(game, "status");
             respond_all_chat($(String.format("%s: I equip Dynamite!", player->name)));
             return SUCCESS;
         }
         return FAIL;
     } else if (card->type == Jail) {
+        respond_all(game, "status");
         i32     enemy_id = game->players->data[player_id]->choose_enemy(game, player_id);
         Player *enemy = game->players->data[enemy_id];
         if (enemy_id < 0) return FAIL;
         if (enemy->role->type == Sheriff) return FAIL;
         if (enemy->jail != NULL) return FAIL;
         enemy->jail = card;
+        respond_all(game, "status");
         respond_all_chat($(String.format("%s: I use Jail to %s!", player->name, enemy->name)));
         return SUCCESS;
     }
     if (player->weapon != NULL) {
+        respond_all(game, "status");
         game->discard->push(game->discard, player->weapon);
+        respond_all(game, "status");
     }
     player->weapon = card;
+    respond_all(game, "status");
     if (card->type == Volcanic) {
+        respond_all(game, "status");
         respond_all_chat(
             $(String.format("%s: I equip Volcanic, now I can use Bang infinitly!", player->name)));
     } else {
@@ -436,6 +477,7 @@ bool equip_weapon(Game *game, i32 player_id, Card *card) {
                                          card_name[card->type],
                                          card->type - Dynamite + (player->scope != NULL))));
     }
+    respond_all(game, "status");
     return SUCCESS;
 }
 

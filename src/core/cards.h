@@ -20,6 +20,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         } else {
             respond_error(find_client_by_id(enemy_id), "You only can use Beer avoid died");
             game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
+            respond_all(game, "status");
         }
     }
     respond_all(game, "status");
