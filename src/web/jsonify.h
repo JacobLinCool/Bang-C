@@ -110,7 +110,7 @@ cJSON *game_jsonify(Game *game, i32 player_id) {
 
     for (i32 i = 0; i < game->discard->size; i++) {
         Card  *cur_discard = game->discard->get(game->discard, i);
-        cJSON *json_discard = card_jsonify(cur_discard, (player_id == i) || DEBUG_DISPLAY);
+        cJSON *json_discard = card_jsonify(cur_discard, true);
         cJSON_AddItemToArray(discards, json_discard);
     }
 
