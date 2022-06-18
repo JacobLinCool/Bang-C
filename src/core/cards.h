@@ -15,6 +15,8 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         if (card->type == Beer) {
             game->discard->push(game->discard, card);
             return;
+        } else {
+            game->players->data[me_id]->hands->push(game->players->data[me_id]->hands, card);
         }
     }
     enemy->dead = true;
@@ -467,7 +469,10 @@ bool general_store(Game* game, i32 me_id) {
         int     id = (me_id + i) % game->players->size;
         Player* player = game->players->get(game->players, id);
         ai_request_setting(AI_FORCE_PLAY, 0);
-        if (player->hp > 0) player->select(game, id, set);
+        if (player->hp > 0) {
+            while (player->select(game, id, set) == false)
+                ;
+        }
     }
     set->free(set);
 
