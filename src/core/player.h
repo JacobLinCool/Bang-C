@@ -104,6 +104,8 @@ bool computer_player_select(Game* game, i32 player_id, Cards* cards) {
     return true;
 }
 
+Card* computer_player_request(Game* game, i32 player_id);
+
 Card* real_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
 
@@ -161,6 +163,8 @@ Card* computer_player_request(Game* game, i32 player_id) {
     if (choose < 0) return NULL;
     return player->hands->remove(player->hands, choose);
 }
+
+Card* computer_player_take(Game* game, i32 player_id, i32 target_id);
 
 Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     Player* player = game->players->get(game->players, player_id);
@@ -246,6 +250,8 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
     i32 random = rand() % target->hands->size;
     return target->hands->remove(target->hands, random);
 }
+
+bool computer_player_ramirez(Game* game, i32 player_id);
 
 bool real_player_ramirez(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
