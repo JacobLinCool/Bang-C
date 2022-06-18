@@ -100,13 +100,15 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (enemy->character->type != Vulture_Sam) {
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->character->type == Vulture_Sam) {
-                respond_all_chat($(String.format(
-                    "%s: Use Vulture Sam's skill! I can get cards from deid people!", game->players->data[i]->name)));
+                respond_all_chat($(
+                    String.format("%s: Use Vulture Sam's skill! I can get cards from deid people!",
+                                  game->players->data[i]->name)));
                 discard_card = game->players->data[i]->hands;
                 break;
             }
         }
     }
+    respond_all(game, "status");
     transfer(enemy->hands, discard_card);
     respond_all(game, "status");
     if (NULL != enemy->weapon) {
@@ -265,7 +267,7 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
 
     respond_all(game, "status");
     while (1) {
-        respond_chat(
+        respond_error(
             find_client_by_id(enemy->id),
             $(String.format("You still need %d missed to avoid attack",
                             1 + (game->players->data[me_id]->character->type == Slab_the_Killer) -
@@ -404,6 +406,7 @@ bool gatling(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
         if (get_player_hp(game, i) <= 0 || me_id == i) continue;
         respond_all(game, "status");
+        respond_error(find_client_by_id(i), "You need to play a Missed to avoid Gatling card");
         bang_no_distance(game, me_id, i);
         respond_all(game, "status");
     }
@@ -415,6 +418,7 @@ bool indians(Game* game, i32 me_id) {
         if (get_player_hp(game, i) <= 0 || me_id == i) continue;
         while (1) {
             respond_all(game, "status");
+            respond_error(find_client_by_id(i), "You need to play a Bang to avoid Indians card");
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[i]->request(game, i);
             respond_all(game, "status");
