@@ -153,9 +153,9 @@ void game_next(Game *game) {
                 "%s: My second card is black, I didn't get extra thing", player->name)));
         }
     } else if (player->character->type == Kit_Carlson) {
-        respond_all_chat($(
-            String.format("%s: Use Kit Carlson's skill! I cant choose two cards from three cards!",
-                          player->name)));
+        respond_all_chat(
+            $(String.format("%s: Use Kit Carlson's skill! I can choose two cards from three cards!",
+                            player->name)));
         Cards *cards = create_Cards();
         for (int i = 0; i < 3; i++) cards->push(cards, get_deck_top(game));
         ai_request_setting(AI_FORCE_PLAY, 0);
@@ -255,7 +255,6 @@ void game_next(Game *game) {
             if (equip_weapon(game, player->id, select_card) == FAIL) {
                 DEBUG_PRINT("Error Use\n");
                 player->hands->push(player->hands, select_card);
-                respond_error(find_client_by_id(player->id), "You can't use this card");
                 // P2S player error use
             }
             continue;
@@ -264,7 +263,7 @@ void game_next(Game *game) {
         if (select_card->use(game, player->id) == SUCCESS) {
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
                 respond_all_chat($(String.format(
-                    "%s: Use Calamity Janet's skill! Missed can be used as same as Bang!")));
+                    "%s: Use Calamity Janet's skill! My Missed can be used as Bang!")));
                 bang(game, player->id);
             }
             game->discard->push(game->discard, select_card);
@@ -303,6 +302,7 @@ void game_next(Game *game) {
     i32 discard_cnt = 0;
 
     while (1) {
+        respond_chat(find_client_by_id(player->id), "Select a card to dscard");
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
         DEBUG_PRINT("Discard: %s\n", select_card == NULL ? "NULL" : card_name[select_card->type]);
@@ -312,12 +312,20 @@ void game_next(Game *game) {
         if (select_card != NULL) {
             discard_cnt++;
             game->discard->push(game->discard, select_card);
+            respond_all_chat(
+                $(String.format("%s discard %s", player->name, card_name[select_card->type])));
             if (player->character->type == Sid_Ketchum && discard_cnt % 2 == 0) {
-                if (player->hp < player->character->health + (player->role->type == Sheriff))
+                if (player->hp < player->character->health + (player->role->type == Sheriff)) {
                     player->hp++;
+                    respond_all_chat($(String.format(
+                        "%s: Use Sid Ketchum's skill! I discard two cards to heal myself",
+                        player->name)));
+                }
             }
         }
+        respond_all(game, "status");
     }
+    respond_all(game, "status");
     respond_all_chat($(String.format("%s round end", player->name)));
 #if (DEBUG)
     fprintf(fp, "after discard card:\n");
@@ -421,7 +429,8 @@ bool equip_weapon(Game *game, i32 player_id, Card *card) {
     }
     player->weapon = card;
     if (card->type == Volcanic) {
-        respond_all_chat("%s: I equip Volcanic, now I can use Bang infinitly!");
+        respond_all_chat(
+            $(String.format("%s: I equip Volcanic, now I can use Bang infinitly!", player->name)));
     } else {
         respond_all_chat($(String.format("%s: I equip %s, my view become %d!", player->name,
                                          card_name[card->type],

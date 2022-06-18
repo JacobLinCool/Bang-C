@@ -7,15 +7,33 @@
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
     if (enemy->hp > 0) return;
+
+    while (1) {
+        ai_request_setting(AI_SPECIFY, Beer);
+        Card* card = enemy->request(game, enemy_id);
+        if (card == NULL) break;
+        if (card->type == Beer) {
+            game->discard->push(game->discard, card);
+            respond_all_chat($(String.format("%s: I use Beer avoid died!", enemy->name)));
+            respond_all(game, "status");
+            return;
+        } else {
+            respond_error(find_client_by_id(enemy_id), "You only can use Beer avoid died");
+            game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
+        }
+    }
+    respond_all(game, "status");
+
     if (enemy->character->type == Sid_Ketchum) {
         DEBUG_PRINT("enemy is Sid_Ketchum\n");
         if (game->players->data[enemy_id]->hands->size >= 2) {
+            respond_chat(find_client_by_id(enemy_id),
+                         "Your're close to died, you can select two cards to heal youself");
             DEBUG_PRINT("enemy has 2 or more cards\n");
             while (1) {
                 ai_request_setting(AI_DISCARD, 0);
                 Card* card = game->players->data[enemy_id]->request(game, enemy_id);
                 if (card == NULL) {
-                    goto sid_ketchum_fail;
                     break;
                 }
                 game->discard->push(game->discard, card);
@@ -31,24 +49,13 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
                 }
             }
             game->players->data[enemy_id]->hp++;
-        }
-    }
-sid_ketchum_fail:
-
-    while (1) {
-        ai_request_setting(AI_SPECIFY, Beer);
-        Card* card = enemy->request(game, enemy_id);
-        if (card == NULL) break;
-        if (card->type == Beer) {
-            game->discard->push(game->discard, card);
-            respond_all_chat($(String.format("%s: I use Beer avoid died!", enemy->name)));
-            respond_all(game, "status");
+            respond_all_chat($(String.format(
+                "%s: Use Sid Ketchum's skill! I discard two cards to heal myeself!", enemy->name)));
             return;
-        } else {
-            respond_error(find_client_by_id(enemy_id), "You only can use Beer avoid died");
-            game->players->data[me_id]->hands->push(game->players->data[me_id]->hands, card);
         }
     }
+    respond_all(game, "status");
+
     enemy->dead = true;
     respond_all_chat($(String.format("%s kill %s", game->players->data[me_id]->name, enemy->name)));
     printf("Died player(%s) role is %s\n", enemy->name, role_name[enemy->role->type]);
@@ -168,8 +175,9 @@ sid_ketchum_fail:
 void attack_player(Game* game, i32 me_id, i32 enemy_id) {
     DEBUG_PRINT("%d attack %d\n", me_id, enemy_id);
     if (get_player_hp(game, enemy_id) <= 0) return;  // avoid dynamaite_judge error
-    respond_all_chat($(String.format("%s attack %s", game->players->data[me_id]->name,
-                                     game->players->data[enemy_id]->name)));
+    respond_all_chat(
+        $(String.format("%s attack %s", me_id != -1 ? game->players->data[me_id]->name : "Dynamite",
+                        game->players->data[enemy_id]->name)));
     // decrease player's hp
     game->players->data[enemy_id]->hp--;
     respond_all(game, "status");
@@ -190,12 +198,12 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             draw_from_player(game, enemy_id, me_id);
         }
     }
+    respond_all(game, "status");
 
     // determine AI hate value
     ai_hate_change(game, me_id, enemy_id, 1);
     // dead
     // died_player(game, me_id, enemy_id);
-
     return;
 }
 
@@ -204,28 +212,46 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     i32     missed_total = 0;
     Player* enemy = game->players->data[enemy_id];
     if (enemy->barrel != NULL) {
+        respond_all_chat($(String.format("%s: The barrel judge work!", enemy->name)));
         if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
     }
+    if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
+        return;
     if (enemy->character->type == Jourdonnais) {
+        respond_all_chat($(String.format(
+            "%s: Use Jourdonnais's skill! I have another chance to barrel judge!", enemy->name)));
         if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
     }
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
 
+    respond_all(game, "status");
     bool  pass = false;
     Card* card[2] = {NULL};
     i32   card_amount = 0;
+    respond_chat(find_client_by_id(enemy->id), "You can use missed to avoid attack");
+
+    respond_all(game, "status");
     while (1) {
+        respond_chat(
+            find_client_by_id(enemy->id),
+            $(String.format("You still need %d missed to avoid attack",
+                            1 + (game->players->data[me_id]->character->type == Slab_the_Killer) -
+                                missed_total)));
         ai_request_setting(AI_SPECIFY, Missed);  // ai no use bang
         card[card_amount] = enemy->request(game, enemy_id);
         // DEBUG_PRINT("Give: %s\n",
         //             card[card_amount] == NULL ? "NULL" : card_name[card[card_amount]->type]);
         if (card[card_amount] == NULL) break;
         if (card[card_amount]->type == Missed) {
+            respond_all_chat(
+                $(String.format("%s use missed to avoid one attack point", enemy->name)));
             // card_amount++;
             missed_total++;
         }
         if (card[card_amount]->type == Bang && enemy->character->type == Calamity_Janet) {
+            respond_all_chat($(String.format(
+                "%s: Use Calamity Janet's skill! My Bang can be used as Missed!", enemy->name)));
             // card_amount++;
             missed_total++;
         }
@@ -236,27 +262,35 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
         // return wrong card
         if (enemy->character->type == Calamity_Janet) {
             if (card[card_amount]->type != Bang && card[card_amount]->type != Missed) {
+                respond_error(find_client_by_id(enemy_id), "You can't use this card");
                 enemy->hands->push(enemy->hands, card[card_amount]);
             }
         } else if (card[card_amount]->type != Missed) {
+            respond_error(find_client_by_id(enemy_id), "You can't use this card");
             enemy->hands->push(enemy->hands, card[card_amount]);
         }
+        respond_all(game, "status");
     }
+    respond_all(game, "status");
 
     if (pass) {
         if (card[0]) game->discard->push(game->discard, card[0]);
         if (card[1]) game->discard->push(game->discard, card[1]);
         return;
     }
-
+    respond_all_chat(
+        $(String.format("%s avoid %s attack ", enemy->name, game->players->data[me_id]->name)));
+    respond_all(game, "status");
     attack_player(game, me_id, enemy_id);
+    respond_all(game, "status");
     return;
 }
 
 void dynamite_judge(Game* game, i32 me_id) {
     Player* me = game->players->data[me_id];
     bool    dynamite_judge_result = judge(game, me_id, 102, 109, Dynamite);
-
+    respond_all_chat($(String.format("The dynamite_judge result is ... %s",
+                                     dynamite_judge_result ? "SUCCESS!!!" : "FAIL!!!")));
     if (dynamite_judge_result) {
         game->discard->push(game->discard, me->dynamite);
         me->dynamite = NULL;
@@ -277,6 +311,9 @@ bool jail_judge(Game* game, i32 me_id) {
     game->discard->push(game->discard, game->players->data[me_id]->jail);
     game->players->data[me_id]->jail = NULL;
     bool jail_judge_result = judge(game, me_id, 201, 213, Jail);
+    respond_all_chat($(String.format("The jail_judge result is ... %s",
+                                     jail_judge_result ? "SUCCESS!!!" : "FAIL!!!")));
+    respond_all_chat($(String.format("%s skip this round", game->players->data[me_id]->name)));
     return jail_judge_result ? SUCCESS : FAIL;
 }
 
@@ -295,8 +332,10 @@ bool bang(Game* game, i32 me_id) {
     if (weapon_distance < enemy_distance) {
         DEBUG_PRINT("Your Weapon Distance: %d\n", weapon_distance);
         DEBUG_PRINT("Enemy Distance: %d\n", enemy_distance);
+        respond_error(find_client_by_id(me_id), "This player is too far");
         return FAIL;
     }
+
     bang_no_distance(game, me_id, enemy_id);
 
     return SUCCESS;
