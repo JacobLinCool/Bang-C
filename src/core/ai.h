@@ -5,6 +5,12 @@
 #include "../utils/all.h"
 #include "utils.h"
 
+#ifdef DEBUG
+i32 speed = 10;
+#else
+i32 speed = 1;
+#endif
+
 #define BAD_GUY 5
 #define AI_PLAY 0
 #define AI_DISCARD 1
@@ -169,9 +175,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
         i32 card_hard = (600 + 50 * weight[candi_card->size - 1].weight) / 50;
         if (card_hard < 5) card_hard = 5;
         if (card_hard > 20) card_hard = 20;
-        if (!DEBUG_DISPLAY) {
-            usleep(500 * (rand() % 1000 + candi_card->size * game->players->size * card_hard));
-        }
+        usleep(500 * (rand() % 1000 + candi_card->size * game->players->size * card_hard) / speed);
         i32 missed_cnt = 0;
         for (int i = candi_card->size - 1; i >= 0; i--) {
             if (candi_card->data[weight[i].id]->type == Missed && missed_cnt < 2) {
@@ -190,18 +194,14 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
         i32 card_hard = (600 + 50 * weight[0].weight) / 25;
         if (card_hard < 10) card_hard = 10;
         if (card_hard > 40) card_hard = 40;
-        if (!DEBUG_DISPLAY) {
-            usleep(1000 * (rand() % 1000 + candi_card->size * game->players->size * card_hard));
-        }
+        usleep(1000 * (rand() % 1000 + candi_card->size * game->players->size * card_hard) / speed);
         return -1;
     }
     // for real thinking time
     i32 card_hard = (1000 - 50 * weight[0].weight) / 25;
     if (card_hard < 10) card_hard = 10;
     if (card_hard > 40) card_hard = 40;
-    if (!DEBUG_DISPLAY) {
-        usleep(1000 * (rand() % 1000 + candi_card->size * game->players->size * card_hard));
-    }
+    usleep(1000 * (rand() % 1000 + candi_card->size * game->players->size * card_hard) / speed);
 
     ai_target = weight[0].target;
     if (ai->role->type == Traitor && game->players->data[ai_target]->role->type == Sheriff) {
