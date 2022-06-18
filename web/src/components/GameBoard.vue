@@ -26,36 +26,36 @@ const discard_top = computed(() =>
 );
 
 const translates = [
-    [{ left: "37.5%", top: "0%" }],
+    [{ left: "37.5%", top: "0.25%", transformOrigin: "top left" }],
     [
-        { left: "15%", top: "0%" },
-        { right: "15%", top: "0%" },
+        { left: "15%", top: "0.25%", transformOrigin: "top left" },
+        { right: "15%", top: "0.25%", transformOrigin: "top right" },
     ],
     [
-        { left: "0%", top: "30%" },
-        { left: "37.5%", top: "0%" },
-        { right: "0%", top: "30%" },
+        { left: "0.25%", top: "30%", transformOrigin: "top left" },
+        { left: "37.5%", top: "0.25%", transformOrigin: "top" },
+        { right: "0.25%", top: "30%", transformOrigin: "top right" },
     ],
     [
-        { left: "0%", top: "40%" },
-        { left: "15%", top: "0%" },
-        { right: "15%", top: "0%" },
-        { right: "0%", top: "40%" },
+        { left: "0.25%", top: "40%", transformOrigin: "top left" },
+        { left: "15%", top: "0.25%", transformOrigin: "top" },
+        { right: "15%", top: "0.25%", transformOrigin: "top" },
+        { right: "0.25%", top: "40%", transformOrigin: "top right" },
     ],
     [
-        { left: "0%", top: "50%" },
-        { left: "0%", top: "10%" },
-        { left: "37.5%", top: "0%" },
-        { right: "0%", top: "10%" },
-        { right: "0%", top: "50%" },
+        { left: "0.25%", top: "50%", transformOrigin: "top left" },
+        { left: "0.25%", top: "10%", transformOrigin: "top left" },
+        { left: "37.5%", top: "0.25%", transformOrigin: "top" },
+        { right: "0.25%", top: "10%", transformOrigin: "top right" },
+        { right: "0.25%", top: "50%", transformOrigin: "top right" },
     ],
     [
-        { left: "0%", top: "60%" },
-        { left: "0%", top: "20%" },
-        { left: "25%", top: "0%" },
-        { right: "25%", top: "0%" },
-        { right: "0%", top: "20%" },
-        { right: "0%", top: "60%" },
+        { left: "0.25%", top: "50%", transformOrigin: "top left" },
+        { left: "0.25%", top: "15%", transformOrigin: "top left" },
+        { left: "25%", top: "0.25%", transformOrigin: "top left" },
+        { right: "25%", top: "0.25%", transformOrigin: "top right" },
+        { right: "0.25%", top: "15%", transformOrigin: "top right" },
+        { right: "0.25%", top: "50%", transformOrigin: "top right" },
     ],
 ];
 
@@ -77,7 +77,7 @@ function skip_select_card() {
 
         <Field
             v-for="(player, i) in others"
-            :class="['absolute w-1/4 transform scale-85']"
+            :class="['absolute w-2/5 transform scale-60']"
             :style="translates[game.players.length - 2][i]"
             :player="player"
             :self="false"

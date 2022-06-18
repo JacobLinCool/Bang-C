@@ -36,7 +36,6 @@ function select_card(x: number) {
     >
         <img
             class="transition-all h-full transform group-hover:scale-105"
-            style="aspect-ratio: 9 / 16"
             :src="`/card/${CardType[props.card.type]}.png`"
         />
         <div v-if="props.card.priority % 100" class="absolute font-bold bottom-[5%] left-[12%]">

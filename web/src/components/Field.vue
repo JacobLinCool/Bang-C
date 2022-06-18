@@ -19,7 +19,7 @@ function select_player() {
 <template>
     <div
         :class="[
-            'transition-all p-2 rounded-md',
+            'transition-all p-2 rounded-lg',
             (game.turn || 0) % (game.players?.length || 10) === props.player.id
                 ? 'bg-orange-300/20 border border-orange-300'
                 : 'bg-blue-300/20',
@@ -28,8 +28,7 @@ function select_player() {
         style="aspect-ratio: 16 / 9"
     >
         <div
-            :class="['absolute w-2/3 flex p-1 h-2/3 justify-center', self ? 'bottom-0' : 'top-0']"
-            :style="{ right: ((props.player.hands?.length || 0) - 3) * 4 + '%' }"
+            :class="['absolute right-0 w-2/3 flex p-1 justify-center', self ? 'bottom-0' : 'top-0']"
         >
             <ListTransition>
                 <Card
@@ -37,47 +36,51 @@ function select_player() {
                     :key="card.x"
                     :card="card"
                     :class="[
-                        'transform hover:scale-110 hover:z-20 h-full',
+                        'max-h-60 transform hover:scale-110 hover:z-20',
                         self ? 'hover:-translate-y-5 z-10' : 'hover:translate-y-4',
                     ]"
                     :style="{
                         'margin-right': ((props.player.hands?.length || 0) - 3) * -5.5 + '%',
-                        left: ((props.player.hands?.length || 0) - 3) * 2 + '%',
+                        left: ((props.player.hands?.length || 0) - 3) * -3 + '%',
                     }"
                 />
             </ListTransition>
         </div>
-        <div :class="['absolute right-0 w-2/3 h-2/3 flex p-1', self ? 'top-0' : 'bottom-0']">
-            <Card
-                v-if="props.player.weapon"
-                :card="props.player.weapon"
-                class="h-full hover:z-20"
-            ></Card>
-            <Card
-                v-if="props.player.scope"
-                :card="props.player.scope"
-                class="h-full hover:z-20"
-            ></Card>
-            <Card
-                v-if="props.player.barrel"
-                :card="props.player.barrel"
-                class="h-full hover:z-20"
-            ></Card>
-            <Card
-                v-if="props.player.mustang"
-                :card="props.player.mustang"
-                class="h-full hover:z-20"
-            ></Card>
-            <Card
-                v-if="props.player.jail"
-                :card="props.player.jail"
-                class="h-full hover:z-20"
-            ></Card>
-            <Card
-                v-if="props.player.dynamite"
-                :card="props.player.dynamite"
-                class="h-full hover:z-20"
-            ></Card>
+        <div
+            :class="['absolute right-0 w-2/3 flex p-1 justify-start', self ? 'top-0' : 'bottom-0']"
+        >
+            <ListTransition>
+                <Card
+                    v-if="props.player.weapon"
+                    :card="props.player.weapon"
+                    class="h-full hover:z-20 max-h-60 flex-1"
+                ></Card>
+                <Card
+                    v-if="props.player.scope"
+                    :card="props.player.scope"
+                    class="h-full hover:z-20 max-h-60 flex-1"
+                ></Card>
+                <Card
+                    v-if="props.player.barrel"
+                    :card="props.player.barrel"
+                    class="h-full hover:z-20 max-h-60 flex-1"
+                ></Card>
+                <Card
+                    v-if="props.player.mustang"
+                    :card="props.player.mustang"
+                    class="h-full hover:z-20 max-h-60 flex-1"
+                ></Card>
+                <Card
+                    v-if="props.player.jail"
+                    :card="props.player.jail"
+                    class="h-full hover:z-20 max-h-60 flex-1"
+                ></Card>
+                <Card
+                    v-if="props.player.dynamite"
+                    :card="props.player.dynamite"
+                    class="h-full hover:z-20 max-h-60 flex-1"
+                ></Card>
+            </ListTransition>
         </div>
         <Role @click="select_player" class="w-1/5 p-1" :type="props.player.role"></Role>
         <Character
