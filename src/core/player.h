@@ -38,8 +38,7 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
     if ((enemy_id < 0 || enemy_id >= player_size) || get_player_hp(game, enemy_id) <= 0 ||
         enemy_id == me_id) {
         enemy_id = -2;
-        respond_error(find_client_by_id(me_id),
-                      $(String.format("%s: You can't choose this player!", "System")));
+        respond_error(find_client_by_id(me_id), "You can't choose this player!");
     }
 
     // determine AI hate value
@@ -74,8 +73,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     if (offset == -2) {
         return false;
     } else if (offset == -1) {
-        respond_error(find_client_by_id(player_id),
-                      $(String.format("%s: You should select a card!", "System")));
+        respond_error(find_client_by_id(player_id), "You should select a card!");
         return false;
     }
 
@@ -88,8 +86,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     }
 
     if (input < 0 || input >= cards->size) {
-        respond_error(find_client_by_id(player_id),
-                      $(String.format("%s: IF YOU DO THIS AGAIN, I WILL BAN YOU!!!", "System")));
+        respond_error(find_client_by_id(player_id), "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
         return false;
     }
 
@@ -124,8 +121,10 @@ Card* real_player_request(Game* game, i32 player_id) {
     if (offset == -2) {
         return computer_player_request(game, player_id);
     } else if (offset == -1) {
-        respond_chat(find_client_by_id(player_id),
-                     $(String.format("%s: You start to discard card", "System")));
+        respond_chat(
+            find_client_by_id(player_id),
+            $(String.format("It's time to discarding your cards, you can keep up to %d card%s!",
+                            player->hp, player->hp > 1 ? "s" : "")));
         return NULL;
     }
     i32 input = -1;
@@ -137,8 +136,7 @@ Card* real_player_request(Game* game, i32 player_id) {
     }
 
     if (input < 1 || input > player->hands->size) {
-        respond_error(find_client_by_id(player_id),
-                      $(String.format("%s: IF YOU DO THIS AGAIN, I WILL BAN YOU!!!", "System")));
+        respond_error(find_client_by_id(player_id), "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
         return NULL;
     }
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
@@ -186,8 +184,7 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     if (offset == -2) {
         return computer_player_take(game, player_id, target_id);
     } else if (offset == -1) {
-        respond_error(find_client_by_id(player_id),
-                      $(String.format("%s: You should choose a card!", "System")));
+        respond_error(find_client_by_id(player_id), "You should choose a card!");
         return NULL;
     }
 
@@ -231,8 +228,7 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
             return x;
         }
     }
-    respond_error(find_client_by_id(player_id),
-                  $(String.format("%s: You can't use this card!", "System")));
+    respond_error(find_client_by_id(player_id), "You can't use this card!");
     return NULL;
 }
 
@@ -276,7 +272,7 @@ bool real_player_ramirez(Game* game, i32 player_id) {
     }
     if (game->discard->size == 0) {
         respond_error(find_client_by_id(player_id),
-                      $(String.format("%s: Sadly, discard deck has no card to take", "System")));
+                      "Sadly, there are no any discarded card to take");
         return false;
     }
 
@@ -304,6 +300,7 @@ bool computer_player_ramirez(Game* game, i32 player_id) {
     i32 choose = ai_request(game, player_id, cards);
     if (choose != -1) {
         DEBUG_PRINT("Choose from discard\n");
+        respond_all_chat($(String.format("%s: Use Kit Carlson skill", player->id)));
         player->hands->push(player->hands, game->discard->pop(game->discard));
         return true;
     } else {
