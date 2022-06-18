@@ -236,7 +236,8 @@ void game_next(Game *game) {
             break;
         }
         // 1.restriction detection
-        if (select_card->type == Bang) {
+        if (select_card->type == Bang &&
+            !(player->weapon != NULL && player->weapon->type == Volcanic)) {
             // only one BANG! card may be played per turn
             if (bang_used && player->character->type != Willy_the_Kid) {
                 player->hands->push(player->hands, select_card);
@@ -323,7 +324,7 @@ void game_next(Game *game) {
     print_status(game, fp);
     fflush(fp);
     printf("Enter any key to continue.(%d)\n", debug_num);
-    // if (debug_num++ >= debug_stop) getchar();
+// if (debug_num++ >= debug_stop) getchar();
 #endif
 }
 
