@@ -113,7 +113,7 @@ bool computer_player_select(Game* game, i32 player_id, Cards* cards) {
     DEBUG_PRINT("player %d select: [%s]\n", player_id, card_name[cards->data[choose]->type]);
 
     player->hands->push(player->hands, cards->remove(cards, choose));
-
+    respond_all(game, "status");
     return true;
 }
 
@@ -152,8 +152,9 @@ Card* real_player_request(Game* game, i32 player_id) {
 done:
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
+        respond_all(game, "status");
     }
-
+    respond_all(game, "status");
     return player->hands->remove(player->hands, input);
 }
 
@@ -163,12 +164,14 @@ Card* computer_player_request(Game* game, i32 player_id) {
     if (ai_request_type == AI_SPECIFY) {
         usleep(1000 * 1000 / speed);
         DEBUG_PRINT("Specify to player %d: [%s]\n", player_id, card_name[ai_request_card]);
+        respond_all(game, "status");
         for (int i = 0; i < player->hands->size; i++) {
             if (player->hands->data[i]->type == ai_request_card) {
                 DEBUG_PRINT("Return: [%s](id:%d)\n", card_name[player->hands->data[i]->type], i);
                 return player->hands->remove(player->hands, i);
             }
         }
+        respond_all(game, "status");
         DEBUG_PRINT("Return: [NULL]\n");
         return NULL;
     } else if (ai_request_type == AI_DISCARD && player->hands->size <= player->hp) {
@@ -178,6 +181,7 @@ Card* computer_player_request(Game* game, i32 player_id) {
     //  DEBUG_PRINT("Choose: %s\n", choose < 0 ? "NULL" : card_name[choose]);
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
+        respond_all(game, "status");
     }
     if (choose < 0) return NULL;
     return player->hands->remove(player->hands, choose);
@@ -216,6 +220,7 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     if (0 <= input && input < target->hands->size) {
         if (target->hands->size == 1 && target->character->type == Suzy_Lafayette) {
             player_draw_deck(game, target->id, 1);
+            respond_all(game, "status");
         }
         return target->hands->remove(target->hands, input);
     } else {
@@ -268,6 +273,7 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
     }
     if (target->hands->size == 1 && target->character->type == Suzy_Lafayette) {
         player_draw_deck(game, target->id, 1);
+        respond_all(game, "status");
     }
     i32 random = rand() % target->hands->size;
     return target->hands->remove(target->hands, random);
@@ -288,6 +294,7 @@ bool real_player_ramirez(Game* game, i32 player_id) {
     i32 input = share_num;
 
     if (input == -2) {
+        respond_all(game, "status");
         return computer_player_ramirez(game, player_id);
     }
     if (game->discard->size == 0) {
@@ -298,6 +305,7 @@ bool real_player_ramirez(Game* game, i32 player_id) {
     if (input == 1) {
         respond_all_chat($(String.format("%s used Pedro Ramirez's skill", player->name)));
         player->hands->push(player->hands, game->discard->pop(game->discard));
+        respond_all(game, "status");
         return true;
     } else {
         return false;
@@ -315,12 +323,14 @@ bool computer_player_ramirez(Game* game, i32 player_id) {
     Cards* cards = create_Cards();
     DEBUG_PRINT("Top discard: [%s]\n", card_name[game->discard->back(game->discard)->type]);
     cards->push(cards, game->discard->back(game->discard));
+    respond_all(game, "status");
     ai_request_setting(AI_PLAY, 0);
     i32 choose = ai_request(game, player_id, cards);
     if (choose != -1) {
         DEBUG_PRINT("Choose from discard\n");
         respond_all_chat($(String.format("%s used Pedro Ramirez's skill", player->name)));
         player->hands->push(player->hands, game->discard->pop(game->discard));
+        respond_all(game, "status");
         return true;
     } else {
         DEBUG_PRINT("Don't choose from discard\n");
