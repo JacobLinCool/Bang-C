@@ -58,7 +58,9 @@ i32 computer_choose_enemy(Game* game, i32 me_id) {
     return enemy_id;*/
 
     // determine AI hate value
-    sleep(1);
+    if (!DEBUG_DISPLAY) {
+        sleep(1);
+    }
     ai_hate_change(game, me_id, ai_target, 1);
     DEBUG_PRINT("ai choose enemy %d\n", ai_target);
     return ai_target;
@@ -155,7 +157,9 @@ Card* computer_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
     // i32     random = rand() % player->hands->size;
     if (ai_request_type == AI_SPECIFY) {
-        sleep(1);
+        if (!DEBUG_DISPLAY) {
+            sleep(1);
+        }
         DEBUG_PRINT("Specify to player %d: [%s]\n", player_id, card_name[ai_request_card]);
         for (int i = 0; i < player->hands->size; i++) {
             if (player->hands->data[i]->type == ai_request_card) {
@@ -242,9 +246,9 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
 Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
     Player* player = game->players->get(game->players, player_id);
     Player* target = game->players->get(game->players, target_id);
-
-    sleep(1);
-
+    if (!DEBUG_DISPLAY) {
+        sleep(1);
+    }
     if (target->barrel && !player->barrel) {
         Card* x = target->barrel;
         target->barrel = NULL;
