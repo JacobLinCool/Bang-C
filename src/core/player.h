@@ -96,7 +96,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     }
 
     if (input < 0 || input >= cards->size) {
-        respond_error(client, "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
+        respond_error(client, "Wrong select");
         return false;
     }
 
@@ -146,7 +146,7 @@ Card* real_player_request(Game* game, i32 player_id) {
         }
 
         if (input < 0 || input >= player->hands->size) {
-            respond_error(client, "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
+            respond_error(client, "Wrong select");
         }
     }
 done:

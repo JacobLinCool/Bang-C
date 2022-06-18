@@ -101,7 +101,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->character->type == Vulture_Sam) {
                 respond_all_chat($(String.format(
-                    "%s: Use Vulture Sam's skill! I can get cards from deid people!")));
+                    "%s: Use Vulture Sam's skill! I can get cards from deid people!", game->players->data[i]->name)));
                 discard_card = game->players->data[i]->hands;
                 break;
             }
@@ -334,7 +334,7 @@ void dynamite_judge(Game* game, i32 me_id) {
     Player* me = game->players->data[me_id];
     bool    dynamite_judge_result = judge(game, me_id, 102, 109, Dynamite);
     respond_all_chat($(String.format("The dynamite_judge result is ... %s",
-                                     dynamite_judge_result ? "SUCCESS!!!" : "FAIL!!!")));
+                                     dynamite_judge_result ? "EXPLOSION!!!" : "SAFTY!!!")));
     respond_all(game, "status");
     if (dynamite_judge_result) {
         game->discard->push(game->discard, me->dynamite);
