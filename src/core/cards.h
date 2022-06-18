@@ -636,7 +636,7 @@ bool general_store(Game* game, i32 me_id) {
     respond_all(game, "status");
 
     for (int i = 0; i < game->players->size; i++) {
-        int     id = (me_id + i) % game->players->size;
+        int id = (me_id + i) % game->players->size;
         respond_all(game, "status");
         Player* player = game->players->get(game->players, id);
         ai_request_setting(AI_FORCE_PLAY, 0);
