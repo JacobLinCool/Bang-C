@@ -552,7 +552,7 @@ int main(void) {
     pthread_create(&sv, NULL, server_thread_start, NULL);
 
     while (true) {
-        key = rand() % 1000000000;
+        key = rand() % 2048;
         Console.log("encrypt key is %u", key);
         sem_wait(&gm_created);
         pthread_join(gm, NULL);
