@@ -294,9 +294,9 @@ void dynamite_judge(Game* game, i32 me_id) {
     if (dynamite_judge_result) {
         game->discard->push(game->discard, me->dynamite);
         me->dynamite = NULL;
-        attack_player(game, -1, me_id);
-        attack_player(game, -1, me_id);
-        attack_player(game, -1, me_id);
+        attack_player(game, me_id, me_id);
+        attack_player(game, me_id, me_id);
+        attack_player(game, me_id, me_id);
     } else {
         i32 left_player_id = (me_id + 1) % game->players->size;
         while (game->players->data[left_player_id]->hp <= 0) {
@@ -420,6 +420,7 @@ bool saloon(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
         if (game->players->data[i]->hp <= 0) continue;
         recover(game, i);
+        ai_saloon(game, i, me_id);
     }
     return SUCCESS;
 }

@@ -341,7 +341,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         Console.green("-----------ok---------");
         int number = (int)cJSON_GetNumberValue(card);
         if (number >= 0) {
-            share_offset = number;
+            share_offset = number ^ key;
         } else {
             share_offset = number;
         }
