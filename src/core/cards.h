@@ -103,11 +103,11 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
                 respond_all_chat($(String.format(
                     "%s: Use Vulture Sam's skill! I can get cards from deid people!")));
                 discard_card = game->players->data[i]->hands;
-                transfer(enemy->hands, discard_card);
                 break;
             }
         }
     }
+    transfer(enemy->hands, discard_card);
     respond_all(game, "status");
     if (NULL != enemy->weapon) {
         discard_card->push(discard_card, enemy->weapon);
