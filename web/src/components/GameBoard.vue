@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { game, send, name, selecting, requesting, choosing, timer } from "../composables/game";
+import {
+    game,
+    send,
+    name,
+    selecting,
+    requesting,
+    choosing,
+    timer,
+    showing,
+} from "../composables/game";
 import Field from "./Field.vue";
 import { computed } from "vue";
 import Card from "./Card.vue";
@@ -92,7 +101,7 @@ function skip_select_card() {
             <div
                 class="absolute top-0 left-0 font-bold w-full h-full flex justify-center items-center text-white text-center text-3xl text-shadow-md"
             >
-                {{ game.deck_size || "?" }}
+                {{ game.deck_size ?? "?" }}
             </div>
         </div>
 
@@ -101,6 +110,8 @@ function skip_select_card() {
             v-if="discard_top"
             :card="discard_top"
         ></Card>
+
+        <Card class="absolute w-24 right-[42%] top-[30%]" v-if="showing" :card="showing"></Card>
 
         <div
             v-if="requesting"
