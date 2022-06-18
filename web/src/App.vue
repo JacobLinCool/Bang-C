@@ -3,6 +3,7 @@ import { state, logs, ws, waiting, selecting, send } from "./composables/game";
 import Fade from "./components/Fade.vue";
 import WaitingRoom from "./components/WaitingRoom.vue";
 import GameBoard from "./components/GameBoard.vue";
+import Winner from "./components/Winner.vue";
 import { computed, provide, ref } from "vue";
 import { Card as C, CharacterType, RoleType } from "./types";
 import Card from "./components/Card.vue";
@@ -16,7 +17,7 @@ const rev_logs = computed(() =>
 );
 
 ws.addEventListener("close", (event) => {
-    if (state.value >= 0) {
+    if (state.value >= 0 && state.value < 2) {
         alert(
             "Connection closed. Reason: " +
                 (event.reason || "No reason, it just doesn't like you."),
@@ -43,6 +44,7 @@ function select_card(x: number) {
             <Fade>
                 <WaitingRoom v-if="state === 0" />
                 <GameBoard v-if="state === 1" />
+                <Winner v-if="state === 2" />
             </Fade>
         </div>
         <div class="w-1/5 h-full bg-white/50 flex flex-col-reverse overflow-y-auto">

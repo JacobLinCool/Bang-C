@@ -68,6 +68,7 @@ export interface Player {
     name: string;
     id: number;
     hp: number;
+    dead: boolean;
     role: RoleType;
     character: CharacterType;
     weapon: Card | null;

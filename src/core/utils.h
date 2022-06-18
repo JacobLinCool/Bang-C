@@ -124,7 +124,8 @@ bool player_draw_deck(Game* game, i32 me_id, i32 count) {
  * @return false
  */
 bool judge(Game* game, i32 me_id, i32 lower, i32 higher, CardType type) {
-    Card*         top_card = get_deck_top(game);
+    Card* top_card = get_deck_top(game);
+    respond_all(game, "status");
     CharacterType char_type = game->players->data[me_id]->character->type;
     DEBUG_PRINT("result: %u,", top_card->priority);
     if (lower <= top_card->priority && top_card->priority <= higher) {
@@ -145,6 +146,7 @@ bool judge(Game* game, i32 me_id, i32 lower, i32 higher, CardType type) {
     game->discard->push(game->discard, top_card);
     if (char_type == Lucky_Duke) {
         top_card = get_deck_top(game);
+        respond_all(game, "status");
         if (lower <= top_card->priority && top_card->priority <= higher) {
             game->discard->push(game->discard, top_card);
             DEBUG_PRINT("In range\n");
@@ -165,10 +167,12 @@ bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
     Card* selected = NULL;
     while (!selected) {
         selected = me->take(game, me_id, enemy_id);
+        respond_all(game, "status");
     }
     DEBUG_PRINT("%d->%d select [%s]\n", me_id, enemy_id, card_name[selected->type]);
 
     me->hands->push(me->hands, selected);
+    respond_all(game, "status");
 
     return SUCCESS;
 }
@@ -182,10 +186,12 @@ bool discard_from_enemy(Game* game, i32 me_id, i32 enemy_id) {
     Card* selected = NULL;
     while (!selected) {
         selected = me->take(game, me_id, enemy_id);
+        respond_all(game, "status");
     }
     DEBUG_PRINT("%d->%d: select [%s]\n", me_id, enemy_id, card_name[selected->type]);
 
     game->discard->push(game->discard, selected);
+    respond_all(game, "status");
 
     return SUCCESS;
 }
@@ -195,6 +201,7 @@ void recover(Game* game, i32 me_id) {
                                               (game->players->data[me_id]->role->type == Sheriff))
         return;
     game->players->data[me_id]->hp++;
+    respond_all(game, "status");
     return;
 }
 
