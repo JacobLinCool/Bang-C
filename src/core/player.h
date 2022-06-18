@@ -79,7 +79,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     sem_wait(&waiting_for_input);
     waiting_for_player = -1;
     i64 offset = (i64)share_offset;
-
+    Console.green("[offset] %d", offset);
     if (offset == -2) {
         return false;
     } else if (offset == -1) {
@@ -132,7 +132,6 @@ Card* real_player_request(Game* game, i32 player_id) {
         sem_wait(&waiting_for_input);
         waiting_for_player = -1;
         i64 offset = (i64)share_offset;
-
         if (offset == -2) {
             return computer_player_request(game, player_id);
         } else if (offset == -1) {
@@ -142,7 +141,7 @@ Card* real_player_request(Game* game, i32 player_id) {
         for (int i = 0; i < player->hands->size; i++) {
             if (player->hands->data[i] == (Card*)(card_base + offset)) {
                 input = i;
-                break;
+                goto done;
             }
         }
 
@@ -150,6 +149,7 @@ Card* real_player_request(Game* game, i32 player_id) {
             respond_error(client, "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
         }
     }
+done:
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
     }
@@ -170,6 +170,8 @@ Card* computer_player_request(Game* game, i32 player_id) {
             }
         }
         DEBUG_PRINT("Return: [NULL]\n");
+        return NULL;
+    } else if (ai_request_type == AI_DISCARD && player->hands->size <= player->hp) {
         return NULL;
     }
     i32 choose = ai_request(game, player_id, player->hands);
