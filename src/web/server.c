@@ -489,7 +489,9 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             }
             cJSON_Delete(list);
 
-            if (game != NULL) {
+            if (game != NULL && waiting_for_player != -1) {
+                Console.info("[%p] %s leave the game, computer is now taking over", instance,
+                             client->name);
                 Player *player = game->players->get(game->players, client->player_id);
                 player->play = computer_player;
                 player->choose_enemy = computer_choose_enemy;
@@ -498,7 +500,8 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
                 player->take = computer_player_take;
                 player->ramirez = computer_player_ramirez;
 
-                if (player->id == game->turn % game->players->size) {
+                if (player->id == waiting_for_player) {
+                    waiting_for_player = -1;
                     share_num = -2;
                     share_offset = -2;
                     sem_post(&waiting_for_input);
@@ -512,15 +515,13 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
         }
 
         case LWS_CALLBACK_TIMER: {
-            if (client && game && game->turn % game->players->size == client->player_id) {
+            if (client && game && waiting_for_player != -1 &&
+                waiting_for_player == client->player_id) {
                 lws_close_reason(instance, LWS_CLOSE_STATUS_NORMAL, (unsigned char *)"Timeout",
                                  strlen("Timeout"));
                 lws_close_free_wsi(instance, LWS_CLOSE_STATUS_NORMAL, "Timeout");
 
                 Console.yellow("[%p] Connection timed out", instance);
-            } else {
-                Console.log("[%p] %p %p %" PRIu64 " %d", instance, client, game,
-                            game->turn % game->players->size, client->player_id);
             }
 
             break;
@@ -549,15 +550,15 @@ int main(void) {
         sem_wait(&gm_created);
         pthread_join(gm, NULL);
 
-        free(game);
+        // free(game);
         game = NULL;
         game_started = false;
 
         while (clients->size) {
             Client *client = clients->pop(clients);
             lws_close_free_wsi(client->instance, LWS_CLOSE_STATUS_NORMAL, "Game Over");
-            client->msg_queue->free(client->msg_queue);
-            free(client);
+            // client->msg_queue->free(client->msg_queue);
+            // free(client);
         }
 
         char  *line = NULL;
