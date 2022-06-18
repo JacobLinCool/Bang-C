@@ -36,8 +36,8 @@ cJSON *player_jsonify(Player *player, bool itself) {
     cJSON *name = cJSON_CreateString(player->name);
     cJSON *id = cJSON_CreateNumber(player->id);
     cJSON *hp = cJSON_CreateNumber(player->hp);
-    cJSON *role =
-        cJSON_CreateNumber((itself || player->role->type == Sheriff) ? player->role->type : 0);
+    cJSON *role = cJSON_CreateNumber(
+        (itself || player->role->type == Sheriff || player->dead) ? player->role->type : 0);
     cJSON *character = cJSON_CreateNumber(player->character->type);
     cJSON *weapon = card_jsonify(player->weapon, true);
     cJSON *barrel = card_jsonify(player->barrel, true);
