@@ -5,6 +5,7 @@
 #include "ai.h"
 
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
+    Player* me = game->players->data[me_id];
     Player* enemy = game->players->data[enemy_id];
     if (enemy->hp > 0) return;
     respond_all(game, "status");
@@ -70,7 +71,8 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     enemy->dead = true;
     respond_all(game, "status");
     respond_all_chat($(String.format("%s kill %s", game->players->data[me_id]->name, enemy->name)));
-    printf("Died player(%s) role is %s\n", enemy->name, role_name[enemy->role->type]);
+    printf("Died player (%s) role is %s, killed by %s (%s)\n", enemy->name,
+           role_name[enemy->role->type], me->name, role_name[me->role->type]);
     respond_all_chat(
         $(String.format("%s died, his role is %s", enemy->name, role_name[enemy->role->type])));
     respond_all(game, "status");
@@ -100,8 +102,9 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (enemy->character->type != Vulture_Sam) {
         for (int i = 0; i < game->players->size; i++) {
             if (game->players->data[i]->character->type == Vulture_Sam) {
-                respond_all_chat($(String.format(
-                    "%s: Use Vulture Sam's skill! I can get cards from deid people!")));
+                respond_all_chat($(
+                    String.format("%s: Use Vulture Sam's skill! I can get cards from deid people!",
+                                  game->players->data[i]->name)));
                 discard_card = game->players->data[i]->hands;
                 transfer(enemy->hands, discard_card);
                 break;
@@ -136,7 +139,6 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
 
     respond_all(game, "status");
     // Penalties and Rewards
-    Player* me = game->players->data[me_id];
     DEBUG_PRINT("Penalties and Rewards.\n");
     if (me_id == enemy_id) {
         DEBUG_PRINT("I killed myself.\n");

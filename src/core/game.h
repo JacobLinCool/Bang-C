@@ -61,6 +61,7 @@ void game_loop(Game *game) {
         game->turn++;
     }
     game_win(game);
+    sleep(3);
     pthread_exit(NULL);
 }
 
