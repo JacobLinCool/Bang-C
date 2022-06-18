@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { game, ws, send, name, requesting } from "../composables/game";
+import { game, send, name, selecting, requesting, choosing, timer } from "../composables/game";
 import Field from "./Field.vue";
 import { computed } from "vue";
 import Card from "./Card.vue";
+import Fade from "./Fade.vue";
 
 const my_idx = computed(() =>
     game.players ? game.players.findIndex((p) => p.name === name.value) : -1,
@@ -108,6 +109,20 @@ function skip_select_card() {
         >
             <span>Skip</span>
         </div>
+
+        <Fade>
+            <div
+                v-if="(selecting.length || requesting || choosing) && timer"
+                :class="[
+                    'absolute bottom-0 left-0 m-8 w-24 h-10 rounded-md flex justify-center items-center border font-bold transition-all',
+                    timer > 15
+                        ? 'text-indigo-700 border-indigo-700'
+                        : 'bg-red-600 border-red-600 text-white',
+                ]"
+            >
+                <span>{{ timer }}</span>
+            </div>
+        </Fade>
     </div>
 </template>
 

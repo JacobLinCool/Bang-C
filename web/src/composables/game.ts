@@ -18,6 +18,9 @@ export const logs: { type: "chat" | "error"; message: string }[] = reactive([]);
 export const selecting: Card[] = reactive([]);
 export const requesting = ref(false);
 export const choosing = ref(false);
+export const timer = ref(0);
+export const winner = ref(-1);
+let timer_id: number;
 
 ws.addEventListener("open", () => {
     state.value = 0;
@@ -54,16 +57,19 @@ ws.addEventListener("message", (event) => {
         case "select_card":
             Object.assign(game, message.payload.game);
             selecting.splice(0, selecting.length, ...message.payload.cards.cards);
+            timer_start();
             break;
 
         case "request_card":
             Object.assign(game, message.payload.game);
             requesting.value = true;
+            timer_start();
             break;
 
         case "choose_enemy":
             Object.assign(game, message.payload.game);
             choosing.value = true;
+            timer_start();
             break;
 
         case "take_card":
@@ -79,6 +85,13 @@ ws.addEventListener("message", (event) => {
                 player.dynamite && cards.push(player.dynamite);
                 selecting.splice(0, selecting.length, ...cards);
             }
+            timer_start();
+            break;
+
+        case "end":
+            Object.assign(game, message.payload.game);
+            winner.value = message.payload.winner;
+            state.value = 2;
             break;
 
         default:
@@ -97,3 +110,16 @@ export function send(action: string, payload: any) {
 window.send = send;
 // @ts-ignore For testing purposes
 window.game = game;
+
+function timer_start() {
+    timer.value = 60 - 5;
+    timer_id && clearInterval(timer_id);
+    timer_id = window.setInterval(timer_interval, 1000);
+}
+
+function timer_interval() {
+    timer.value--;
+    if (timer.value <= 0) {
+        clearInterval(timer_id);
+    }
+}
