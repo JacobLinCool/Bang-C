@@ -151,13 +151,15 @@ void game_next(Game *game) {
         Cards *cards = create_Cards();
         for (int i = 0; i < 3; i++) cards->push(cards, get_deck_top(game));
         ai_request_setting(AI_FORCE_PLAY, 0);
-        player->select(game, player->id, cards);
+        while (player->select(game, player->id, cards) == false)
+            ;
 
         // P2S game status
         respond_all(game, "status");
 
         ai_request_setting(AI_FORCE_PLAY, 0);
-        player->select(game, player->id, cards);
+        while (player->select(game, player->id, cards) == false)
+            ;
 
         // P2S game status
         respond_all(game, "status");

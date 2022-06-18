@@ -31,6 +31,7 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
     sem_wait(&waiting_for_input);
     enemy_id = share_num;
 
+    if (enemy_id == -2) return -1;
     if ((enemy_id < 0 || enemy_id >= player_size) || get_player_hp(game, enemy_id) <= 0 ||
         enemy_id == me_id) {
         enemy_id = -1;
@@ -65,6 +66,14 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
 
     sem_wait(&waiting_for_input);
     i64 offset = (i64)share_offset;
+
+    if (offset == -2) {
+        return false;
+    } else if (offset == -1) {
+        respond_error(find_client_by_id(player_id), "You should select a card\n");
+        return false;
+    }
+
     i32 input = -1;
     for (int i = 0; i < cards->size; i++) {
         if (cards->data[i] == (Card*)(card_base + offset)) {
@@ -72,6 +81,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
             break;
         }
     }
+
     if (input < 0 || input >= cards->size) {
         respond_error(find_client_by_id(player_id), "Wrong Card!\n");
         return false;
@@ -102,6 +112,13 @@ Card* real_player_request(Game* game, i32 player_id) {
 
     sem_wait(&waiting_for_input);
     i64 offset = (i64)share_offset;
+
+    if (offset == -2) {
+        return computer_player_request(game, player_id);
+    } else if (offset == -1) {
+        respond_chat(find_client_by_id(player_id), "You drop selecting the card\n");
+        return NULL;
+    }
     i32 input = -1;
     for (int i = 0; i < player->hands->size; i++) {
         if (player->hands->data[i] == (Card*)(card_base + offset)) {
@@ -154,6 +171,14 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
 
     sem_wait(&waiting_for_input);
     i64 offset = (i64)share_offset;
+
+    if (offset == -2) {
+        return computer_player_take(game, player_id, target_id);
+    } else if (offset == -1) {
+        respond_error(find_client_by_id(player_id), "You should choose a card\n");
+        return NULL;
+    }
+
     i32 input = -1;
     for (int i = 0; i < target->hands->size; i++) {
         if (target->hands->data[i] == (Card*)(card_base + offset)) {
@@ -231,6 +256,9 @@ bool real_player_ramirez(Game* game, i32 player_id) {
     sem_wait(&waiting_for_input);
     i32 input = share_num;
 
+    if (input == -2) {
+        return computer_player_ramirez(game, player_id);
+    }
     if (game->discard->size == 0) {
         respond_error(find_client_by_id(player_id), "Sadly, there is no card to take.\n");
         return false;
