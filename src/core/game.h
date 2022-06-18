@@ -90,7 +90,6 @@ void game_start(Game *game) {
     for (int i = 0; i < game->players->size; i++) {
         ai_initialize(game, i);
     }
-    // game_loop(game);
 }
 
 void game_next(Game *game) {
