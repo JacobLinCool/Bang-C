@@ -185,11 +185,8 @@ void game_next(Game *game) {
         player_draw_deck(game, player->id, 2 - player->ramirez(game, player->id));
         respond_all_chat($(String.format("%s gets two cards from deck", player->name)));
     } else if (player->character->type == Jesse_Jones) {
-        i32 enemy_id = -2;
-        while (enemy_id < -1) {
-            enemy_id = player->choose_enemy(game, player->id);
-        }
-        if (enemy_id == -1) {
+        i32 enemy_id = player->choose_enemy(game, player->id);
+        if (enemy_id < 0 || game->players->data[enemy_id]->hands->size == 0) {
             player_draw_deck(game, player->id, 2);
             respond_all_chat($(String.format("%s gets two cards from deck", player->name)));
         } else {

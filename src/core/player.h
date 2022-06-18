@@ -269,6 +269,7 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
     if (target->hands->size == 1 && target->character->type == Suzy_Lafayette) {
         player_draw_deck(game, target->id, 1);
     }
+    if (target->hands->size == 0) return NULL;
     i32 random = rand() % target->hands->size;
     return target->hands->remove(target->hands, random);
 }

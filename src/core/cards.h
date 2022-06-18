@@ -390,8 +390,10 @@ bool panic(Game* game, i32 me_id) {
 }
 
 bool cat_balou(Game* game, i32 me_id) {
-    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
-    if (enemy_id < 0) return FAIL;
+    Player* player = game->players->data[me_id];
+    i32     enemy_id = player->choose_enemy(game, player->id);
+
+    if (enemy_id < 0 || game->players->get(game->players, enemy_id)->hands->size == 0) return FAIL;
 
     discard_from_enemy(game, me_id, enemy_id);
     return SUCCESS;
