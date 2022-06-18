@@ -302,6 +302,7 @@ void game_next(Game *game) {
     i32 discard_cnt = 0;
 
     while (1) {
+        respond_chat(find_client_by_id(player->id), "Select a card to dscard");
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
         DEBUG_PRINT("Discard: %s\n", select_card == NULL ? "NULL" : card_name[select_card->type]);
@@ -311,12 +312,20 @@ void game_next(Game *game) {
         if (select_card != NULL) {
             discard_cnt++;
             game->discard->push(game->discard, select_card);
+            respond_all_chat(
+                $(String.format("%s discard %s", player->name, card_name[select_card->type])));
             if (player->character->type == Sid_Ketchum && discard_cnt % 2 == 0) {
-                if (player->hp < player->character->health + (player->role->type == Sheriff))
+                if (player->hp < player->character->health + (player->role->type == Sheriff)) {
                     player->hp++;
+                    respond_all_chat($(String.format(
+                        "%s: Use Sid Ketchum's skill! I discard two cards to heal myself",
+                        player->name)));
+                }
             }
         }
+        respond_all(game, "status");
     }
+    respond_all(game, "status");
     respond_all_chat($(String.format("%s round end", player->name)));
 #if (DEBUG)
     fprintf(fp, "after discard card:\n");
