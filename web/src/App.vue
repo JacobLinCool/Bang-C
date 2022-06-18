@@ -76,4 +76,12 @@ body,
 .logs-leave-active {
     position: absolute;
 }
+
+* {
+    position: relative;
+}
+
+div::-webkit-scrollbar {
+    display: none;
+}
 </style>
