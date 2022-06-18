@@ -323,6 +323,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
     // {"card" : int}
     if (strcmp("select_card", action) == 0) {
+        Console.log("server receive: select_card");
         if (!game_started) {
             respond_error(sender, "Game has not started");
             return;
@@ -337,13 +338,14 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             respond_error(sender, "Card offset should be a number");
             return;
         }
-
+        Console.green("-----------ok---------");
         int number = (int)cJSON_GetNumberValue(card);
         if (number >= 0) {
-            share_offset = number ^ key;
+            share_offset = number;
         } else {
             share_offset = number;
         }
+        Console.green("-----------ok1---------");
         sem_post(&waiting_for_input);
     }
 

@@ -18,8 +18,7 @@ cJSON *card_jsonify(Card *card, bool itself) {
     if (card == NULL) return NULL;
     cJSON *root = cJSON_CreateObject();
 
-    cJSON *offset =
-        cJSON_CreateNumber(((u64)card - card_base) ^ key);  // this may leak some informations
+    cJSON *offset = cJSON_CreateNumber(((u64)card - card_base));  // this may leak some informations
     cJSON *type = cJSON_CreateNumber(itself ? card->type : 0);
     cJSON *priority = cJSON_CreateNumber(itself ? card->priority : 0);
 
