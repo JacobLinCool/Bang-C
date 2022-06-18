@@ -36,6 +36,7 @@ cJSON *player_jsonify(Player *player, bool itself) {
 
     cJSON *name = cJSON_CreateString(player->name);
     cJSON *id = cJSON_CreateNumber(player->id);
+    cJSON *dead = cJSON_CreateNumber(player->dead);
     cJSON *hp = cJSON_CreateNumber(player->hp);
     cJSON *role = cJSON_CreateNumber(
         (itself || player->role->type == Sheriff || player->dead) ? player->role->type : 0);
@@ -50,6 +51,7 @@ cJSON *player_jsonify(Player *player, bool itself) {
 
     cJSON_AddItemToObject(root, "name", name);
     cJSON_AddItemToObject(root, "id", id);
+    cJSON_AddItemToObject(root, "dead", dead);
     cJSON_AddItemToObject(root, "hp", hp);
     cJSON_AddItemToObject(root, "role", role);
     cJSON_AddItemToObject(root, "character", character);
@@ -186,7 +188,7 @@ void respond_client_with_cards(Game *game, char *type, i32 player_id, Cards *car
 
 void respond_client_with_target(Game *game, char *type, i32 player_id, i32 target_id) {
     cJSON *base = cJSON_CreateObject();
-    cJSON_AddItemToObject(base, "target", player_jsonify(game->players->data[target_id], true));
+    cJSON_AddItemToObject(base, "target", player_jsonify(game->players->data[target_id], false));
     cJSON_AddItemToObject(base, "game", game_jsonify(game, player_id));
     Client *client = find_client_by_id(player_id);
     if (client != NULL) {
