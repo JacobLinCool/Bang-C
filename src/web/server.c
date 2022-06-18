@@ -5,10 +5,14 @@
 
 bool  game_started = false;
 Game *game;
+sem_t gm_created;
 
 pthread_t gm, sv;
 
-void *gm_thread_start() { game_loop(game); }
+void *gm_thread_start() {
+    sem_post(&gm_created);
+    game_loop(game);
+}
 
 void start_server(int port, lws_callback_function callback) {
     struct lws_protocols protocols[] = {{.id = 2048,
@@ -237,8 +241,8 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             return;
         }
 
-        game_started = true;
         game = new_game();
+        game_started = true;
 
         for (size_t i = 0; i < clients->size; i++) {
             if (clients->get(clients, i)->named == false) {
@@ -514,6 +518,9 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
                 lws_close_free_wsi(instance, LWS_CLOSE_STATUS_NORMAL, "Timeout");
 
                 Console.yellow("[%p] Connection timed out", instance);
+            } else {
+                Console.log("[%p] %p %p %" PRIu64 " %d", instance, client, game,
+                            game->turn % game->players->size, client->player_id);
             }
 
             break;
@@ -534,11 +541,34 @@ int main(void) {
     srand(seed);
     clients = create_Clients();
 
+    sem_init(&gm_created, 0, 0);
     sem_init(&waiting_for_input, 0, 0);
     pthread_create(&sv, NULL, server_thread_start, NULL);
 
-    pthread_join(sv, NULL);
-    pthread_join(gm, NULL);
+    while (true) {
+        sem_wait(&gm_created);
+        pthread_join(gm, NULL);
+
+        free(game);
+        game = NULL;
+        game_started = false;
+
+        while (clients->size) {
+            Client *client = clients->pop(clients);
+            lws_close_free_wsi(client->instance, LWS_CLOSE_STATUS_NORMAL, "Game Over");
+            client->msg_queue->free(client->msg_queue);
+            free(client);
+        }
+
+        char  *line = NULL;
+        size_t len = 0;
+        getline(&line, &len, stdin);
+        if (line != NULL) {
+            if (strncmp(line, "exit", 4) == 0) {
+                break;
+            }
+        }
+    }
 
     return EXIT_SUCCESS;
 }

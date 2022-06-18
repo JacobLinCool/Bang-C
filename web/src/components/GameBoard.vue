@@ -21,6 +21,10 @@ const others = computed(() => {
     return players;
 });
 
+const discard_top = computed(() =>
+    game.discards ? game.discards[game.discards.length - 1] : null,
+);
+
 const translates = [
     [{ left: "37.5%", top: "0%" }],
     [
@@ -86,8 +90,8 @@ const translates = [
 
         <Card
             class="absolute w-20 right-[35%] top-[32%]"
-            v-if="game.discards?.length"
-            :card="game.discards[game.discards.length - 1]"
+            v-if="discard_top"
+            :card="discard_top"
         ></Card>
     </div>
 </template>
