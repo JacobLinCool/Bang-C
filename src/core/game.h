@@ -196,7 +196,6 @@ void game_next(Game *game) {
     ai_bang_use = 0;
     while (true) {
         DEBUG_PRINT("player %d, choose your card\n", player->id);
-
         ai_request_setting(AI_PLAY, 0);
         Card *select_card = player->request(game, player->id);
 
@@ -255,7 +254,7 @@ void game_next(Game *game) {
         print_status(game, fp);
         fflush(fp);
         printf("Enter any key to continue.(%d)\n", debug_num);
-        if (debug_num++ >= debug_stop) getchar();
+        // if (debug_num++ >= debug_stop) getchar();
 #endif
     }
     //  3.Discard excess cards
@@ -273,7 +272,7 @@ void game_next(Game *game) {
     print_status(game, fp);
     fflush(fp);
     printf("Enter any key to continue.(%d)\n", debug_num);
-    if (debug_num++ >= debug_stop) getchar();
+    // if (debug_num++ >= debug_stop) getchar();
 #endif
 }
 

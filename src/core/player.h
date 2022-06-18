@@ -148,7 +148,6 @@ Card* real_player_request(Game* game, i32 player_id) {
 
 Card* computer_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
-
     // i32     random = rand() % player->hands->size;
     if (ai_request_type == AI_SPECIFY) {
         DEBUG_PRINT("Specify to player %d: [%s]\n", player_id, card_name[ai_request_card]);
