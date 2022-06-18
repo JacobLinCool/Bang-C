@@ -256,7 +256,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
         game->players->shuffle(game->players);
 
-        game->start(game);
+        pthread_create(&gm, NULL, gm_thread_start, NULL);
 
         for (size_t i = 0; i < game->players->size; i++) {
             Player *player = game->players->get(game->players, i);

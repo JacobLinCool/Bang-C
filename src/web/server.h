@@ -79,6 +79,7 @@ Client *find_client(struct lws *instance) {
 bool is_host(Client *client) { return clients->size > 0 && client == clients->get(clients, 0); }
 
 void respond(Client *client, const char *type, cJSON *payload) {
+    if (client == NULL) return;
     cJSON *res = cJSON_CreateObject();
     cJSON_AddItemToObject(res, "type", cJSON_CreateStringReference(type));
     cJSON_AddItemReferenceToObject(res, "payload", payload);
@@ -92,6 +93,7 @@ void respond(Client *client, const char *type, cJSON *payload) {
 }
 
 void respond_error(Client *client, const char *message) {
+    if (client == NULL) return;
     cJSON *payload = cJSON_CreateObject();
     cJSON_AddItemToObject(payload, "message", cJSON_CreateStringReference(message));
     respond(client, "error", payload);
@@ -101,6 +103,7 @@ void respond_error(Client *client, const char *message) {
 }
 
 void respond_chat(Client *client, const char *message) {
+    if (client == NULL) return;
     cJSON *payload = cJSON_CreateObject();
     cJSON_AddItemToObject(payload, "message", cJSON_CreateStringReference(message));
     respond(client, "chat", payload);
