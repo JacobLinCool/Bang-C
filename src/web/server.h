@@ -79,6 +79,7 @@ Client *find_client(struct lws *instance) {
 bool is_host(Client *client) { return clients->size > 0 && client == clients->get(clients, 0); }
 
 void respond(Client *client, const char *type, cJSON *payload) {
+    if (!client) return;
     cJSON *res = cJSON_CreateObject();
     cJSON_AddItemToObject(res, "type", cJSON_CreateStringReference(type));
     cJSON_AddItemReferenceToObject(res, "payload", payload);

@@ -90,7 +90,6 @@ void game_start(Game *game) {
     for (int i = 0; i < game->players->size; i++) {
         ai_initialize(game, i);
     }
-    game_loop(game);
 }
 
 void game_next(Game *game) {
@@ -129,20 +128,13 @@ void game_next(Game *game) {
 
     // 1.Draw two cards
     DEBUG_PRINT("1.Draw two cards\n");
-
     if (player->character->type == Black_Jack) {
         player_draw_deck(game, player->id, 1);
         Card *second_card = get_deck_top(game);
         player->hands->push(player->hands, second_card);
 
         // P2S Black_Jack show second card
-        for (int i = 0; i < clients->size; i++) {
-            cJSON *base = cJSON_CreateObject();
-            cJSON_AddItemToObject(base, "game",
-                                  game_jsonify(game, clients->get(clients, i)->player_id));
-            cJSON_AddItemToObject(base, "show_card", card_jsonlfy(second_card, true));
-            respond(clients->get(clients, i), "show_second_card", base);
-        }
+        // respond_all_with_card(game, "show card", second_card);
 
         if (second_card->priority / 100 == 2 || second_card->priority / 100 == 3) {
             player_draw_deck(game, player->id, 1);
@@ -179,7 +171,6 @@ void game_next(Game *game) {
     } else {
         player_draw_deck(game, player->id, 2);
     }
-
     // P2S game status
     respond_all(game, "status");
 
@@ -206,8 +197,6 @@ void game_next(Game *game) {
             if (bang_used && player->character->type != Willy_the_Kid) {
                 player->hands->push(player->hands, select_card);
 
-                // player use bang again
-                respond_client(game, "player_use_bang_again", player->id);
                 continue;
             } else {
                 bang_used++;
@@ -223,16 +212,6 @@ void game_next(Game *game) {
                 player->hands->push(player->hands, select_card);
 
                 // P2S player error use
-                respond_client(game, "player_error_use", player->id);
-            }
-
-            // P2S equip weapon
-            for (int i = 0; i < clients->size; i++) {
-                cJSON *base = cJSON_CreateObject();
-                cJSON_AddItemToObject(base, "game",
-                                      game_jsonify(game, clients->get(clients, i)->player_id));
-                cJSON_AddItemToObject(base, "game", card_jsonlfy(select_card, true));
-                respond(clients->get(clients, i), "status", base);
             }
             continue;
         }
@@ -251,7 +230,6 @@ void game_next(Game *game) {
             }
             player->hands->push(player->hands, select_card);
             // P2S player error use
-            respond_client(game, "player_error_use", player->id);
         }
         DEBUG_PRINT("Using Done\n");
         // 3.check if someone died(only brown card used)
@@ -271,24 +249,12 @@ void game_next(Game *game) {
     //  3.Discard excess cards
     DEBUG_PRINT("Now: Discard cards.\n");
 
-    // P2S player start discard card
-    respond_client(game, "player_start_discard_card", player->id);
-
     while (player->hands->size > player->hp) {
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
         DEBUG_PRINT("Discard: %s\n", select_card == NULL ? "NULL" : card_name[select_card->type]);
 
         if (select_card != NULL) game->discard->push(game->discard, select_card);
-
-        // P2S discard card
-        for (int i = 0; i < clients->size; i++) {
-            cJSON *base = cJSON_CreateObject();
-            cJSON_AddItemToObject(base, "game",
-                                  game_jsonify(game, clients->get(clients, i)->player_id));
-            cJSON_AddItemToObject(base, "discard_card", card_jsonlfy(select_card, true));
-            respond(clients->get(clients, i), "discard_card", base);
-        }
     }
 #if (DEBUG)
     fprintf(fp, "after discard card:\n");

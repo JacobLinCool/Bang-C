@@ -5,7 +5,7 @@ third_dir = $(src_dir)/third
 
 test_files = $(wildcard $(test_dir)/**/*.c)
 
-all: build
+all: server
 
 server: force
 	@$(cc) -pthread -o server $(src_dir)/web/server.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a -pthread
