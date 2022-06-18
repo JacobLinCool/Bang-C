@@ -190,7 +190,7 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     Player* target = game->players->get(game->players, target_id);
     Client* client = find_client_by_id(player_id);
 
-    respond_client(game, "take_card", player_id);
+    respond_client_with_target(game, "take_card", player_id, target_id);
     lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
     waiting_for_player = player_id;
 
