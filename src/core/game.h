@@ -59,6 +59,7 @@ void game_loop(Game *game) {
             if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0)
                 died_player(game, i, i);
         }
+        game->turn++;
     }
     game_win(game);
     pthread_exit(NULL);
@@ -109,7 +110,6 @@ void game_next(Game *game) {
         game->turn++;
         player = game->players->data[(game->turn) % game->players->size];
     }
-    game->turn++;
 
     DEBUG_PRINT("It's player %d turn!!!\n", player->id);
     // P2S someone round start
