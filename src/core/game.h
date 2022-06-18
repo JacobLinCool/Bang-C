@@ -90,7 +90,7 @@ void game_start(Game *game) {
     for (int i = 0; i < game->players->size; i++) {
         ai_initialize(game, i);
     }
-    game_loop(game);
+    // game_loop(game);
 }
 
 void game_next(Game *game) {
@@ -193,7 +193,6 @@ void game_next(Game *game) {
     ai_bang_use = 0;
     while (true) {
         DEBUG_PRINT("player %d, choose your card\n", player->id);
-
         ai_request_setting(AI_PLAY, 0);
         Card *select_card = player->request(game, player->id);
 
@@ -265,12 +264,11 @@ void game_next(Game *game) {
         print_status(game, fp);
         fflush(fp);
         printf("Enter any key to continue.(%d)\n", debug_num);
-        if (debug_num++ >= debug_stop) getchar();
+        // if (debug_num++ >= debug_stop) getchar();
 #endif
     }
     //  3.Discard excess cards
     DEBUG_PRINT("Now: Discard cards.\n");
-
     // P2S player start discard card
     respond_client(game, "player_start_discard_card", player->id);
 
@@ -282,6 +280,7 @@ void game_next(Game *game) {
         if (select_card != NULL) game->discard->push(game->discard, select_card);
 
         // P2S discard card
+        Console.red("[debug] checkpoint: A\n");
         for (int i = 0; i < clients->size; i++) {
             cJSON *base = cJSON_CreateObject();
             cJSON_AddItemToObject(base, "game",
@@ -295,7 +294,7 @@ void game_next(Game *game) {
     print_status(game, fp);
     fflush(fp);
     printf("Enter any key to continue.(%d)\n", debug_num);
-    if (debug_num++ >= debug_stop) getchar();
+    // if (debug_num++ >= debug_stop) getchar();
 #endif
 }
 
