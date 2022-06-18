@@ -299,7 +299,7 @@ void game_win(Game *game) {
         }
     }
     if (live_player[Sheriff] == 0) {
-        if (live_player[Criminal] == 0) {
+        if (live_player[Criminal] == 0 && live_player[Deputy] == 0) {
             Console.green("Traitor win!");
             respond_all_end(game, "end", Traitor);
         } else {

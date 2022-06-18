@@ -27,8 +27,10 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
     i32 enemy_id;
     i32 player_size = game->players->size;
 
+    Client* client = find_client_by_id(me_id);
+
     respond_client(game, "choose_enemy", me_id);
-    lws_set_timer_usecs(find_client_by_id(me_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
+    lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
 
     sem_wait(&waiting_for_input);
     enemy_id = share_num;
@@ -38,7 +40,7 @@ i32 player_choose_enemy(Game* game, i32 me_id) {
     if ((enemy_id < 0 || enemy_id >= player_size) || get_player_hp(game, enemy_id) <= 0 ||
         enemy_id == me_id) {
         enemy_id = -2;
-        respond_error(find_client_by_id(me_id), "You can't choose this player!");
+        respond_error(client, "You can't choose this player!");
     }
 
     // determine AI hate value
@@ -64,9 +66,10 @@ i32 computer_choose_enemy(Game* game, i32 me_id) {
 
 bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     Player* player = game->players->get(game->players, player_id);
+    Client* client = find_client_by_id(player_id);
 
     respond_client_with_cards(game, "select_card", player_id, cards);
-    lws_set_timer_usecs(find_client_by_id(player_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
+    lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
 
     sem_wait(&waiting_for_input);
     i64 offset = (i64)share_offset;
@@ -74,7 +77,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     if (offset == -2) {
         return false;
     } else if (offset == -1) {
-        respond_error(find_client_by_id(player_id), "You should select a card!");
+        respond_error(client, "You should select a card!");
         return false;
     }
 
@@ -87,7 +90,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
     }
 
     if (input < 0 || input >= cards->size) {
-        respond_error(find_client_by_id(player_id), "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
+        respond_error(client, "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
         return false;
     }
 
@@ -112,9 +115,10 @@ Card* computer_player_request(Game* game, i32 player_id);
 
 Card* real_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
+    Client* client = find_client_by_id(player_id);
 
     respond_client(game, "request_card", player_id);
-    lws_set_timer_usecs(find_client_by_id(player_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
+    lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
 
     sem_wait(&waiting_for_input);
     i64 offset = (i64)share_offset;
@@ -123,7 +127,7 @@ Card* real_player_request(Game* game, i32 player_id) {
         return computer_player_request(game, player_id);
     } else if (offset == -1) {
         respond_chat(
-            find_client_by_id(player_id),
+            client,
             $(String.format("It's time to discarding your cards, you can keep up to %d card%s!",
                             player->hp, player->hp > 1 ? "s" : "")));
         return NULL;
@@ -137,7 +141,7 @@ Card* real_player_request(Game* game, i32 player_id) {
     }
 
     if (input < 1 || input > player->hands->size) {
-        respond_error(find_client_by_id(player_id), "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
+        respond_error(client, "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
         return NULL;
     }
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
@@ -176,9 +180,10 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id);
 Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     Player* player = game->players->get(game->players, player_id);
     Player* target = game->players->get(game->players, target_id);
+    Client* client = find_client_by_id(player_id);
 
     respond_client(game, "take_card", player_id);
-    lws_set_timer_usecs(find_client_by_id(player_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
+    lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
 
     sem_wait(&waiting_for_input);
     i64 offset = (i64)share_offset;
@@ -186,7 +191,7 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
     if (offset == -2) {
         return computer_player_take(game, player_id, target_id);
     } else if (offset == -1) {
-        respond_error(find_client_by_id(player_id), "You should choose a card!");
+        respond_error(client, "You should choose a card!");
         return NULL;
     }
 
@@ -230,7 +235,7 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
             return x;
         }
     }
-    respond_error(find_client_by_id(player_id), "You can't use this card!");
+    respond_error(client, "You can't use this card!");
     return NULL;
 }
 
@@ -264,9 +269,10 @@ bool computer_player_ramirez(Game* game, i32 player_id);
 
 bool real_player_ramirez(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
+    Client* client = find_client_by_id(player_id);
 
     respond_client(game, "ramirez", player_id);
-    lws_set_timer_usecs(find_client_by_id(player_id)->instance, TIME_OUT_SECONDS * LWS_US_PER_SEC);
+    lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
 
     sem_wait(&waiting_for_input);
     i32 input = share_num;
@@ -275,13 +281,12 @@ bool real_player_ramirez(Game* game, i32 player_id) {
         return computer_player_ramirez(game, player_id);
     }
     if (game->discard->size == 0) {
-        respond_error(find_client_by_id(player_id),
-                      "Sadly, there are no any discarded card to take");
+        respond_error(client, "Sadly, there are no any discarded card to take");
         return false;
     }
 
     if (input == 1) {
-        respond_all_chat($(String.format("%s: Use Kit Carlson skill", player->id)));
+        respond_all_chat($(String.format("%s used Pedro Ramirez's skill", player->name)));
         player->hands->push(player->hands, game->discard->pop(game->discard));
         return true;
     } else {
@@ -304,7 +309,7 @@ bool computer_player_ramirez(Game* game, i32 player_id) {
     i32 choose = ai_request(game, player_id, cards);
     if (choose != -1) {
         DEBUG_PRINT("Choose from discard\n");
-        respond_all_chat($(String.format("%s: Use Kit Carlson skill", player->id)));
+        respond_all_chat($(String.format("%s used Pedro Ramirez's skill", player->name)));
         player->hands->push(player->hands, game->discard->pop(game->discard));
         return true;
     } else {
