@@ -123,30 +123,32 @@ Card* real_player_request(Game* game, i32 player_id) {
     Player* player = game->players->get(game->players, player_id);
     Client* client = find_client_by_id(player_id);
 
-    respond_client(game, "request_card", player_id);
-    lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
-    waiting_for_player = player_id;
-
-    sem_wait(&waiting_for_input);
-    waiting_for_player = -1;
-    i64 offset = (i64)share_offset;
-
-    if (offset == -2) {
-        return computer_player_request(game, player_id);
-    } else if (offset == -1) {
-        return NULL;
-    }
     i32 input = -1;
-    for (int i = 0; i < player->hands->size; i++) {
-        if (player->hands->data[i] == (Card*)(card_base + offset)) {
-            input = i;
-            break;
-        }
-    }
+    while (1) {
+        respond_client(game, "request_card", player_id);
+        lws_set_timer_usecs(client->instance, TIME_OUT_SECONDS * LWS_USEC_PER_SEC);
+        waiting_for_player = player_id;
 
-    if (input < 1 || input > player->hands->size) {
-        respond_error(client, "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
-        return NULL;
+        sem_wait(&waiting_for_input);
+        waiting_for_player = -1;
+        i64 offset = (i64)share_offset;
+
+        if (offset == -2) {
+            return computer_player_request(game, player_id);
+        } else if (offset == -1) {
+            return NULL;
+        }
+
+        for (int i = 0; i < player->hands->size; i++) {
+            if (player->hands->data[i] == (Card*)(card_base + offset)) {
+                input = i;
+                break;
+            }
+        }
+
+        if (input < 0 || input >= player->hands->size) {
+            respond_error(client, "IF YOU DO THIS AGAIN, I WILL BAN YOU!!! 😡");
+        }
     }
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
