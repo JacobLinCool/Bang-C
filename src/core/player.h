@@ -182,8 +182,7 @@ Card* computer_player_request(Game* game, i32 player_id) {
     }
     i32 choose = 0;
     if (ai_respond_error >= 5) {
-        if (player->hands->size == 0) return NULL;
-        choose = rand() % player->hands->size;
+        return NULL;
     } else {
         choose = ai_request(game, player_id, player->hands);
     }
