@@ -214,7 +214,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             Card* card = get_deck_top(game);
             game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
         }
-        if (enemy_type == El_Gringo && me_id != enemy_id) {
+        if (enemy_type == El_Gringo && me_id != enemy_id && me_id != -1) {
             respond_all_chat($(
                 String.format("%s: Use El Gringo's skill! I can get one card from attacking people",
                               game->players->data[enemy_id]->name)));
