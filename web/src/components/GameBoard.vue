@@ -15,9 +15,14 @@ import { computed } from "vue";
 import Card from "./Card.vue";
 import Fade from "./Fade.vue";
 
-const my_idx = computed(() =>
-    game.players ? game.players.findIndex((p) => p.name === name.value) : -1,
-);
+const is_player = computed(() => game.players && !!game.players.find((p) => p.name === name.value));
+const my_idx = computed(() => {
+    return is_player.value
+        ? game.players
+            ? game.players.findIndex((p) => p.name === name.value)
+            : 0
+        : 0;
+});
 
 const others = computed(() => {
     if (!game.players) {
