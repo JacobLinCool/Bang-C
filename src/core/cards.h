@@ -68,6 +68,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             return;
         }
     }
+    if (enemy->hp > 0) return;
     enemy->dead = true;
     respond_all(game, "status");
     if (me_id != -1) {
