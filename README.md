@@ -50,4 +50,10 @@ Change directory to `web`
 
 - [Bang! (card game) - Wikipedia](https://en.wikipedia.org/wiki/Bang!_(card_game))
 
+## Source
+
+### Cards
+
+- [Card List - Bang!](https://bang.dvgiochi.com/cardslist.php?id=1#q_result)
+
 We Love GitHub!
