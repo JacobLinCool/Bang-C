@@ -338,6 +338,7 @@ bool computer_player_ramirez(Game* game, i32 player_id) {
     respond_all(game, "status");
     ai_request_setting(AI_PLAY, 0);
     i32 choose = ai_request(game, player_id, cards);
+    cards->free(cards);
     if (choose != -1) {
         DEBUG_PRINT("Choose from discard\n");
         respond_all_chat($(String.format("%s used Pedro Ramirez's skill", player->name)));
