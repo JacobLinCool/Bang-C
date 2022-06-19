@@ -496,7 +496,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             }
             cJSON_Delete(list);
 
-            if (game != NULL && waiting_for_player != -1) {
+            if (game != NULL && client->player_id != -1 && waiting_for_player != -1) {
                 Console.info("[%p] %s leave the game, computer is now taking over", instance,
                              client->name);
                 Player *player = game->players->get(game->players, client->player_id);
