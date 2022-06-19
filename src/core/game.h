@@ -248,7 +248,7 @@ void game_next(Game *game) {
             // only one BANG! card may be played per turn
             if (bang_used && player->character->type != Willy_the_Kid) {
                 player->hands->push(player->hands, select_card);
-                respond_error(find_client_by_id(player->id), "You can't use Bang again");
+                respond_error(find_client_by_id(player->id), "You can't use BANG twice in a round");
                 respond_all(game, "status");
                 continue;
             } else {
@@ -273,7 +273,7 @@ void game_next(Game *game) {
         if (select_card->use(game, player->id) == SUCCESS) {
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
                 respond_all_chat($(String.format(
-                    "%s: Use Calamity Janet's skill! My Missed can be used as Bang!")));
+                    "%s: Use Calamity Janet's skill! My MISSED can be used as BANG!")));
                 bang(game, player->id);
                 // respond_all(game, "status");
             }
@@ -315,7 +315,7 @@ void game_next(Game *game) {
     i32 discard_cnt = 0;
 
     while (1) {
-        respond_chat(find_client_by_id(player->id), "Select a card to dscard");
+        respond_chat(find_client_by_id(player->id), "Select a card to discard");
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
         // respond_all(game, "status");
@@ -412,25 +412,25 @@ bool equip_weapon(Game *game, i32 player_id, Card *card) {
         if (card->type == Barrel && player->barrel == NULL) {
             player->barrel = card;
             respond_all(game, "status");
-            respond_all_chat($(String.format("%s: I equip Barrel!", player->name)));
+            respond_all_chat($(String.format("%s: I equip BARREL!", player->name)));
             return SUCCESS;
         }
         if (card->type == Mustang && player->mustang == NULL) {
             player->mustang = card;
             respond_all(game, "status");
-            respond_all_chat($(String.format("%s: I equip Mustang!", player->name)));
+            respond_all_chat($(String.format("%s: I equip MUSTANG!", player->name)));
             return SUCCESS;
         }
         if (card->type == Scope && player->scope == NULL) {
             player->scope = card;
             respond_all(game, "status");
-            respond_all_chat($(String.format("%s: I equip Scope!", player->name)));
+            respond_all_chat($(String.format("%s: I equip SCOPE!", player->name)));
             return SUCCESS;
         }
         if (card->type == Dynamite && player->dynamite == NULL) {
             player->dynamite = card;
             respond_all(game, "status");
-            respond_all_chat($(String.format("%s: I equip Dynamite!", player->name)));
+            respond_all_chat($(String.format("%s: I equip DYNAMITE!", player->name)));
             return SUCCESS;
         }
         return FAIL;
@@ -439,16 +439,16 @@ bool equip_weapon(Game *game, i32 player_id, Card *card) {
         Player *enemy = game->players->data[enemy_id];
         if (enemy_id < 0) return FAIL;
         if (enemy->role->type == Sheriff) {
-            respond_error(find_client_by_id(enemy_id), "You can't use jail on Sheriff");
+            respond_error(find_client_by_id(enemy_id), "You can't use JAIL on Sheriff");
             return FAIL;
         }
         if (enemy->jail != NULL) {
-            respond_error(find_client_by_id(enemy_id), "He has Jail already");
+            respond_error(find_client_by_id(enemy_id), "He has JAIL already");
             return FAIL;
         }
         enemy->jail = card;
         respond_all(game, "status");
-        respond_all_chat($(String.format("%s: I use Jail to %s!", player->name, enemy->name)));
+        respond_all_chat($(String.format("%s: I use JAIL to %s!", player->name, enemy->name)));
         return SUCCESS;
     }
     if (player->weapon != NULL) {
@@ -458,7 +458,7 @@ bool equip_weapon(Game *game, i32 player_id, Card *card) {
     player->weapon = card;
     if (card->type == Volcanic) {
         respond_all_chat(
-            $(String.format("%s: I equip Volcanic, now I can use Bang infinitly!", player->name)));
+            $(String.format("%s: I equip VOLCANIC, now I can use BANG infinitly!", player->name)));
     } else {
         respond_all_chat($(String.format("%s: I equip %s, my view become %d!", player->name,
                                          card_name[card->type],

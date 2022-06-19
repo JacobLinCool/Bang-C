@@ -28,15 +28,15 @@ char* character_name[] = {"",
                           "Vulture_Sam",
                           "Willy_the_Kid"};
 
-char* card_name[] = {"Hidden",    "Bang",         "Missed",     "Gatling",     "Indians",
-                     "Panic",     "Cat Balou",    "Stagecoach", "Wells Fargo", "General Store",
-                     "Beer",      "Saloon",       "Duel",       "Barrel",      "Scope",
-                     "Mustang",   "Jail",         "Dynamite",   "Volcanic",    "Schofield",
-                     "Remington", "Rev Carabine", "Winchester"
+char* card_name[] = {"Hidden",    "BANG",         "MISSED",     "GATLING",     "INDIANS",
+                     "PANIC",     "CAT BALOU",    "STAGECOACH", "WELLS FORGO", "GENERAL STORE",
+                     "BEER",      "SALOON",       "DUEL",       "BARREL",      "SCOPE",
+                     "MUSTANG",   "JAIL",         "DYNAMITE",   "VOLVANIC",    "SCHOFIELD",
+                     "REMINGTON", "REV CARABINE", "WINCHESTER"
 
 };
 
-char* suit[] = {"", "spade", "heart", "diamond", "club"};
+char* suit[] = {"", "Spade", "Heart", "Diamond", "Club"};
 
 // number of {"", "Sheriff", "Deputy", "Criminal", "Traitor"} in 4~7 players
 int role_in_players[4][5] = {{0, 1, 0, 2, 1}, {0, 1, 1, 2, 1}, {0, 1, 1, 3, 1}, {0, 1, 2, 3, 1}};
