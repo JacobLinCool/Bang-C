@@ -152,6 +152,11 @@ ws.addEventListener("message", (event) => {
             show_card({ x: -1, type: CardType.Duel, priority: 0 });
             break;
 
+        case "show general_store":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.General_Store, priority: 0 });
+            break;
+
         case "ramirez":
             Object.assign(game, message.payload.game);
             logs.push({ type: "chat", message: "Do you want to use Ramirez's skill?" });
