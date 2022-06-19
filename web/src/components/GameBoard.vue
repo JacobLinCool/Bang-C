@@ -118,7 +118,12 @@ function skip_select_card() {
         ></Card>
 
         <Fade>
-            <Card class="absolute w-24 right-[45%] top-[30%]" v-if="showing" :card="showing"></Card>
+            <Card
+                class="absolute w-24 right-[45%] top-[30%]"
+                v-if="showing"
+                :card="showing"
+                :key="showing.type"
+            ></Card>
         </Fade>
 
         <div
