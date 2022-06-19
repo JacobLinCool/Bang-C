@@ -45,10 +45,6 @@ void game_join(Game *game, const char *name, bool is_computer) {
         player->ramirez = real_player_ramirez;
     }
     game->players->push(game->players, player);
-    Event.emit(EVT_GAME_PLAYER_JOIN, &(struct {
-                   Game   *game;
-                   Player *player;
-               }){game, player});
 }
 
 void game_loop(Game *game) {
@@ -93,6 +89,7 @@ void game_start(Game *game) {
     for (int i = 0; i < game->players->size; i++) {
         ai_initialize(game, i);
     }
+    Console.info("Game Initialized.");
 }
 
 void game_next(Game *game) {
@@ -398,7 +395,6 @@ Game *new_game() {
     game->next = game_next;
     game->join = game_join;
 
-    Event.emit(EVT_GAME_LOAD, game);
     return game;
 }
 

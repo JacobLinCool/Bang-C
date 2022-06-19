@@ -4,6 +4,7 @@
 #include "../core/game.h"
 
 bool  game_started = false;
+bool  stop_server = false;
 Game *game;
 sem_t gm_created;
 
@@ -43,7 +44,9 @@ void start_server(int port, lws_callback_function callback) {
     Console.info("WebSocket server started");
 
     while (lws_service(context, 0) >= 0) {
-        // nothing!
+        if (stop_server) {
+            break;
+        }
     }
 
     lws_context_destroy(context);
@@ -385,6 +388,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             client->msg_queue = create_Messages();
             client->named = false;
             strcpy(client->name, $(String.format("Player %s", random_string(8))));
+            client->player_id = -1;
             clients->push(clients, client);
 
             handle_action(client, "join", NULL);
@@ -538,13 +542,15 @@ int main(void) {
     time_t seed = time(NULL);  //= 1655497098;  // time(NULL);1655587684
     Console.info("Random Seed: %ld", seed);
     srand(seed);
-    clients = create_Clients();
 
-    sem_init(&gm_created, 0, 0);
-    sem_init(&waiting_for_input, 0, 0);
+    clients = create_Clients();
     pthread_create(&sv, NULL, server_thread_start, NULL);
 
     while (true) {
+        Console.info("You can type \"exit\" to quit after a round of game finished.");
+        sem_init(&gm_created, 0, 0);
+        sem_init(&waiting_for_input, 0, 0);
+
         key = rand() % 2048;
         Console.log("encrypt key is %u", key);
         sem_wait(&gm_created);
@@ -559,20 +565,28 @@ int main(void) {
             client->msg_queue->free(client->msg_queue);
         }
 
+        Console.info("[$] Freeing %d marked blocks ...", $size());
         $free();
+        Console.info("[$] Done.");
 
         sleep(3);
 
-        char  *line = NULL;
-        size_t len = 0;
-        getline(&line, &len, stdin);
-        if (line != NULL) {
-            if (strncmp(line, "exit", 4) == 0) {
-                exit(EXIT_SUCCESS);
+        fd_set readfds;
+        FD_ZERO(&readfds);
+        FD_SET(STDIN_FILENO, &readfds);
+        struct timeval timeout = {0, 0};
+
+        int sel_rv = select(1, &readfds, NULL, NULL, &timeout);
+        if (sel_rv > 0) {
+            char buffer[1024];
+            scanf("%s", buffer);
+            if (strcmp(buffer, "exit") == 0) {
+                stop_server = true;
+                pthread_join(sv, NULL);
+                break;
             }
         }
-
-        Console.log("Continue...");
+        Console.info("Starting a new round of game.");
     }
 
     return EXIT_SUCCESS;
