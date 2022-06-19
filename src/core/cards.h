@@ -667,7 +667,7 @@ bool general_store(Game* game, i32 me_id) {
     respond_all(game, "status");
 
     for (int i = 0; i < game->players->size; i++) {
-        int id = (me_id + i) % game->players->size;
+        int     id = (me_id + i) % game->players->size;
         Player* player = game->players->get(game->players, id);
         ai_request_setting(AI_FORCE_PLAY, 0);
         respond_all(game, "status");
@@ -751,7 +751,7 @@ Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: re
                 {.type = Beer, .priority = 210, .use = beer},
                 {.type = Beer, .priority = 211, .use = beer},
                 {.type = Saloon, .priority = 205, .use = saloon},
-                {.type = Duel, .priority = 111, .use = duel}, 
+                {.type = Duel, .priority = 111, .use = duel},
                 {.type = Duel, .priority = 312, .use = duel},
                 {.type = Duel, .priority = 408, .use = duel},
                 {.type = Barrel, .priority = 112, .use = barrel},
