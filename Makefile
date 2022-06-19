@@ -18,20 +18,6 @@ server-debug: force
 valgrind: force
 	@valgrind --leak-check=full --show-reachable=yes --track-origins=yes --log-file=valgrind.log ./server
 
-build:
-	@$(cc) -o main $(src_dir)/main.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
-	@echo "Build complete"
-
-debug:
-	@$(cc) -o main $(src_dir)/main.c -D DEBUG $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
-	@echo "Build complete"
-
-mdebug:
-	@$(cc) -o main $(src_dir)/main.c -fsanitize=address -D DEBUG
-	@echo "Build complete"
-
-.PRECIOUS: test_files
-
 test: $(test_files)
 	@echo "Tests Passed"
 
@@ -65,4 +51,5 @@ dockerfile: force
 docker: force
 	docker run --rm -it -p 8080:8080 jacoblincool/bang-dev bash -c '/app/server'
 
-.PHONY: all build clean test force
+.PHONY: all server clean test force
+.PRECIOUS: test_files
