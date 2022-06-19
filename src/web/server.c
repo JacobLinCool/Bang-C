@@ -58,41 +58,46 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
     if (strcmp("join", action) == 0) {
         cJSON *list = create_player_list();
         for (size_t i = 0; i < clients->size; i++) {
-            respond_chat(clients->get(clients, i),
-                         $(String.format("%s join the game.", sender->name)));
+            if (computer_count + clients->size <= 7) {
+                respond_chat(clients->get(clients, i),
+                             $(String.format("%s join the game as a player.", sender->name)));
+            } else {
+                respond_chat(clients->get(clients, i),
+                             $(String.format("%s join the game as a watcher.", sender->name)));
+            }
 
             respond(clients->get(clients, i), "players", list, true);
         }
         cJSON_Delete(list);
-    }
-    if (strcmp("name", action) == 0) {
+
+    } else if (strcmp("name", action) == 0) {
         if (sender->named == true) {
             respond_error(sender, $(String.format("Already have a name: %s", sender->name)));
-            return;
+            goto clean;
         }
 
         if (game_started) {
             respond_chat(sender, "Game already started");
-            return;
+            goto clean;
         }
 
         cJSON *name_token = cJSON_GetObjectItem(payload, "name");
 
         if (name_token == NULL || cJSON_IsString(name_token) == false) {
             respond_error(sender, "Missing name");
-            return;
+            goto clean;
         }
 
         if (strncmp("Computer", name_token->valuestring, 8) == 0) {
             respond_error(sender, "You can't use that name");
-            return;
+            goto clean;
         }
 
         for (int i = 0; i < clients->size; i++) {
             Client *other = clients->data[i];
             if (strcmp(other->name, name_token->valuestring) == 0) {
                 respond_error(sender, "Name already taken");
-                return;
+                goto clean;
             }
         }
 
@@ -111,26 +116,22 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         }
         cJSON_Delete(list);
 
-        // cJSON_Delete(payload);
-        return;
-    }
-
-    if (strcmp("kick", action) == 0) {
+    } else if (strcmp("kick", action) == 0) {
         if (is_host(sender) == false) {
             respond_error(sender, "Only the host can kick players");
-            return;
+            goto clean;
         }
 
         if (game_started) {
             respond_chat(sender, "Game already started");
-            return;
+            goto clean;
         }
 
         cJSON *name_token = cJSON_GetObjectItem(payload, "name");
 
         if (name_token == NULL || cJSON_IsString(name_token) == false) {
             respond_error(sender, "Missing name");
-            return;
+            goto clean;
         }
 
         bool    is_computer = false;
@@ -138,7 +139,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
         char *name = name_token->valuestring;
 
-        if (strncmp("Computer", name, 8) == 0) {
+        if (computer_count > 0 && strncmp("Computer", name, 8) == 0) {
             computer_count--;
             is_computer = true;
         }
@@ -154,7 +155,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
         if (target == NULL && is_computer == false) {
             respond_error(sender, $(String.format("No player named %s", name)));
-            return;
+            goto clean;
         }
 
         cJSON *list = create_player_list();
@@ -162,6 +163,12 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             respond_chat(clients->get(clients, i),
                          $(String.format("%s has been kicked by %s",
                                          is_computer ? name : target->name, sender->name)));
+
+            if (clients->size + computer_count >= 7) {
+                respond_chat(clients->get(clients, i),
+                             $(String.format("%s becomes a player.",
+                                             clients->get(clients, 6 - computer_count)->name)));
+            }
 
             respond(clients->get(clients, i), "players", list, true);
         }
@@ -172,16 +179,12 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             lws_close_free_wsi(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked");
         }
 
-        // cJSON_Delete(payload);
-        return;
-    }
-
-    if (strcmp("chat", action) == 0) {
+    } else if (strcmp("chat", action) == 0) {
         cJSON *message_token = cJSON_GetObjectItem(payload, "message");
 
         if (message_token == NULL || cJSON_IsString(message_token) == false) {
             respond_error(sender, "Missing message");
-            return;
+            goto clean;
         }
 
         char *message = message_token->valuestring;
@@ -191,24 +194,20 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
                          $(String.format("%s: %s", sender->name, message)));
         }
 
-        // cJSON_Delete(payload);
-        return;
-    }
-
-    if (strcmp("add_computer", action) == 0) {
+    } else if (strcmp("add_computer", action) == 0) {
         if (is_host(sender) == false) {
             respond_chat(sender, "Only the host can add computer player");
-            return;
+            goto clean;
         }
 
         if (game_started) {
             respond_chat(sender, "Game already started");
-            return;
+            goto clean;
         }
 
         if (clients->size + computer_count >= 7) {
             respond_chat(sender, "Room is full");
-            return;
+            goto clean;
         }
 
         computer_count++;
@@ -222,38 +221,39 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         }
         cJSON_Delete(list);
 
-        // cJSON_Delete(payload);
-        return;
-    }
-
-    if (strcmp("start", action) == 0) {
+    } else if (strcmp("start", action) == 0) {
         if (is_host(sender) == false) {
             respond_error(sender, "Only the host can start the game");
-            return;
+            goto clean;
         }
 
         if (game_started) {
             respond_chat(sender, "Game already started");
-            return;
+            goto clean;
         }
 
         size_t players = computer_count + clients->size;
 
         if (players < 4) {
             respond_error(sender, "Not enough players");
-            return;
+            goto clean;
         }
 
         game = new_game();
         game_started = true;
 
-        for (size_t i = 0; i < clients->size; i++) {
+        size_t real_player_count = clients->size;
+        if (real_player_count + computer_count > 7) {
+            real_player_count = 7 - computer_count;
+        }
+
+        for (size_t i = 0; i < real_player_count; i++) {
             if (clients->get(clients, i)->named == false) {
                 clients->get(clients, i)->named = true;
             }
         }
 
-        for (size_t i = 0; i < clients->size; i++) {
+        for (size_t i = 0; i < real_player_count; i++) {
             game->join(game, clients->get(clients, i)->name, false);
         }
 
@@ -286,58 +286,43 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
         pthread_create(&gm, NULL, gm_thread_start, NULL);
 
-        // cJSON_Delete(payload);
-        return;
     }
-    // after game started
-    /*
-        game.h          |   action          |   payload(type)
-        ------------------------------------------------------
-        choose enemy    |   select_player   |   player(player id)
-        select          |   select_card     |   card(x)
-        request         |   select_card     |   card(x)
-        take            |   select_card     |   card(x)
-        ramirez         |   yes_no          |   y/n(0 or 1)
-
-    */
-
     // {"player" : int}
-    if (strcmp("select_player", action) == 0) {
+    else if (strcmp("select_player", action) == 0) {
         if (!game_started) {
             respond_error(sender, "Game has not started");
-            return;
+            goto clean;
         }
 
         cJSON *player = cJSON_GetObjectItem(payload, "player");
         if (player == NULL) {
             respond_error(sender, "Not choose player");
-            return;
+            goto clean;
         }
         if (cJSON_IsNumber(player) == false) {
             respond_error(sender, "Player id should be a number");
-            return;
+            goto clean;
         }
         int number = (int)cJSON_GetNumberValue(player);
         share_num = number;
         sem_post(&waiting_for_input);
     }
-
     // {"card" : int}
-    if (strcmp("select_card", action) == 0) {
+    else if (strcmp("select_card", action) == 0) {
         Console.log("server receive: select_card");
         if (!game_started) {
             respond_error(sender, "Game has not started");
-            return;
+            goto clean;
         }
 
         cJSON *card = cJSON_GetObjectItem(payload, "card");
         if (card == NULL) {
             respond_error(sender, "No choose card");
-            return;
+            goto clean;
         }
         if (cJSON_IsNumber(card) == false) {
             respond_error(sender, "Card offset should be a number");
-            return;
+            goto clean;
         }
         Console.green("-----------ok---------");
         int number = (int)cJSON_GetNumberValue(card);
@@ -349,28 +334,32 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         Console.green("-----------ok1---------");
         sem_post(&waiting_for_input);
     }
-
     // {"y/n" : int}
-    if (strcmp("yes_no", action) == 0) {
+    else if (strcmp("yes_no", action) == 0) {
         if (!game_started) {
             respond_error(sender, "Game has not started");
-            return;
+            goto clean;
         }
 
         cJSON *yn = cJSON_GetObjectItem(payload, "y/n");
         if (yn == NULL) {
             respond_error(sender, "Not make dicision");
-            return;
+            goto clean;
         }
         if (cJSON_IsNumber(yn) == false) {
             respond_error(sender, "dicision should be a number");
-            return;
+            goto clean;
         }
 
         int number = (int)cJSON_GetNumberValue(yn);
         share_num = number;
         sem_post(&waiting_for_input);
     }
+
+    goto clean;
+
+clean:
+    cJSON_Delete(payload);
 }
 
 static int event_handler(struct lws *instance, enum lws_callback_reasons reason, void *user,
@@ -379,18 +368,12 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 
     switch (reason) {
         case LWS_CALLBACK_ESTABLISHED: {
-            if (clients->size >= 7 - computer_count) {
-                Console.red("[%p] Room is full, Connection refused", instance);
-                lws_close_free_wsi(instance, LWS_CLOSE_STATUS_NORMAL, "Room is full");
-                break;
-            }
-
             Console.yellow("[%p] Connection established", instance);
-            client = calloc(1, sizeof(Client));
+            client = $(calloc(1, sizeof(Client)));
             client->instance = instance;
             client->msg_queue = create_Messages();
             client->named = false;
-            strcpy(client->name, $(String.format("Player %s", random_string(8))));
+            strcpy(client->name, $(String.format("Player %s", $(random_string(8)))));
             client->player_id = -1;
             clients->push(clients, client);
 
@@ -405,7 +388,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
                 break;
             }
 
-            char  *data = strndup((char *)in, len);
+            char  *data = $(strndup((char *)in, len));
             cJSON *json = cJSON_Parse(data);
             if (json == NULL) {
                 Console.red("[%p] Invalid JSON: %s", instance, data);
@@ -433,6 +416,10 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             payload = payload_token;
 
             Console.cyan("[%p] Received action: %s", instance, action);
+
+            cJSON_DetachItemFromObject(json, "payload");
+            cJSON_Delete(json);
+
             handle_action(client, action, payload);
 
             break;
@@ -456,12 +443,13 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
                 break;
             }
 
-            Console.blue("[%p] Sending %s", instance, msg);
+            // Console.blue("[%p] Sending %s", instance, msg);
             size_t         len = strlen(msg);
             unsigned char *payload = $(calloc(len + 1 + LWS_PRE + 4, sizeof(char)));
             memcpy(payload + LWS_PRE, msg, len + 1);
             lws_write(instance, payload + LWS_PRE, len, LWS_WRITE_TEXT);
-            Console.green("[%p] Message sent, queueing: %zu", instance, client->msg_queue->size);
+            Console.green("[%p] Message sent (%zu), queueing: %zu", instance, len,
+                          client->msg_queue->size);
 
             if (client->msg_queue->size > 0) {
                 lws_callback_on_writable(instance);
@@ -559,7 +547,17 @@ int main(void) {
         Console.log("encrypt key is %u", key);
         sem_wait(&gm_created);
         pthread_join(gm, NULL);
+        Console.log("Game Over");
 
+        for (size_t i = 0; i < game->players->size; i++) {
+            Player *player = game->players->get(game->players, i);
+            player->hands->free(player->hands);
+        }
+        game->players->free(game->players);
+        game->characters->free(game->characters);
+        game->roles->free(game->roles);
+        game->deck->free(game->deck);
+        game->discard->free(game->discard);
         game = NULL;
         game_started = false;
 
