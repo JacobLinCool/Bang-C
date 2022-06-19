@@ -112,7 +112,7 @@ function skip_select_card() {
             :card="discard_top"
         ></Card>
 
-        <Card class="absolute w-24 right-[42%] top-[30%]" v-if="showing" :card="showing"></Card>
+        <Card class="absolute w-24 right-[45%] top-[30%]" v-if="showing" :card="showing"></Card>
 
         <div
             v-if="requesting"
