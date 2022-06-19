@@ -119,6 +119,7 @@ void game_next(Game *game) {
         DEBUG_PRINT("judge: dynamite\n");
         respond_all_chat("Will the dynamite explode?");
         dynamite_judge(game, player->id);
+        died_player(game, player->id, player->id);
     }
     if (player->hp <= 0) {
         died_player(game, -1, player->id);
@@ -161,14 +162,14 @@ void game_next(Game *game) {
         for (int i = 0; i < 3; i++) cards->push(cards, get_deck_top(game));
         respond_all(game, "status");
         ai_request_setting(AI_FORCE_PLAY, 0);
-        respond_all(game, "status");
+        // respond_all(game, "status");
         while (player->select(game, player->id, cards) == false)
             ;
 
         // P2S game status
         respond_all(game, "status");
         ai_request_setting(AI_FORCE_PLAY, 0);
-        respond_all(game, "status");
+        // respond_all(game, "status");
         while (player->select(game, player->id, cards) == false)
             ;
 
@@ -265,14 +266,14 @@ void game_next(Game *game) {
             }
             continue;
         }
-        respond_all(game, "status");
-        // (b)brown card
+        // respond_all(game, "status");
+        //  (b)brown card
         if (select_card->use(game, player->id) == SUCCESS) {
             if (select_card->type == Missed && player->character->type == Calamity_Janet) {
                 respond_all_chat($(String.format(
                     "%s: Use Calamity Janet's skill! My Missed can be used as Bang!")));
                 bang(game, player->id);
-                respond_all(game, "status");
+                // respond_all(game, "status");
             }
             game->discard->push(game->discard, select_card);
         } else {
@@ -292,7 +293,7 @@ void game_next(Game *game) {
         for (int i = 0; i < game->players->size; i++) {
             if (!game->players->data[i]->dead && game->players->data[i]->hp <= 0) {
                 died_player(game, player->id, i);
-                respond_all(game, "status");
+                // respond_all(game, "status");
             }
         }
         respond_all(game, "status");
@@ -305,8 +306,8 @@ void game_next(Game *game) {
         // if (debug_num++ >= debug_stop) getchar();
 #endif
     }
-    respond_all(game, "status");
-    //  3.Discard excess cards
+    // respond_all(game, "status");
+    //   3.Discard excess cards
     DEBUG_PRINT("Now: Discard cards.\n");
 
     i32 discard_cnt = 0;
@@ -315,7 +316,7 @@ void game_next(Game *game) {
         respond_chat(find_client_by_id(player->id), "Select a card to dscard");
         ai_request_setting(AI_DISCARD, 0);
         Card *select_card = player->request(game, player->id);
-        respond_all(game, "status");
+        // respond_all(game, "status");
         DEBUG_PRINT("Discard: %s\n", select_card == NULL ? "NULL" : card_name[select_card->type]);
         if (select_card == NULL && player->hands->size <= player->hp) {
             break;
@@ -332,11 +333,11 @@ void game_next(Game *game) {
                     respond_all_chat($(String.format(
                         "%s: Use Sid Ketchum's skill! I discard two cards to heal myself",
                         player->name)));
-                    respond_all(game, "status");
+                    // respond_all(game, "status");
                 }
             }
         }
-        respond_all(game, "status");
+        // respond_all(game, "status");
     }
     respond_all_chat($(String.format("%s round end", player->name)));
 #if (DEBUG)

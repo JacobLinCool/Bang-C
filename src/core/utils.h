@@ -109,6 +109,7 @@ bool player_draw_deck(Game* game, i32 me_id, i32 count) {
     Player* me = game->players->data[me_id];
     while (count--) {
         me->hands->push(me->hands, get_deck_top(game));
+        respond_all(game, "status");
     }
     return 0;
 }
@@ -133,14 +134,17 @@ bool judge(Game* game, i32 me_id, i32 lower, i32 higher, CardType type) {
         if (char_type == Lucky_Duke) {
             if (type != Dynamite) {
                 game->discard->push(game->discard, top_card);
+                respond_all(game, "status");
                 return SUCCESS;
             }
         } else {
             game->discard->push(game->discard, top_card);
+            respond_all(game, "status");
             return SUCCESS;
         }
     } else if (char_type == Lucky_Duke && type == Dynamite) {
         game->discard->push(game->discard, top_card);
+        respond_all(game, "status");
         return FAIL;
     }
     game->discard->push(game->discard, top_card);
