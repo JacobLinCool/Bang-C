@@ -565,6 +565,8 @@ int main(void) {
 
         while (clients->size) {
             Client *client = clients->pop(clients);
+            lws_close_reason(client->instance, LWS_CLOSE_STATUS_NORMAL,
+                             (unsigned char *)"Game Over", strlen("Game Over"));
             lws_close_free_wsi(client->instance, LWS_CLOSE_STATUS_NORMAL, "Game Over");
             client->msg_queue->free(client->msg_queue);
         }
