@@ -1,34 +1,51 @@
 # Bang! C
 
-Bang! the board game C implementation.
+Bang! the board game C implementation, including game manager, computer player, backend websocket server, and frontend web client.
+
+[Docker image is avaliable on Docker Hub](https://hub.docker.com/repository/docker/jacoblincool/bang-dev)
 
 ## Architecture
 
-We need to implement a 3 layer architecture.
+We need to implement a 4-layer architecture.
 
 ### Layer 1: Utils
 
 The first layer is the utils layer.
 
-It should be more generic than the other layers, which means that it should be able to migrate to other projects.
+We have implemented some generic utilities, such as connection waiting room.
 
 ### Layer 2: Game Logic (Core)
 
 The second layer is the game logic layer.
 
-It should contains all the game logic and expose a simplified API to the third layer.
+It contains all the game logic and expose a simplified API to the third layer (network layer).
 
-I think it should be a event driven architecture.
+### Layer 3: Network Interface (Transportation)
 
-Game Init -> Game Start -> Game Loop -> Game End
+The third layer is the network interface layer.
 
-### Layer 3: User Interface (View)
+We use websocket portocol to transfer data over TCP.
 
-The third layer is the user interface layer.
+All the data were using JSON to deliver from / to the client.
 
-It may be a simple terminal interface (TUI), or a graphical interface (GUI).
+### Layer 4: User Interface (View)
 
-Also, the config file parser should be implemented here.
+The forth layer is the user interface layer.
+
+We designed a website as graphical interface (GUI).
+
+## Multiple Threads
+
+The main thread will spawn a server thread, and in each round of game, the server thread will spawn a game manager thread, which will be ended when a game is done.
+
+- Main
+  - Server
+    - Game Manager 1
+    - Game Manager 2
+    - Game Manager 3
+    - ...
+
+And the main thread will stop the server when a round of game finished if user type `exit` in terminal during the cycle.
 
 ## Development
 
