@@ -180,7 +180,11 @@ Card* computer_player_request(Game* game, i32 player_id) {
     }
     i32 choose = 0;
     if (ai_respond_error >= 5) {
-        return NULL;
+        if (ai_request_type == AI_DISCARD) {
+            return player->hands->get(player->hands, rand() % player->hands->size);
+        } else {
+            return NULL;
+        }
     } else {
         choose = ai_request(game, player_id, player->hands);
     }

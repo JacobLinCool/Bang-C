@@ -317,6 +317,7 @@ void game_next(Game *game) {
     }
     // respond_all(game, "status");
     //   3.Discard excess cards
+    ai_respond_error = 0;
     DEBUG_PRINT("Now: Discard cards.\n");
 
     i32 discard_cnt = 0;
