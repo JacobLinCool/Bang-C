@@ -97,7 +97,13 @@ void respond_all_chat(const char *message) {
 
 cJSON *create_player_list() {
     cJSON *players = cJSON_CreateArray();
-    for (size_t i = 0; i < clients->size; i++) {
+
+    size_t real_player_count = clients->size;
+    if (real_player_count + computer_count > 7) {
+        real_player_count = 7 - computer_count;
+    }
+
+    for (size_t i = 0; i < real_player_count; i++) {
         Client *client = clients->get(clients, i);
         cJSON_AddItemToArray(players, cJSON_CreateString(client->name));
     }

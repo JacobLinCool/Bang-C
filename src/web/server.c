@@ -58,8 +58,13 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
     if (strcmp("join", action) == 0) {
         cJSON *list = create_player_list();
         for (size_t i = 0; i < clients->size; i++) {
-            respond_chat(clients->get(clients, i),
-                         $(String.format("%s join the game.", sender->name)));
+            if (computer_count + clients->size <= 7) {
+                respond_chat(clients->get(clients, i),
+                             $(String.format("%s join the game as a player.", sender->name)));
+            } else {
+                respond_chat(clients->get(clients, i),
+                             $(String.format("%s join the game as a watcher.", sender->name)));
+            }
 
             respond(clients->get(clients, i), "players", list, true);
         }
@@ -159,6 +164,12 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
                          $(String.format("%s has been kicked by %s",
                                          is_computer ? name : target->name, sender->name)));
 
+            if (clients->size + computer_count >= 7) {
+                respond_chat(clients->get(clients, i),
+                             $(String.format("%s becomes a player.",
+                                             clients->get(clients, 6 - computer_count)->name)));
+            }
+
             respond(clients->get(clients, i), "players", list, true);
         }
         cJSON_Delete(list);
@@ -231,13 +242,18 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         game = new_game();
         game_started = true;
 
-        for (size_t i = 0; i < clients->size; i++) {
+        size_t real_player_count = clients->size;
+        if (real_player_count + computer_count > 7) {
+            real_player_count = 7 - computer_count;
+        }
+
+        for (size_t i = 0; i < real_player_count; i++) {
             if (clients->get(clients, i)->named == false) {
                 clients->get(clients, i)->named = true;
             }
         }
 
-        for (size_t i = 0; i < clients->size; i++) {
+        for (size_t i = 0; i < real_player_count; i++) {
             game->join(game, clients->get(clients, i)->name, false);
         }
 
@@ -352,12 +368,6 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 
     switch (reason) {
         case LWS_CALLBACK_ESTABLISHED: {
-            if (clients->size >= 7 - computer_count) {
-                Console.red("[%p] Room is full, Connection refused", instance);
-                lws_close_free_wsi(instance, LWS_CLOSE_STATUS_NORMAL, "Room is full");
-                break;
-            }
-
             Console.yellow("[%p] Connection established", instance);
             client = $(calloc(1, sizeof(Client)));
             client->instance = instance;
