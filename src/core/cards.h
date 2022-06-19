@@ -22,10 +22,10 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         if (card->type == Beer) {
             game->discard->push(game->discard, card);
             respond_all(game, "status");
-            respond_all_chat($(String.format("%s: I use Beer avoid died!", enemy->name)));
+            respond_all_chat($(String.format("%s: I use BEER avoid died!", enemy->name)));
             return;
         } else {
-            respond_error(find_client_by_id(enemy_id), "You only can use Beer avoid died");
+            respond_error(find_client_by_id(enemy_id), "You only can use BEER  avoid died");
             game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
             respond_all(game, "status");
         }
@@ -280,12 +280,12 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     bool  pass = false;
     Card* card[2] = {NULL};
     i32   card_amount = 0;
-    respond_chat(find_client_by_id(enemy->id), "You can use missed to avoid attack");
+    respond_chat(find_client_by_id(enemy->id), "You can use MISSED to avoid attack");
 
     while (1) {
         respond_error(
             find_client_by_id(enemy->id),
-            $(String.format("You still need %d missed to avoid attack",
+            $(String.format("You still need %d MISSED to avoid attack",
                             1 + (game->players->data[me_id]->character->type == Slab_the_Killer) -
                                 missed_total)));
         ai_request_setting(AI_SPECIFY, Missed);  // ai no use bang
@@ -296,13 +296,13 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
         if (card[card_amount] == NULL) break;
         if (card[card_amount]->type == Missed) {
             respond_all_chat(
-                $(String.format("%s use missed to avoid one attack point", enemy->name)));
+                $(String.format("%s use MISSED to avoid one attack point", enemy->name)));
             // card_amount++;
             missed_total++;
         }
         if (card[card_amount]->type == Bang && enemy->character->type == Calamity_Janet) {
             respond_all_chat($(String.format(
-                "%s: Use Calamity Janet's skill! My Bang can be used as Missed!", enemy->name)));
+                "%s: Use Calamity Janet's skill! My BANG can be used as MISSED!", enemy->name)));
             // card_amount++;
             missed_total++;
         }
@@ -393,7 +393,7 @@ bool bang(Game* game, i32 me_id) {
     }
 
     respond_all_chat(
-        $(String.format("%s: I use Bang to attack %s!", game->players->data[me_id]->name,
+        $(String.format("%s: I use BANG to attack %s!", game->players->data[me_id]->name,
                         game->players->data[enemy_id]->name)));
     respond_all(game, "show bang");
     bang_no_distance(game, me_id, enemy_id);
@@ -407,11 +407,11 @@ bool missed(Game* game, i32 me_id) {
 
 bool gatling(Game* game, i32 me_id) {
     // respond_all(game, "status");
-    respond_all_chat($(String.format("%s: I use Gatling!", game->players->data[me_id]->name)));
+    respond_all_chat($(String.format("%s: I use GATLING!", game->players->data[me_id]->name)));
     respond_all(game, "show gatling");
     for (int i = 0; i < game->players->size; i++) {
         if (get_player_hp(game, i) <= 0 || me_id == i) continue;
-        respond_error(find_client_by_id(i), "You need to use a Missed to avoid Gatling card");
+        respond_error(find_client_by_id(i), "You need to use a MISSED to avoid GATLING card");
         bang_no_distance(game, me_id, i);
     }
     // respond_all(game, "status");
@@ -419,13 +419,13 @@ bool gatling(Game* game, i32 me_id) {
 }
 
 bool indians(Game* game, i32 me_id) {
-    respond_all_chat($(String.format("%s: I use Indian!", game->players->data[me_id]->name)));
+    respond_all_chat($(String.format("%s: I use INDIANS!", game->players->data[me_id]->name)));
     respond_all(game, "show indian");
 
     for (int i = 0; i < game->players->size; i++) {
         if (get_player_hp(game, i) <= 0 || me_id == i) continue;
         while (1) {
-            respond_error(find_client_by_id(i), "You need to use a Bang to avoid Indians card");
+            respond_error(find_client_by_id(i), "You need to use a BANG to avoid INDIANS card");
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[i]->request(game, i);
             // respond_all(game, "status");
@@ -459,10 +459,10 @@ bool panic(Game* game, i32 me_id) {
     // calculate distance between me and enemy
     if (distance(game, me_id, enemy_id) > 1) return FAIL;
 
-    respond_all_chat($(String.format("%s: I use Panic to %s!", game->players->data[me_id]->name,
+    respond_all_chat($(String.format("%s: I use PANIC to %s!", game->players->data[me_id]->name,
                                      game->players->data[enemy_id]->name)));
     respond_error(find_client_by_id(enemy_id),
-                  $(String.format("You're used Panic by %s", game->players->data[me_id]->name)));
+                  $(String.format("You're used PANIC by %s", game->players->data[me_id]->name)));
     respond_all(game, "show panic");
 
     draw_from_player(game, me_id, enemy_id);
@@ -476,9 +476,9 @@ bool cat_balou(Game* game, i32 me_id) {
 
     if (enemy_id < 0 || game->players->get(game->players, enemy_id)->hands->size == 0) return FAIL;
 
-    respond_all_chat($(String.format("%s: I use Cat_balou to %s!", game->players->data[me_id]->name,
+    respond_all_chat($(String.format("%s: I use CAT BALOU to %s!", game->players->data[me_id]->name,
                                      game->players->data[enemy_id]->name)));
-    respond_error(find_client_by_id(enemy_id), $(String.format("You're used Cat_balou by %s",
+    respond_error(find_client_by_id(enemy_id), $(String.format("You're used CAT BALOU by %s",
                                                                game->players->data[me_id]->name)));
     respond_all(game, "show cat_balou");
 
@@ -488,8 +488,8 @@ bool cat_balou(Game* game, i32 me_id) {
 }
 
 bool stagecoach(Game* game, i32 me_id) {
-    respond_all_chat($(String.format("%s: I use Stagecoach!", game->players->data[me_id]->name)));
-    respond_all(game, "show stagecoach");
+    respond_all_chat($(String.format("%s: I use STAGECOACH!", game->players->data[me_id]->name)));
+    respond_all(game, "show STAGECOACH");
 
     player_draw_deck(game, me_id, 2);
     // respond_all(game, "status");
@@ -497,7 +497,7 @@ bool stagecoach(Game* game, i32 me_id) {
 }
 
 bool wells_fargo(Game* game, i32 me_id) {
-    respond_all_chat($(String.format("%s: I use Wells_fargo!", game->players->data[me_id]->name)));
+    respond_all_chat($(String.format("%s: I use WELLS FARGO!", game->players->data[me_id]->name)));
     respond_all(game, "show wells_fargo");
 
     player_draw_deck(game, me_id, 3);
@@ -514,15 +514,15 @@ bool beer(Game* game, i32 me_id) {
 
     respond_all(game, "status");
 
-    respond_all_chat($(String.format("%s: I use Beer!", game->players->data[me_id]->name)));
-    respond_all(game, "show Beer");
+    respond_all_chat($(String.format("%s: I use BEER!", game->players->data[me_id]->name)));
+    respond_all(game, "show BEER");
 
     respond_all(game, "status");
     return SUCCESS;
 }
 
 bool saloon(Game* game, i32 me_id) {
-    respond_all_chat($(String.format("%s: I use Saloon!", game->players->data[me_id]->name)));
+    respond_all_chat($(String.format("%s: I use SALOON!", game->players->data[me_id]->name)));
     respond_all(game, "show saloon");
 
     for (int i = 0; i < game->players->size; i++) {
@@ -538,10 +538,10 @@ bool duel(Game* game, i32 me_id) {
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
     if (enemy_id < 0) return FAIL;
 
-    respond_all_chat($(String.format("%s: I use Duel to %s!", game->players->data[me_id]->name,
+    respond_all_chat($(String.format("%s: I use DUEL to %s!", game->players->data[me_id]->name,
                                      game->players->data[enemy_id]->name)));
     respond_error(find_client_by_id(enemy_id),
-                  $(String.format("You're used Duel by %s", game->players->data[me_id]->name)));
+                  $(String.format("You're used DUEL by %s", game->players->data[me_id]->name)));
     respond_all(game, "show duel");
 
     // duel
@@ -550,7 +550,7 @@ bool duel(Game* game, i32 me_id) {
         // respond_all(game, "status");
         while (1) {
             respond_error(find_client_by_id(enemy_id),
-                          "You need to use Bang to avoid attack from duel!");
+                          "You need to use BANG to avoid attack from DUEL!");
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[enemy_id]->request(game, enemy_id);
             // respond_all(game, "status");
@@ -563,13 +563,13 @@ bool duel(Game* game, i32 me_id) {
             }
             if (card->type == Bang) {
                 respond_all_chat($(
-                    String.format("%s use a bang for duel", game->players->data[enemy_id]->name)));
+                    String.format("%s use a BANG for DUEL", game->players->data[enemy_id]->name)));
                 game->discard->push(game->discard, card);
                 break;
             } else if (card->type == Missed &&
                        game->players->data[enemy_id]->character->type == Calamity_Janet) {
                 respond_all_chat($(
-                    String.format("%s: Use Calamity Janet's skill! My Bang can be used as Missed!",
+                    String.format("%s: Use Calamity Janet's skill! My BANG can be used as MISSED!",
                                   game->players->data[enemy_id]->name)));
                 game->discard->push(game->discard, card);
                 break;
@@ -585,7 +585,7 @@ bool duel(Game* game, i32 me_id) {
         while (1) {
             // respond_all(game, "status");
             respond_error(find_client_by_id(enemy_id),
-                          "You need to use Bang to avoid attack from duel!");
+                          "You need to use BANG to avoid attack from DUEL!");
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[me_id]->request(game, me_id);
             // respond_all(game, "status");
@@ -598,13 +598,13 @@ bool duel(Game* game, i32 me_id) {
             }
             if (card->type == Bang) {
                 respond_all_chat(
-                    $(String.format("%s use a bang for duel", game->players->data[me_id]->name)));
+                    $(String.format("%s use a BANG for DUEL", game->players->data[me_id]->name)));
                 game->discard->push(game->discard, card);
                 break;
             } else if (card->type == Missed &&
                        game->players->data[me_id]->character->type == Calamity_Janet) {
                 respond_all_chat($(
-                    String.format("%s: Use Calamity Janet's skill! My Bang can be used as Missed!",
+                    String.format("%s: Use Calamity Janet's skill! My BANG can be used as MISSED!",
                                   game->players->data[me_id]->name)));
                 game->discard->push(game->discard, card);
                 break;
