@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { send, game, choosing } from "../composables/game";
+import { send, game, choosing, requesting } from "../composables/game";
 import Card from "./Card.vue";
 import Character from "./Character.vue";
 import Role from "./Role.vue";
@@ -47,6 +47,7 @@ function select_player() {
                     :class="[
                         'max-h-60 transform hover:scale-110 hover:z-20',
                         self ? 'hover:-translate-y-5 z-10' : 'hover:translate-y-4',
+                        requesting && self ? 'border-2 border-indigo-500' : 'filter brightness-85',
                     ]"
                     :style="{
                         'margin-right':
