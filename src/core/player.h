@@ -227,6 +227,9 @@ Card* real_player_take(Game* game, i32 player_id, i32 target_id) {
             respond_all(game, "status");
         }
         return target->hands->remove(target->hands, input);
+    } else if (El_Gringo_active == true) {
+        respond_error(client, "You can only draw from hands");
+        return NULL;
     } else {
         if (target->barrel && target->barrel == (Card*)(card_base + offset)) {
             Card* x = target->barrel;
@@ -262,18 +265,20 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
     Player* player = game->players->get(game->players, player_id);
     Player* target = game->players->get(game->players, target_id);
     usleep(1000 * 1000 / speed);
-    if (target->barrel && !player->barrel) {
-        Card* x = target->barrel;
-        target->barrel = NULL;
-        return x;
-    } else if (target->mustang && !player->mustang) {
-        Card* x = target->mustang;
-        target->mustang = NULL;
-        return x;
-    } else if (target->weapon != NULL) {
-        Card* x = target->weapon;
-        target->weapon = NULL;
-        return x;
+    if (El_Gringo_active != true) {
+        if (target->barrel && !player->barrel) {
+            Card* x = target->barrel;
+            target->barrel = NULL;
+            return x;
+        } else if (target->mustang && !player->mustang) {
+            Card* x = target->mustang;
+            target->mustang = NULL;
+            return x;
+        } else if (target->weapon != NULL) {
+            Card* x = target->weapon;
+            target->weapon = NULL;
+            return x;
+        }
     }
     if (target->hands->size == 1 && target->character->type == Suzy_Lafayette) {
         player_draw_deck(game, target->id, 1);

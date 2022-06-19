@@ -4,6 +4,7 @@
 #include "../third/cimple/all.h"
 #include "constants.h"
 #include "types.h"
+bool El_Gringo_active = false;
 
 void check_deck(Game* game) {
     for (int i = 0; i < game->deck->size; i++) {
@@ -170,6 +171,7 @@ bool draw_from_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
     if (enemy->hp <= 0) return FAIL;
 
+    El_Gringo_active = false;
     Card* selected = NULL;
     while (!selected) {
         selected = me->take(game, me_id, enemy_id);
@@ -189,6 +191,7 @@ bool discard_from_enemy(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
     if (enemy->hp <= 0) return FAIL;
 
+    El_Gringo_active = false;
     Card* selected = NULL;
     while (!selected) {
         selected = me->take(game, me_id, enemy_id);
