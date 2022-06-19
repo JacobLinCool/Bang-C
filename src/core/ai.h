@@ -227,7 +227,9 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
             hate[player_id][ai_target] -= 2;
         }
     }
-    return weight[0].id;
+    return weight[((0 + ai_respond_error) < candi_card->size ? (0 + ai_respond_error)
+                                                             : candi_card->size - 1)]
+        .id;
 }
 
 i32 ai_player_cnt(Game* game) {
