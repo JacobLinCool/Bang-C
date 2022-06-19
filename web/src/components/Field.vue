@@ -4,9 +4,21 @@ import Card from "./Card.vue";
 import Character from "./Character.vue";
 import Role from "./Role.vue";
 import ListTransition from "./ListTransition.vue";
-import { Player } from "../types";
+import { Player, Card as C } from "../types";
+import { computed } from "vue";
 
 const props = defineProps<{ player: Partial<Player>; self: boolean }>();
+const weapons = computed(
+    () =>
+        [
+            props.player.weapon,
+            props.player.scope,
+            props.player.barrel,
+            props.player.mustang,
+            props.player.jail,
+            props.player.dynamite,
+        ].filter((x) => x && x.type) as C[],
+);
 
 function select_player() {
     if (choosing.value) {
@@ -66,35 +78,18 @@ function select_player() {
         >
             <ListTransition>
                 <Card
-                    v-if="props.player.weapon"
-                    :card="props.player.weapon"
-                    class="h-full hover:z-20 max-h-45 flex-1"
-                ></Card>
-                <Card
-                    v-if="props.player.scope"
-                    :card="props.player.scope"
-                    class="h-full hover:z-20 max-h-45 flex-1"
-                ></Card>
-                <Card
-                    v-if="props.player.barrel"
-                    :card="props.player.barrel"
-                    class="h-full hover:z-20 max-h-45 flex-1"
-                ></Card>
-                <Card
-                    v-if="props.player.mustang"
-                    :card="props.player.mustang"
-                    class="h-full hover:z-20 max-h-45 flex-1"
-                ></Card>
-                <Card
-                    v-if="props.player.jail"
-                    :card="props.player.jail"
-                    class="h-full hover:z-20 max-h-45 flex-1"
-                ></Card>
-                <Card
-                    v-if="props.player.dynamite"
-                    :card="props.player.dynamite"
-                    class="h-full hover:z-20 max-h-45 flex-1"
-                ></Card>
+                    v-for="card in weapons"
+                    :key="card.x"
+                    :card="card"
+                    class="hover:z-20 max-h-45"
+                    :style="{
+                        'margin-right':
+                            ((weapons.length || 0) - 3 <= 6 ? (weapons.length || 0) - 3 : 6) *
+                                -5.5 +
+                            '%',
+                        left: ((weapons.length || 0) - 3) * -3 + '%',
+                    }"
+                />
             </ListTransition>
         </div>
         <Role @click="select_player" :class="['w-1/5 p-1']" :type="props.player.role"></Role>
