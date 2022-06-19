@@ -246,11 +246,12 @@ void game_next(Game *game) {
         // 1.restriction detection
         if (select_card->type == Bang &&
             !(player->weapon != NULL && player->weapon->type == Volcanic)) {
-            // only one BANG! card may be played per turn
+                        // only one BANG! card may be played per turn
             if (bang_used && player->character->type != Willy_the_Kid) {
                 player->hands->push(player->hands, select_card);
                 respond_error(find_client_by_id(player->id), "You can't use BANG twice in a round");
                 respond_all(game, "status");
+                ai_respond_error++;
                 continue;
             } else {
                 bang_used++;
@@ -262,6 +263,7 @@ void game_next(Game *game) {
         DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (is_weapon(select_card)) {
             if (equip_weapon(game, player->id, select_card) == FAIL) {
+                ai_respond_error++;
                 DEBUG_PRINT("Error Use\n");
                 player->hands->push(player->hands, select_card);
                 respond_all(game, "status");
