@@ -190,7 +190,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     return;
 }
 
-// If no me_id, me_id = player_id
+// If no me_id, me_id = enemy_id
 void attack_player(Game* game, i32 me_id, i32 enemy_id) {
     respond_all(game, "status");
     DEBUG_PRINT("%d attack %d\n", me_id, enemy_id);
@@ -213,20 +213,20 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             Card* card = get_deck_top(game);
             game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
         }
-        if (enemy_type == El_Gringo && me_id != -1) {
+        if (enemy_type == El_Gringo && me_id != enemy_id) {
             respond_all_chat($(
                 String.format("%s: Use El Gringo's skill! I can get one card from attacking people",
                               game->players->data[enemy_id]->name)));
-            if (game->players->data[enemy_id]->hands->size == 0) {
-                respond_error(find_client_by_id(me_id),
+            if (game->players->data[me_id]->hands->size == 0) {
+                respond_error(find_client_by_id(enemy_id),
                               "Sadly, there are no any card can draw from enemy");
             } else {
                 El_Gringo_active = true;
                 while (1) {
-                    Player* me = game->players->get(game->players, me_id);
-                    Card*   card = me->take(game, me_id, enemy_id);
+                    Player* enemy = game->players->get(game->players, enemy_id);
+                    Card*   card = enemy->take(game, enemy_id, me_id);
                     if (card != NULL) {
-                        me->hands->push(me->hands, card);
+                        enemy->hands->push(enemy->hands, card);
                         respond_all(game, "status");
                         El_Gringo_active = false;
                         break;
