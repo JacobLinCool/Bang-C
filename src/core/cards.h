@@ -73,11 +73,10 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (me_id != -1) {
         respond_all_chat(
             $(String.format("%s kill %s", game->players->data[me_id]->name, enemy->name)));
-        printf("Died player (%s) role is %s, killed by %s (%s)\n", enemy->name,
-               role_name[enemy->role->type], me->name, role_name[me->role->type]);
+    } else {
+        respond_all_chat(
+            $(String.format("%s died, his role is %s", enemy->name, role_name[enemy->role->type])));
     }
-    respond_all_chat(
-        $(String.format("%s died, his role is %s", enemy->name, role_name[enemy->role->type])));
 
     // END OF THE GAME detection
     // find Criminal, Traitor.

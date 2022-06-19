@@ -151,10 +151,8 @@ Card* real_player_request(Game* game, i32 player_id) {
             respond_error(client, "Wrong select");
         }
     }
-done:
-    if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
-        player_draw_deck(game, player->id, 1);
-    }
+done:;
+
     Card* remove_card = player->hands->remove(player->hands, input);
     respond_all(game, "status");
     return remove_card;
@@ -187,9 +185,6 @@ Card* computer_player_request(Game* game, i32 player_id) {
         choose = ai_request(game, player_id, player->hands);
     }
     //  DEBUG_PRINT("Choose: %s\n", choose < 0 ? "NULL" : card_name[choose]);
-    if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
-        player_draw_deck(game, player->id, 1);
-    }
     if (choose < 0) return NULL;
     Card* remove_card = player->hands->remove(player->hands, choose);
     respond_all(game, "status");

@@ -122,10 +122,7 @@ void game_next(Game *game) {
         respond_all_chat("Will the dynamite explode?");
         dynamite_judge(game, player->id);
         died_player(game, -1, player->id);
-    }
-    if (player->hp <= 0) {
-        died_player(game, -1, player->id);
-        return;
+        if (game->finished) return;
     }
     if (player->jail != NULL) {
         DEBUG_PRINT("judge: jail\n");
@@ -269,6 +266,9 @@ void game_next(Game *game) {
                 respond_all(game, "status");
                 // P2S player error use
             }
+            if (player->hands->size == 0 && player->character->type == Suzy_Lafayette) {
+                player_draw_deck(game, player->id, 1);
+            }
             continue;
         }
         // respond_all(game, "status");
@@ -292,6 +292,9 @@ void game_next(Game *game) {
             DEBUG_PRINT("Error Use\n");
             respond_error(find_client_by_id(player->id), "You can't use this card");
             // P2S player error use
+        }
+        if (player->hands->size == 0 && player->character->type == Suzy_Lafayette) {
+            player_draw_deck(game, player->id, 1);
         }
         DEBUG_PRINT("Using Done\n");
         respond_all(game, "status");
