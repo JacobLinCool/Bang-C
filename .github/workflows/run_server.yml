@@ -16,6 +16,9 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
 
+            - name: Install Valgrind
+              run: sudo apt update && sudo apt install valgrind -y
+
             - name: Setup
               run: sudo make setup
 
@@ -34,5 +37,5 @@ jobs:
             - name: Start Server
               run: |
                   date 
-                  timeout ${{ github.event.inputs.duration }} ./server || true
+                  timeout ${{ github.event.inputs.duration }} valgrind --leak-check=full --show-reachable=yes --track-origins=yes ./server || true
                   date
