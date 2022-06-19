@@ -1,5 +1,5 @@
 import { reactive, ref } from "vue";
-import { Card, Player } from "../types";
+import { Card, CardType, Player } from "../types";
 import { WSClient } from "./websocket";
 
 export const ws = WSClient();
@@ -94,6 +94,56 @@ ws.addEventListener("message", (event) => {
         case "show card":
             Object.assign(game, message.payload.game);
             show_card(message.payload.card);
+            break;
+
+        case "show bang":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Bang, priority: 0 });
+            break;
+
+        case "show gatling":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Gatling, priority: 0 });
+            break;
+
+        case "show indian":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Indians, priority: 0 });
+            break;
+
+        case "show panic":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Panic, priority: 0 });
+            break;
+
+        case "show cat_balou":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Cat_Balou, priority: 0 });
+            break;
+
+        case "show stagecoach":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Stagecoach, priority: 0 });
+            break;
+
+        case "show wells_fargo":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Wells_Fargo, priority: 0 });
+            break;
+
+        case "show Beer":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Beer, priority: 0 });
+            break;
+
+        case "show saloon":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Saloon, priority: 0 });
+            break;
+
+        case "show duel":
+            Object.assign(game, message.payload.game);
+            show_card({ x: -1, type: CardType.Duel, priority: 0 });
             break;
 
         case "ramirez":
