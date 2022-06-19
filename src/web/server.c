@@ -61,8 +61,9 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             respond_chat(clients->get(clients, i),
                          $(String.format("%s join the game.", sender->name)));
 
-            respond(clients->get(clients, i), "players", list);
+            respond(clients->get(clients, i), "players", list, true);
         }
+        cJSON_Delete(list);
     }
     if (strcmp("name", action) == 0) {
         if (sender->named == true) {
@@ -106,8 +107,9 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
         cJSON *list = create_player_list();
         for (size_t i = 0; i < clients->size; i++) {
-            respond(clients->get(clients, i), "players", list);
+            respond(clients->get(clients, i), "players", list, true);
         }
+        cJSON_Delete(list);
 
         // cJSON_Delete(payload);
         return;
@@ -161,8 +163,9 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
                          $(String.format("%s has been kicked by %s",
                                          is_computer ? name : target->name, sender->name)));
 
-            respond(clients->get(clients, i), "players", list);
+            respond(clients->get(clients, i), "players", list, true);
         }
+        cJSON_Delete(list);
 
         if (target != NULL) {
             lws_close_reason(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked", strlen("Kicked"));
@@ -215,8 +218,9 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             respond_chat(clients->get(clients, i),
                          $(String.format("%s has added a computer player", sender->name)));
 
-            respond(clients->get(clients, i), "players", list);
+            respond(clients->get(clients, i), "players", list, true);
         }
+        cJSON_Delete(list);
 
         // cJSON_Delete(payload);
         return;
@@ -271,14 +275,13 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             }
         }
 
-        cJSON *list = create_player_list();
         Console.log("client size: %d", clients->size);
         for (size_t i = 0; i < clients->size; i++) {
             respond_chat(clients->get(clients, i),
                          $(String.format("%s has started the game", sender->name)));
 
             respond(clients->get(clients, i), "start",
-                    game_jsonify(game, clients->get(clients, i)->player_id));
+                    game_jsonify(game, clients->get(clients, i)->player_id), false);
         }
 
         pthread_create(&gm, NULL, gm_thread_start, NULL);
@@ -489,8 +492,9 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
                 respond_chat(clients->get(clients, i),
                              $(String.format("%s leave the game.", client->name)));
 
-                respond(clients->get(clients, i), "players", list);
+                respond(clients->get(clients, i), "players", list, true);
             }
+            cJSON_Delete(list);
 
             if (game != NULL && waiting_for_player != -1) {
                 Console.info("[%p] %s leave the game, computer is now taking over", instance,

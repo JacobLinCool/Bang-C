@@ -53,7 +53,7 @@ Client *find_client(struct lws *instance) {
 
 bool is_host(Client *client) { return clients->size > 0 && client == clients->get(clients, 0); }
 
-void respond(Client *client, const char *type, cJSON *payload) {
+void respond(Client *client, const char *type, cJSON *payload, bool detach) {
     if (client == NULL) return;
     cJSON *res = cJSON_CreateObject();
     cJSON_AddItemToObject(res, "type", cJSON_CreateString(type));
@@ -61,6 +61,9 @@ void respond(Client *client, const char *type, cJSON *payload) {
 
     char *msg = $(cJSON_PrintUnformatted(res));
     Console.cyan("Delete START");
+    if (detach) {
+        cJSON_DetachItemFromObject(res, "payload");
+    }
     cJSON_Delete(res);
     Console.cyan("Delete END");
 
@@ -72,7 +75,7 @@ void respond_error(Client *client, const char *message) {
     if (client == NULL) return;
     cJSON *payload = cJSON_CreateObject();
     cJSON_AddItemToObject(payload, "message", cJSON_CreateString(message));
-    respond(client, "error", payload);
+    respond(client, "error", payload, false);
 
     Console.red("[%p] Error: %s", client->instance, message);
 }
@@ -81,15 +84,16 @@ void respond_chat(Client *client, const char *message) {
     if (client == NULL) return;
     cJSON *payload = cJSON_CreateObject();
     cJSON_AddItemToObject(payload, "message", cJSON_CreateString(message));
-    respond(client, "chat", payload);
+    respond(client, "chat", payload, false);
 }
 
 void respond_all_chat(const char *message) {
     cJSON *payload = cJSON_CreateObject();
     cJSON_AddItemToObject(payload, "message", cJSON_CreateString(message));
     for (int i = 0; i < clients->size; i++) {
-        respond(clients->get(clients, i), "chat", payload);
+        respond(clients->get(clients, i), "chat", payload, true);
     }
+    cJSON_Delete(payload);
 }
 
 cJSON *create_player_list() {
