@@ -1,4 +1,4 @@
-import { reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import { Card, CardType, Player } from "../types";
 import { WSClient } from "./websocket";
 
@@ -27,6 +27,12 @@ let show_timer_id: number;
 
 ws.addEventListener("open", () => {
     state.value = 0;
+});
+
+watch(game, () => {
+    if (game?.turn && game.turn >= 0 && state.value < 1) {
+        state.value = 1;
+    }
 });
 
 ws.addEventListener("message", (event) => {

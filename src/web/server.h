@@ -60,12 +60,11 @@ void respond(Client *client, const char *type, cJSON *payload, bool detach) {
     cJSON_AddItemToObject(res, "payload", payload);
 
     char *msg = $(cJSON_PrintUnformatted(res));
-    Console.cyan("Delete START");
+
     if (detach) {
         cJSON_DetachItemFromObject(res, "payload");
     }
     cJSON_Delete(res);
-    Console.cyan("Delete END");
 
     client->msg_queue->push(client->msg_queue, msg);
     lws_callback_on_writable(client->instance);

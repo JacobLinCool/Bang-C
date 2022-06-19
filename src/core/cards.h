@@ -341,7 +341,7 @@ void dynamite_judge(Game* game, i32 me_id) {
     // respond_all(game, "status");
     Player* me = game->players->data[me_id];
     bool    dynamite_judge_result = judge(game, me_id, 102, 109, Dynamite);
-    respond_all_chat($(String.format("The dynamite_judge result is ... %s",
+    respond_all_chat($(String.format("The dynamite judge result is ... %s",
                                      dynamite_judge_result ? "EXPLOSION!!!" : "SAFTY!!!")));
     if (dynamite_judge_result) {
         game->discard->push(game->discard, me->dynamite);
