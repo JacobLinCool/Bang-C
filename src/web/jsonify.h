@@ -138,7 +138,7 @@ void respond_all(Game *game, char *type) {
         cJSON *base = cJSON_CreateObject();
         cJSON_AddItemToObject(base, "game",
                               game_jsonify(game, clients->get(clients, i)->player_id));
-        respond(clients->get(clients, i), type, base);
+        respond(clients->get(clients, i), type, base, false);
     }
 }
 
@@ -150,7 +150,7 @@ void respond_all_end(Game *game, char *type, i32 winner) {
         cJSON_AddItemToObject(base, "winner", win);
         cJSON_AddItemToObject(base, "game",
                               game_jsonify(game, clients->get(clients, i)->player_id));
-        respond(clients->get(clients, i), type, base);
+        respond(clients->get(clients, i), type, base, false);
     }
 }
 
@@ -159,7 +159,7 @@ void respond_client(Game *game, char *type, i32 player_id) {
     cJSON_AddItemToObject(base, "game", game_jsonify(game, player_id));
     Client *client = find_client_by_id(player_id);
     if (client != NULL) {
-        respond(client, type, base);
+        respond(client, type, base, false);
     }
 }
 
@@ -168,7 +168,7 @@ void respond_all_with_card(Game *game, char *type, Card *card) {
         cJSON *base = cJSON_CreateObject();
         cJSON_AddItemToObject(base, "card", card_jsonify(card, true));
         cJSON_AddItemToObject(base, "game", game_jsonify(game, i));
-        respond(clients->get(clients, i), type, base);
+        respond(clients->get(clients, i), type, base, false);
     }
 }
 
@@ -178,7 +178,7 @@ void respond_client_with_cards(Game *game, char *type, i32 player_id, Cards *car
     cJSON_AddItemToObject(base, "game", game_jsonify(game, player_id));
     Client *client = find_client_by_id(player_id);
     if (client != NULL) {
-        respond(client, type, base);
+        respond(client, type, base, false);
     }
 }
 
@@ -188,7 +188,7 @@ void respond_client_with_target(Game *game, char *type, i32 player_id, i32 targe
     cJSON_AddItemToObject(base, "game", game_jsonify(game, player_id));
     Client *client = find_client_by_id(player_id);
     if (client != NULL) {
-        respond(client, type, base);
+        respond(client, type, base, false);
     }
 }
 
