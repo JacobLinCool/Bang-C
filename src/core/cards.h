@@ -696,7 +696,7 @@ bool general_store(Game* game, i32 me_id) {
     }
     respond_all(game, "status");
     respond_all_chat(
-        $(String.format("%s: I use GENERAL STORE to %s!", game->players->data[me_id]->name)));
+        $(String.format("%s: I use GENERAL STORE!", game->players->data[me_id]->name)));
     respond_all(game, "show general_store");
 
     for (int i = 0; i < game->players->size; i++) {
