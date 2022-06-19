@@ -60,7 +60,6 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
             respond(clients->get(clients, i), "players", list);
         }
-        cJSON_Delete(list);
     }
     if (strcmp("name", action) == 0) {
         if (sender->named == true) {
@@ -106,9 +105,8 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
         for (size_t i = 0; i < clients->size; i++) {
             respond(clients->get(clients, i), "players", list);
         }
-        cJSON_Delete(list);
 
-        cJSON_Delete(payload);
+        // cJSON_Delete(payload);
         return;
     }
 
@@ -162,14 +160,13 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
             respond(clients->get(clients, i), "players", list);
         }
-        cJSON_Delete(list);
 
         if (target != NULL) {
             lws_close_reason(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked", strlen("Kicked"));
             lws_close_free_wsi(target->instance, LWS_CLOSE_STATUS_NORMAL, "Kicked");
         }
 
-        cJSON_Delete(payload);
+        // cJSON_Delete(payload);
         return;
     }
 
@@ -188,7 +185,7 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
                          $(String.format("%s: %s", sender->name, message)));
         }
 
-        cJSON_Delete(payload);
+        // cJSON_Delete(payload);
         return;
     }
 
@@ -217,9 +214,8 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
 
             respond(clients->get(clients, i), "players", list);
         }
-        cJSON_Delete(list);
 
-        cJSON_Delete(payload);
+        // cJSON_Delete(payload);
         return;
     }
 
@@ -281,11 +277,10 @@ void handle_action(Client *sender, char *action, cJSON *payload) {
             respond(clients->get(clients, i), "start",
                     game_jsonify(game, clients->get(clients, i)->player_id));
         }
-        cJSON_Delete(list);
 
         pthread_create(&gm, NULL, gm_thread_start, NULL);
 
-        cJSON_Delete(payload);
+        // cJSON_Delete(payload);
         return;
     }
     // after game started
@@ -414,7 +409,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             char  *action = NULL;
 
             if (cJSON_IsString(action_token) == false || (action_token->valuestring == NULL)) {
-                cJSON_Delete(json);
+                // cJSON_Delete(json);
                 break;
             }
 
@@ -424,7 +419,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             cJSON *payload = NULL;
 
             if (cJSON_IsObject(payload_token) == false) {
-                cJSON_Delete(json);
+                // cJSON_Delete(json);
                 break;
             }
 
@@ -447,18 +442,19 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
                 break;
             }
 
-            Message *msg = client->msg_queue->shift(client->msg_queue);
+            char *msg = client->msg_queue->shift(client->msg_queue);
 
             if (msg == NULL) {
                 Console.red("[%p] Message is NULL", instance);
                 break;
             }
 
-            Console.blue("[%p] Sending %s", instance, msg->payload);
-            lws_write(instance, (unsigned char *)msg->payload, msg->len, LWS_WRITE_TEXT);
-
-            // free_message(msg);
-            // free(msg);
+            Console.blue("[%p] Sending %s", instance, msg);
+            size_t         len = strlen(msg);
+            unsigned char *payload = calloc(len + 1 + LWS_PRE, sizeof(char));
+            memcpy(payload + LWS_PRE, msg, len + 1);
+            lws_write(instance, payload + LWS_PRE, len, LWS_WRITE_TEXT);
+            Console.green("[%p] Message sent, queueing: %zu", instance, client->msg_queue->size);
 
             if (client->msg_queue->size > 0) {
                 lws_callback_on_writable(instance);
@@ -481,10 +477,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             }
 
             while (client->msg_queue->size > 0) {
-                Message *msg = client->msg_queue->shift(client->msg_queue);
-                if (msg != NULL) {
-                    free_message(msg);
-                }
+                char *msg = client->msg_queue->shift(client->msg_queue);
             }
 
             cJSON *list = create_player_list();
@@ -494,7 +487,6 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 
                 respond(clients->get(clients, i), "players", list);
             }
-            cJSON_Delete(list);
 
             if (game != NULL && waiting_for_player != -1) {
                 Console.info("[%p] %s leave the game, computer is now taking over", instance,
@@ -516,7 +508,6 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             }
 
             client->msg_queue->free(client->msg_queue);
-            // free(client);
 
             break;
         }
@@ -559,25 +550,29 @@ int main(void) {
         sem_wait(&gm_created);
         pthread_join(gm, NULL);
 
-        // free(game);
         game = NULL;
         game_started = false;
 
         while (clients->size) {
             Client *client = clients->pop(clients);
             lws_close_free_wsi(client->instance, LWS_CLOSE_STATUS_NORMAL, "Game Over");
-            // client->msg_queue->free(client->msg_queue);
-            // free(client);
+            client->msg_queue->free(client->msg_queue);
         }
+
+        $free();
+
+        sleep(3);
 
         char  *line = NULL;
         size_t len = 0;
         getline(&line, &len, stdin);
         if (line != NULL) {
             if (strncmp(line, "exit", 4) == 0) {
-                break;
+                exit(EXIT_SUCCESS);
             }
         }
+
+        Console.log("Continue...");
     }
 
     return EXIT_SUCCESS;
