@@ -8,8 +8,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     respond_all(game, "status");
     Player* me = NULL;
     Player* enemy = NULL;
-    if(me_id != -1)
-        me = game->players->data[me_id];
+    if (me_id != -1) me = game->players->data[me_id];
     enemy = game->players->data[enemy_id];
     if (enemy->hp > 0) return;
     while (1) {
@@ -68,14 +67,14 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     }
     enemy->dead = true;
     respond_all(game, "status");
-    if(me_id != -1) {
-        respond_all_chat($(String.format("%s kill %s", game->players->data[me_id]->name, enemy->name)));
+    if (me_id != -1) {
+        respond_all_chat(
+            $(String.format("%s kill %s", game->players->data[me_id]->name, enemy->name)));
         printf("Died player (%s) role is %s, killed by %s (%s)\n", enemy->name,
-           role_name[enemy->role->type], me->name, role_name[me->role->type]);
+               role_name[enemy->role->type], me->name, role_name[me->role->type]);
     }
     respond_all_chat(
         $(String.format("%s died, his role is %s", enemy->name, role_name[enemy->role->type])));
-
 
     // END OF THE GAME detection
     // find Criminal, Traitor.
@@ -139,11 +138,10 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
 
     // Penalties and Rewards
     DEBUG_PRINT("Penalties and Rewards.\n");
-    if(me_id == -1) {
+    if (me_id == -1) {
         respond_all_chat($(String.format("%s: Because of explosion, I died...", me->name)));
         return;
-    }
-    else if (me_id == enemy_id) {
+    } else if (me_id == enemy_id) {
         DEBUG_PRINT("I killed myself.\n");
         respond_all_chat($(String.format("%s: I killed myself...", enemy->name)));
         return;
@@ -151,8 +149,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
         DEBUG_PRINT("Penalty: discard all cards\n");
-        respond_all_chat(
-            $(String.format("Sherif killed Deputy! He lose his all cards!")));
+        respond_all_chat($(String.format("Sherif killed Deputy! He lose his all cards!")));
         discard_card = game->discard;
         transfer(me->hands, discard_card);
         respond_all(game, "status");
@@ -184,8 +181,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         DEBUG_PRINT("Reward: draw 3 cards\n");
         respond_all_chat(
             $(String.format("%s kill Criminal, he get three cards for reward", me->name)));
-        if(me_id != -1)
-            player_draw_deck(game, me_id, 3);
+        if (me_id != -1) player_draw_deck(game, me_id, 3);
     }
     respond_all(game, "status");
     return;
