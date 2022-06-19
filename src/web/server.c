@@ -482,7 +482,9 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 
             while (client->msg_queue->size > 0) {
                 Message *msg = client->msg_queue->shift(client->msg_queue);
-                free_message(msg);
+                if (msg != NULL) {
+                    free_message(msg);
+                }
             }
 
             cJSON *list = create_player_list();
