@@ -451,7 +451,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 
             Console.blue("[%p] Sending %s", instance, msg);
             size_t         len = strlen(msg);
-            unsigned char *payload = calloc(len + 1 + LWS_PRE, sizeof(char));
+            unsigned char *payload = $(calloc(len + 1 + LWS_PRE, sizeof(char)));
             memcpy(payload + LWS_PRE, msg, len + 1);
             lws_write(instance, payload + LWS_PRE, len, LWS_WRITE_TEXT);
             Console.green("[%p] Message sent, queueing: %zu", instance, client->msg_queue->size);
