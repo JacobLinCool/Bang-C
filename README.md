@@ -49,11 +49,32 @@ And the main thread will stop the server when a round of game finished if user t
 
 ## Development
 
+Install cmake (to build `libwebsocket`) and valgrind (to debug).
+
+```sh
+sudo apt update && sudo apt install -y cmake valgrind
+```
+
+Then, you need two terminal window to run the game server and the client.
+
 ### Backend Game Server
 
 1. Install third party libraries `sudo make setup`
 2. Build server `make server`
 3. Run server `./server`
+
+```sh
+# Install third party libraries
+sudo make setup
+
+# Build server
+make server
+# or "make server-debug" to enable debug mode
+
+# Run server
+./server
+# or "make valgrind" to run with valgrind
+```
 
 ### Frontend Game Client
 
@@ -62,6 +83,25 @@ Change directory to `web`
 1. Install dev tools: Node.js 16+, pnpm
 2. Install dependencies: `pnpm install`
 3. Run dev server `pnpm dev`
+
+```sh
+# Install PNPM
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+
+# Install Node LTS
+pnpm env use --global lts
+
+# Change directory to web
+cd web
+
+# Install dependencies
+pnpm install
+
+# Run dev server
+pnpm dev
+```
+
+After you run the both server and client, you should be able to play the game on `http://localhost:8080`.
 
 ## References
 
