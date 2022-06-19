@@ -170,10 +170,11 @@ Card* computer_player_request(Game* game, i32 player_id) {
         for (int i = 0; i < player->hands->size; i++) {
             if (player->hands->data[i]->type == ai_request_card) {
                 DEBUG_PRINT("Return: [%s](id:%d)\n", card_name[player->hands->data[i]->type], i);
-                return player->hands->remove(player->hands, i);
+                Card* remove_card = player->hands->remove(player->hands, i);
+                respond_all(game, "status");
+                return remove_card;
             }
         }
-        respond_all(game, "status");
         DEBUG_PRINT("Return: [NULL]\n");
         return NULL;
     } else if (ai_request_type == AI_DISCARD && player->hands->size <= player->hp) {
@@ -184,9 +185,10 @@ Card* computer_player_request(Game* game, i32 player_id) {
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
     }
-    respond_all(game, "status");
     if (choose < 0) return NULL;
-    return player->hands->remove(player->hands, choose);
+    Card* remove_card = player->hands->remove(player->hands, choose);
+    respond_all(game, "status");
+    return remove_card;
 }
 
 Card* computer_player_take(Game* game, i32 player_id, i32 target_id);

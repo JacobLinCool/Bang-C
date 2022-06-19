@@ -5,12 +5,11 @@
 #include "ai.h"
 
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
-    respond_all(game, "status");
     Player* me = game->players->data[me_id];
     Player* enemy = game->players->data[enemy_id];
     if (enemy->hp > 0) return;
     while (1) {
-        respond_all(game, "status");
+        // respond_all(game, "status");
         ai_request_setting(AI_SPECIFY, Beer);
         Card* card = enemy->request(game, enemy_id);
         respond_all(game, "status");
@@ -26,7 +25,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             respond_all(game, "status");
         }
     }
-    respond_all(game, "status");
+    // respond_all(game, "status");
 
     if (enemy->character->type == Sid_Ketchum) {
         DEBUG_PRINT("enemy is Sid_Ketchum\n");
@@ -37,7 +36,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             while (1) {
                 ai_request_setting(AI_DISCARD, 0);
                 Card* card = game->players->data[enemy_id]->request(game, enemy_id);
-                respond_all(game, "status");
+                // respond_all(game, "status");
                 if (card == NULL) {
                     break;
                 }
@@ -49,7 +48,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             while (1) {
                 ai_request_setting(AI_DISCARD, 0);
                 Card* card = game->players->data[enemy_id]->request(game, enemy_id);
-                respond_all(game, "status");
+                // respond_all(game, "status");
                 if (card != NULL) {
                     game->discard->push(game->discard, card);
                     respond_all(game, "status");
@@ -170,13 +169,14 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             discard_card->push(discard_card, me->dynamite);
             me->dynamite = NULL;
         }
+        respond_all(game, "status");
     } else if (enemy->role->type == Criminal) {
         DEBUG_PRINT("Reward: draw 3 cards\n");
         respond_all_chat(
             $(String.format("%s kill Criminal, he get three cards for reward", me->name)));
         player_draw_deck(game, me_id, 3);
     }
-    respond_all(game, "status");
+
     return;
 }
 
@@ -216,7 +216,6 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
     ai_hate_change(game, me_id, enemy_id, 1);
     // dead
     // died_player(game, me_id, enemy_id);
-    respond_all(game, "status");
     return;
 }
 
@@ -241,7 +240,7 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
 
-    respond_all(game, "status");
+    // respond_all(game, "status");
     bool  pass = false;
     Card* card[2] = {NULL};
     i32   card_amount = 0;
@@ -255,9 +254,9 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
                                 missed_total)));
         ai_request_setting(AI_SPECIFY, Missed);  // ai no use bang
         card[card_amount] = enemy->request(game, enemy_id);
-        respond_all(game, "status");
-        // DEBUG_PRINT("Give: %s\n",
-        //             card[card_amount] == NULL ? "NULL" : card_name[card[card_amount]->type]);
+        // respond_all(game, "status");
+        //  DEBUG_PRINT("Give: %s\n",
+        //              card[card_amount] == NULL ? "NULL" : card_name[card[card_amount]->type]);
         if (card[card_amount] == NULL) break;
         if (card[card_amount]->type == Missed) {
             respond_all_chat(
@@ -287,7 +286,7 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
         }
         respond_all(game, "status");
     }
-    respond_all(game, "status");
+    // respond_all(game, "status");
 
     if (pass) {
         if (card[0]) game->discard->push(game->discard, card[0]);
@@ -298,12 +297,12 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     respond_all_chat(
         $(String.format("%s avoid %s attack ", enemy->name, game->players->data[me_id]->name)));
     attack_player(game, me_id, enemy_id);
-    respond_all(game, "status");
+    // respond_all(game, "status");
     return;
 }
 
 void dynamite_judge(Game* game, i32 me_id) {
-    respond_all(game, "status");
+    // respond_all(game, "status");
     Player* me = game->players->data[me_id];
     bool    dynamite_judge_result = judge(game, me_id, 102, 109, Dynamite);
     respond_all_chat($(String.format("The dynamite_judge result is ... %s",
@@ -321,12 +320,12 @@ void dynamite_judge(Game* game, i32 me_id) {
         }
         game->players->data[left_player_id]->dynamite = me->dynamite;
         me->dynamite = NULL;
+        respond_all(game, "status");
     }
-    respond_all(game, "status");
 }
 
 bool jail_judge(Game* game, i32 me_id) {
-    respond_all(game, "status");
+    // respond_all(game, "status");
     game->discard->push(game->discard, game->players->data[me_id]->jail);
     game->players->data[me_id]->jail = NULL;
     bool jail_judge_result = judge(game, me_id, 201, 213, Jail);
@@ -338,7 +337,7 @@ bool jail_judge(Game* game, i32 me_id) {
 }
 
 bool bang(Game* game, i32 me_id) {
-    respond_all(game, "status");
+    // respond_all(game, "status");
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
     if (enemy_id < 0) return FAIL;
 
@@ -362,7 +361,7 @@ bool bang(Game* game, i32 me_id) {
                         game->players->data[enemy_id]->name)));
     respond_all(game, "show bang");
     bang_no_distance(game, me_id, enemy_id);
-    respond_all(game, "status");
+    // respond_all(game, "status");
     return SUCCESS;
 }
 
@@ -371,7 +370,7 @@ bool missed(Game* game, i32 me_id) {
 }
 
 bool gatling(Game* game, i32 me_id) {
-    respond_all(game, "status");
+    // respond_all(game, "status");
     respond_all_chat($(String.format("%s: I use Gatling!", game->players->data[me_id]->name)));
     respond_all(game, "show gatling");
     for (int i = 0; i < game->players->size; i++) {
@@ -379,12 +378,11 @@ bool gatling(Game* game, i32 me_id) {
         respond_error(find_client_by_id(i), "You need to use a Missed to avoid Gatling card");
         bang_no_distance(game, me_id, i);
     }
-    respond_all(game, "status");
+    // respond_all(game, "status");
     return SUCCESS;
 }
 
 bool indians(Game* game, i32 me_id) {
-    respond_all(game, "status");
     respond_all_chat($(String.format("%s: I use Indian!", game->players->data[me_id]->name)));
     respond_all(game, "show indian");
 
@@ -394,10 +392,10 @@ bool indians(Game* game, i32 me_id) {
             respond_error(find_client_by_id(i), "You need to use a Bang to avoid Indians card");
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[i]->request(game, i);
-            respond_all(game, "status");
+            // respond_all(game, "status");
             if (card == NULL) {
                 attack_player(game, me_id, i);
-                respond_all(game, "status");
+                // respond_all(game, "status");
                 break;
             }
             if (card->type == Bang) {
@@ -415,12 +413,10 @@ bool indians(Game* game, i32 me_id) {
             }
         }
     }
-    respond_all(game, "status");
     return SUCCESS;
 }
 
 bool panic(Game* game, i32 me_id) {
-    respond_all(game, "status");
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
     if (enemy_id < 0) return FAIL;
 
@@ -434,12 +430,11 @@ bool panic(Game* game, i32 me_id) {
     respond_all(game, "show panic");
 
     draw_from_player(game, me_id, enemy_id);
-    respond_all(game, "status");
+    // respond_all(game, "status");
     return SUCCESS;
 }
 
 bool cat_balou(Game* game, i32 me_id) {
-    respond_all(game, "status");
     Player* player = game->players->data[me_id];
     i32     enemy_id = player->choose_enemy(game, player->id);
 
@@ -452,33 +447,29 @@ bool cat_balou(Game* game, i32 me_id) {
     respond_all(game, "show cat_balou");
 
     discard_from_enemy(game, me_id, enemy_id);
-    respond_all(game, "status");
+    // respond_all(game, "status");
     return SUCCESS;
 }
 
 bool stagecoach(Game* game, i32 me_id) {
-    respond_all(game, "status");
-
     respond_all_chat($(String.format("%s: I use Stagecoach!", game->players->data[me_id]->name)));
     respond_all(game, "show stagecoach");
 
     player_draw_deck(game, me_id, 2);
-    respond_all(game, "status");
+    // respond_all(game, "status");
     return SUCCESS;
 }
 
 bool wells_fargo(Game* game, i32 me_id) {
-    respond_all(game, "status");
     respond_all_chat($(String.format("%s: I use Wells_fargo!", game->players->data[me_id]->name)));
     respond_all(game, "show wells_fargo");
 
     player_draw_deck(game, me_id, 3);
-    respond_all(game, "status");
+    // respond_all(game, "status");
     return SUCCESS;
 }
 
 bool beer(Game* game, i32 me_id) {
-    respond_all(game, "status");
     if (game->players->size <= 2) return FAIL;
     if (game->players->data[me_id]->hp == game->players->data[me_id]->character->health +
                                               (game->players->data[me_id]->role->type == Sheriff))
@@ -495,8 +486,6 @@ bool beer(Game* game, i32 me_id) {
 }
 
 bool saloon(Game* game, i32 me_id) {
-    respond_all(game, "status");
-
     respond_all_chat($(String.format("%s: I use Saloon!", game->players->data[me_id]->name)));
     respond_all(game, "show saloon");
 
@@ -505,12 +494,11 @@ bool saloon(Game* game, i32 me_id) {
         recover(game, i);
         ai_saloon(game, i, me_id);
     }
-    respond_all(game, "status");
+    // respond_all(game, "status");
     return SUCCESS;
 }
 
 bool duel(Game* game, i32 me_id) {
-    respond_all(game, "status");
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
     if (enemy_id < 0) return FAIL;
 
@@ -523,13 +511,13 @@ bool duel(Game* game, i32 me_id) {
     // duel
     bool duel_finish = false;
     while (1) {
-        respond_all(game, "status");
+        // respond_all(game, "status");
         while (1) {
             respond_error(find_client_by_id(enemy_id),
                           "You need to use Bang to avoid attack from duel!");
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[enemy_id]->request(game, enemy_id);
-            respond_all(game, "status");
+            // respond_all(game, "status");
             if (card == NULL) {
                 respond_all_chat(
                     $(String.format("%s loses the duel", game->players->data[enemy_id]->name)));
@@ -559,12 +547,12 @@ bool duel(Game* game, i32 me_id) {
         respond_all(game, "status");
         if (duel_finish) break;
         while (1) {
-            respond_all(game, "status");
+            // respond_all(game, "status");
             respond_error(find_client_by_id(enemy_id),
                           "You need to use Bang to avoid attack from duel!");
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[me_id]->request(game, me_id);
-            respond_all(game, "status");
+            // respond_all(game, "status");
             if (card == NULL) {
                 respond_all_chat(
                     $(String.format("%s loses the duel", game->players->data[me_id]->name)));
