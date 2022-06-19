@@ -231,6 +231,7 @@ void game_next(Game *game) {
     // 2.Play any number of cards
     i8 bang_used = 0;
     ai_bang_use = 0;
+    ai_respond_error = 0;
     while (true) {
         respond_all(game, "status");
         DEBUG_PRINT("player %d, choose your card\n", player->id);
@@ -279,6 +280,7 @@ void game_next(Game *game) {
             }
             game->discard->push(game->discard, select_card);
         } else {
+            ai_respond_error++;
             if (select_card->type == Bang ||
                 (select_card->type == Missed && player->character->type == Calamity_Janet)) {
                 bang_used--;

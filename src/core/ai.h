@@ -29,6 +29,7 @@ i32      ai_target;
 i8       ai_request_type;  // 0: play 1: discard
 CardType ai_request_card;
 i8       ai_bang_use;
+i8       ai_respond_error;
 
 i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hate[10],
                    i32 max_hate_id[10]);
@@ -248,11 +249,22 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hat
     }
     i32 max_distance = 1;
     if (ai->weapon != NULL) max_distance += ai->weapon->type - Volcanic;
+    max_distance += (game->players->data[ai_id]->scope != NULL) +
+                    (game->players->data[ai_id]->character->type == Rose_Doolan);
     if (card == Bang) {
         if (ai_bang_use) {
             return -100;
         }
-        ai_target = max_hate_id[max_distance];
+        int k = max_distance;
+        while (k >= 0) {
+            ai_target = max_hate_id[k];
+            if (distance(game, ai_id, ai_target) <= max_distance) {
+                break;
+            }
+            k--;
+        }
+        if (k < 0) return -100;
+
         if (player_cnt > 2 && ai->role->type == Traitor &&
             game->players->data[ai_target]->role->type == Sheriff) {
             if (game->players->data[ai_target]->hp < 4) return 0;
