@@ -11,6 +11,7 @@
 
 i32 debug_num = 0;
 i32 debug_stop = 0;
+int role_capacities[4][5] = {{0, 1, 0, 2, 1}, {0, 1, 1, 2, 1}, {0, 1, 1, 3, 1}, {0, 1, 2, 3, 1}};
 
 void print_status(Game *game, FILE *fp);
 bool equip_weapon(Game *game, i32 player_id, Card *card);
@@ -21,8 +22,8 @@ void game_win(Game *game);
 bool valid_assign_role(Role *role, i32 player_total) {
     if (role == NULL) return false;
     // printf("assign: %s\n", role_name[role->type]);
-    if (game_start_role_in_players[player_total - 4][role->type] <= 0) return false;
-    game_start_role_in_players[player_total - 4][role->type]--;
+    if (role_capacities[player_total - 4][role->type] <= 0) return false;
+    role_capacities[player_total - 4][role->type]--;
     return true;
 }
 void game_join(Game *game, const char *name, bool is_computer) {
@@ -62,6 +63,7 @@ void game_loop(Game *game) {
 }
 
 void game_start(Game *game) {
+    memcpy(role_capacities, role_in_players, sizeof(role_in_players));
     // shuffle cards, roles, characters
     VectorShuffle(game->deck);
     VectorShuffle(game->roles);

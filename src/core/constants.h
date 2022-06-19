@@ -40,8 +40,6 @@ char* suit[] = {"", "spade", "heart", "diamond", "club"};
 
 // number of {"", "Sheriff", "Deputy", "Criminal", "Traitor"} in 4~7 players
 int role_in_players[4][5] = {{0, 1, 0, 2, 1}, {0, 1, 1, 2, 1}, {0, 1, 1, 3, 1}, {0, 1, 2, 3, 1}};
-int game_start_role_in_players[4][5] = {
-    {0, 1, 0, 2, 1}, {0, 1, 1, 2, 1}, {0, 1, 1, 3, 1}, {0, 1, 2, 3, 1}};
 u64 card_base;
 u32 key, key2;
 
