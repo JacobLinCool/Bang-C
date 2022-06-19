@@ -180,7 +180,13 @@ Card* computer_player_request(Game* game, i32 player_id) {
     } else if (ai_request_type == AI_DISCARD && player->hands->size <= player->hp) {
         return NULL;
     }
-    i32 choose = ai_request(game, player_id, player->hands);
+    i32 choose = 0;
+    if (ai_respond_error >= 5) {
+        if (player->hands->size == 0) return NULL;
+        choose = rand() % player->hands->size;
+    } else {
+        choose = ai_request(game, player_id, player->hands);
+    }
     //  DEBUG_PRINT("Choose: %s\n", choose < 0 ? "NULL" : card_name[choose]);
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);

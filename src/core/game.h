@@ -231,6 +231,7 @@ void game_next(Game *game) {
     // 2.Play any number of cards
     i8 bang_used = 0;
     ai_bang_use = 0;
+    ai_respond_error = 0;
     while (true) {
         respond_all(game, "status");
         DEBUG_PRINT("player %d, choose your card\n", player->id);
@@ -250,6 +251,7 @@ void game_next(Game *game) {
                 player->hands->push(player->hands, select_card);
                 respond_error(find_client_by_id(player->id), "You can't use BANG twice in a round");
                 respond_all(game, "status");
+                ai_respond_error++;
                 continue;
             } else {
                 bang_used++;
@@ -261,6 +263,7 @@ void game_next(Game *game) {
         DEBUG_PRINT("Use: %s\n", card_name[select_card->type]);
         if (is_weapon(select_card)) {
             if (equip_weapon(game, player->id, select_card) == FAIL) {
+                ai_respond_error++;
                 DEBUG_PRINT("Error Use\n");
                 player->hands->push(player->hands, select_card);
                 respond_all(game, "status");
@@ -279,6 +282,7 @@ void game_next(Game *game) {
             }
             game->discard->push(game->discard, select_card);
         } else {
+            ai_respond_error++;
             if (select_card->type == Bang ||
                 (select_card->type == Missed && player->character->type == Calamity_Janet)) {
                 bang_used--;
