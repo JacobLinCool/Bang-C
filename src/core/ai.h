@@ -206,7 +206,7 @@ i32 ai_request(Game* game, i32 player_id, Cards* candi_card) {
     }
 
     // if event is play cards
-    if (ai_request_type != AI_FORCE_PLAY && weight[0].weight <= 8) {
+    if (ai_request_type != AI_FORCE_PLAY && weight[0].weight <= 7) {
         // for real thinking time
         i32 card_hard = (600 + 50 * weight[0].weight) / 25;
         if (card_hard < 10) card_hard = 10;
@@ -305,7 +305,7 @@ i32 ai_card_weight(Game* game, Cards* cards, i32 ai_id, i32 card_id, i32 max_hat
     if (card == Panic || card == Cat_Balou) {
         ai_target = max_hate_id[1];
         if (max_hate[1] < BAD_GUY) return 5;
-        return equip_total(game, ai_id, max_hate_id[1]);
+        return 8 + equip_total(game, ai_id, max_hate_id[1]);
     }
     if (card == Stagecoach) return 5 * (ai->hp - ai->hands->size - 1);
     if (card == Wells_Fargo) return 5 * (ai->hp - ai->hands->size - 2);
