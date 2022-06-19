@@ -5,8 +5,6 @@
 #include "ai.h"
 
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
-    Player* me = game->players->data[me_id];
-    Player* enemy = game->players->data[enemy_id];
     Player* me = NULL;
     Player* enemy = NULL;
     if (me_id != -1) me = game->players->data[me_id];
