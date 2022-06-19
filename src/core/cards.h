@@ -214,16 +214,16 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             Card* card = get_deck_top(game);
             game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
         }
-        if (enemy_type == El_Gringo && me_id != enemy_id) {
+        if (enemy_type == El_Gringo && me_id != enemy_id && me_id != -1) {
             respond_all_chat($(
                 String.format("%s: Use El Gringo's skill! I can get one card from attacking people",
                               game->players->data[enemy_id]->name)));
-            if (me_id != -1 && game->players->data[me_id]->hands->size == 0) {
+            if (game->players->data[me_id]->hands->size == 0) {
                 respond_error(find_client_by_id(enemy_id),
                               "Sadly, there are no any card can draw from enemy");
             } else {
                 El_Gringo_active = true;
-                while (me_id != -1) {
+                while (1) {
                     Player* enemy = game->players->get(game->players, enemy_id);
                     Card*   card = enemy->take(game, enemy_id, me_id);
                     if (card != NULL) {
