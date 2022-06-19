@@ -151,7 +151,8 @@ Card* real_player_request(Game* game, i32 player_id) {
             respond_error(client, "Wrong select");
         }
     }
-done:
+done:;
+
     Card* remove_card = player->hands->remove(player->hands, input);
     respond_all(game, "status");
     return remove_card;
