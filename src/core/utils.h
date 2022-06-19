@@ -149,12 +149,14 @@ bool judge(Game* game, i32 me_id, i32 lower, i32 higher, CardType type) {
         respond_all(game, "status");
         if (lower <= top_card->priority && top_card->priority <= higher) {
             game->discard->push(game->discard, top_card);
+            respond_all(game, "status");
             DEBUG_PRINT("In range\n");
             return SUCCESS;
         }
         game->discard->push(game->discard, top_card);
     }
     DEBUG_PRINT("Out of range\n");
+    respond_all(game, "status");
     return FAIL;
 }
 

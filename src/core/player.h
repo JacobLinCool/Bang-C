@@ -106,6 +106,7 @@ bool real_player_select(Game* game, i32 player_id, Cards* cards) {
 }
 
 bool computer_player_select(Game* game, i32 player_id, Cards* cards) {
+    respond_all(game, "status");
     Player* player = game->players->get(game->players, player_id);
     /*i32     random = rand() % cards->size;*/
 
@@ -120,6 +121,7 @@ bool computer_player_select(Game* game, i32 player_id, Cards* cards) {
 Card* computer_player_request(Game* game, i32 player_id);
 
 Card* real_player_request(Game* game, i32 player_id) {
+    respond_all(game, "status");
     Player* player = game->players->get(game->players, player_id);
     Client* client = find_client_by_id(player_id);
 
@@ -152,19 +154,19 @@ Card* real_player_request(Game* game, i32 player_id) {
 done:
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
-        respond_all(game, "status");
     }
+    Card* remove_card = player->hands->remove(player->hands, input);
     respond_all(game, "status");
-    return player->hands->remove(player->hands, input);
+    return remove_card;
 }
 
 Card* computer_player_request(Game* game, i32 player_id) {
+    respond_all(game, "status");
     Player* player = game->players->get(game->players, player_id);
     // i32     random = rand() % player->hands->size;
     if (ai_request_type == AI_SPECIFY) {
         usleep(1000 * 1000 / speed);
         DEBUG_PRINT("Specify to player %d: [%s]\n", player_id, card_name[ai_request_card]);
-        respond_all(game, "status");
         for (int i = 0; i < player->hands->size; i++) {
             if (player->hands->data[i]->type == ai_request_card) {
                 DEBUG_PRINT("Return: [%s](id:%d)\n", card_name[player->hands->data[i]->type], i);
@@ -181,8 +183,8 @@ Card* computer_player_request(Game* game, i32 player_id) {
     //  DEBUG_PRINT("Choose: %s\n", choose < 0 ? "NULL" : card_name[choose]);
     if (player->hands->size == 1 && player->character->type == Suzy_Lafayette) {
         player_draw_deck(game, player->id, 1);
-        respond_all(game, "status");
     }
+    respond_all(game, "status");
     if (choose < 0) return NULL;
     return player->hands->remove(player->hands, choose);
 }
