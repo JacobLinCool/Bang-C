@@ -237,15 +237,27 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     i32     missed_total = 0;
     Player* enemy = game->players->data[enemy_id];
     if (enemy->barrel != NULL) {
-        respond_all_chat($(String.format("%s: The barrel judge work!", enemy->name)));
-        if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
+        
+        if (judge(game, enemy_id, 201, 213, Barrel)){
+            missed_total++;
+            respond_all_chat($(String.format("%s: The barrel block bullet!", enemy->name)));
+        }
+        else {
+            respond_all_chat($(String.format("%s: The bullet run through the barrel!", enemy->name)));
+        }
     }
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
     if (enemy->character->type == Jourdonnais) {
         respond_all_chat($(String.format(
             "%s: Use Jourdonnais's skill! I have another chance to barrel judge!", enemy->name)));
-        if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
+        if (judge(game, enemy_id, 201, 213, Barrel)){
+            missed_total++;
+            respond_all_chat($(String.format("%s: The barrel block bullet!", enemy->name)));
+        }
+        else {
+            respond_all_chat($(String.format("%s: The bullet run through the barrel!", enemy->name)));
+        }
     }
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
