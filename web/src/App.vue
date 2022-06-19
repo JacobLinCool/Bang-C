@@ -28,6 +28,7 @@ ws.addEventListener("close", (event) => {
 
 const spotlight = ref<C | CharacterType | RoleType | null>(null);
 const spotlight_type = ref(0);
+const chat_message = ref("");
 
 provide("spotlight", spotlight);
 provide("spotlight_type", spotlight_type);
@@ -35,6 +36,11 @@ provide("spotlight_type", spotlight_type);
 function select_card(x: number) {
     send("select_card", { card: x });
     selecting.splice(0, selecting.length);
+}
+
+function chat() {
+    send("chat", { message: chat_message.value.trim().slice(0, 400) });
+    chat_message.value = "";
 }
 </script>
 
@@ -47,14 +53,25 @@ function select_card(x: number) {
                 <Winner v-if="state === 2" />
             </Fade>
         </div>
-        <div class="w-1/5 h-full bg-white/50 flex flex-col-reverse overflow-y-auto">
-            <TransitionGroup name="logs">
-                <div v-for="log of rev_logs" :key="log.i" class="p-2">
-                    <span :class="[log.type === 'chat' ? 'text-gray-600' : 'text-red-600']">{{
-                        log.message
-                    }}</span>
-                </div>
-            </TransitionGroup>
+        <div class="w-1/5 h-full bg-white/50 flex flex-col">
+            <div class="flex-1 w-full flex flex-col-reverse overflow-y-auto">
+                <TransitionGroup name="logs">
+                    <div v-for="log of rev_logs" :key="log.i" class="p-2">
+                        <span :class="[log.type === 'chat' ? 'text-gray-600' : 'text-red-600']">{{
+                            log.message
+                        }}</span>
+                    </div>
+                </TransitionGroup>
+            </div>
+            <div class="transition-all w-full m-0 p-0">
+                <textarea
+                    class="w-full h-20 transition-all outline-none focus:outline-none p-2 bg-white/50 focus:bg-white border-t border-orange-200 focus:border-orange-500 focus:border-t-2 resize-none focus:h-60"
+                    v-model="chat_message"
+                    placeholder="Type here to chat, press enter to send."
+                    maxlength="400"
+                    @keyup.enter="chat"
+                ></textarea>
+            </div>
         </div>
         <Fade>
             <div
