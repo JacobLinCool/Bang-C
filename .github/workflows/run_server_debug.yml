@@ -1,0 +1,41 @@
+name: Run Websocket Server in Debug Mode
+
+on:
+    workflow_dispatch:
+        inputs:
+            duration:
+                description: The duration of the service to run. Number with optional suffix, 's' (default), 'm', 'h'.
+                required: true
+                default: "2h"
+
+jobs:
+    serve:
+        runs-on: ubuntu-latest
+        timeout-minutes: 1440 # maximum duration is 24 hours
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Install Valgrind
+              run: sudo apt update && sudo apt install valgrind -y
+
+            - name: Setup
+              run: sudo make setup
+
+            - name: Build Server
+              run: make server-debug
+
+            - name: Install Cloudflared
+              run: |
+                  curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+                  sudo dpkg -i cloudflared.deb
+
+            - name: Start Tunnel
+              run: |
+                  sudo cloudflared service install ${{ secrets.TUNNEL_TOKEN }} &
+
+            - name: Start Server
+              run: |
+                  date 
+                  timeout ${{ github.event.inputs.duration }} make valgrind || true
+                  date
