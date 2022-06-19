@@ -7,7 +7,10 @@
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* me = NULL;
     Player* enemy = NULL;
-    if (me_id != -1) me = game->players->data[me_id];
+    if (me_id != -1)
+        me = game->players->data[me_id];
+    else
+        me = game->players->data[enemy_id];
     enemy = game->players->data[enemy_id];
     if (enemy->hp > 0) return;
     while (1) {
