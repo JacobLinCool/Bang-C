@@ -275,6 +275,7 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
         player_draw_deck(game, target->id, 1);
         respond_all(game, "status");
     }
+    if (target->hands->size == 0) return NULL;
     i32 random = rand() % target->hands->size;
     return target->hands->remove(target->hands, random);
 }

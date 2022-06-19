@@ -483,10 +483,10 @@ bool panic(Game* game, i32 me_id) {
 }
 
 bool cat_balou(Game* game, i32 me_id) {
-    i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
-    if (enemy_id < 0) return FAIL;
+    Player* player = game->players->data[me_id];
+    i32     enemy_id = player->choose_enemy(game, player->id);
 
-    respond_all(game, "status");
+    if (enemy_id < 0 || game->players->get(game->players, enemy_id)->hands->size == 0) return FAIL;
 
     respond_all_chat($(String.format("%s: I use Cat_balou to %s!", game->players->data[me_id]->name,
                                      game->players->data[enemy_id]->name)));
@@ -495,6 +495,7 @@ bool cat_balou(Game* game, i32 me_id) {
     respond_all(game, "show cat_balou");
 
     respond_all(game, "status");
+
     discard_from_enemy(game, me_id, enemy_id);
     respond_all(game, "status");
     return SUCCESS;
