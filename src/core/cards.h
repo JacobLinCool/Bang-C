@@ -5,10 +5,10 @@
 #include "ai.h"
 
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
+    respond_all(game, "status");
     Player* me = game->players->data[me_id];
     Player* enemy = game->players->data[enemy_id];
     if (enemy->hp > 0) return;
-    respond_all(game, "status");
     while (1) {
         respond_all(game, "status");
         ai_request_setting(AI_SPECIFY, Beer);
@@ -19,7 +19,6 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             game->discard->push(game->discard, card);
             respond_all(game, "status");
             respond_all_chat($(String.format("%s: I use Beer avoid died!", enemy->name)));
-            respond_all(game, "status");
             return;
         } else {
             respond_error(find_client_by_id(enemy_id), "You only can use Beer avoid died");
@@ -35,9 +34,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             respond_chat(find_client_by_id(enemy_id),
                          "Your're close to died, you can select two cards to heal youself");
             DEBUG_PRINT("enemy has 2 or more cards\n");
-            respond_all(game, "status");
             while (1) {
-                respond_all(game, "status");
                 ai_request_setting(AI_DISCARD, 0);
                 Card* card = game->players->data[enemy_id]->request(game, enemy_id);
                 respond_all(game, "status");
@@ -50,15 +47,14 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             }
             DEBUG_PRINT("has discarded one card\n");
             while (1) {
-                respond_all(game, "status");
                 ai_request_setting(AI_DISCARD, 0);
                 Card* card = game->players->data[enemy_id]->request(game, enemy_id);
+                respond_all(game, "status");
                 if (card != NULL) {
                     game->discard->push(game->discard, card);
                     respond_all(game, "status");
                     break;
                 }
-                respond_all(game, "status");
             }
             game->players->data[enemy_id]->hp++;
             respond_all(game, "status");
@@ -67,7 +63,6 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             return;
         }
     }
-    respond_all(game, "status");
     enemy->dead = true;
     respond_all(game, "status");
     respond_all_chat($(String.format("%s kill %s", game->players->data[me_id]->name, enemy->name)));
@@ -75,7 +70,6 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
            role_name[enemy->role->type], me->name, role_name[me->role->type]);
     respond_all_chat(
         $(String.format("%s died, his role is %s", enemy->name, role_name[enemy->role->type])));
-    respond_all(game, "status");
 
     // END OF THE GAME detection
     // find Criminal, Traitor.
@@ -93,7 +87,6 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         respond_all_chat("All Criminal and Traitor died, game end!");
         DEBUG_PRINT("game finished.\n");
     }
-    respond_all(game, "status");
 
     if (game->finished) return;
     DEBUG_PRINT("game not finished.\n");
@@ -110,7 +103,6 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             }
         }
     }
-    respond_all(game, "status");
     transfer(enemy->hands, discard_card);
     respond_all(game, "status");
     if (NULL != enemy->weapon) {
@@ -137,21 +129,18 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         discard_card->push(discard_card, enemy->dynamite);
         enemy->dynamite = NULL;
     }
-
     respond_all(game, "status");
+
     // Penalties and Rewards
     DEBUG_PRINT("Penalties and Rewards.\n");
     if (me_id == enemy_id) {
         DEBUG_PRINT("I killed myself.\n");
         respond_all_chat($(String.format("%s: I killed myself...", me->name)));
-        respond_all(game, "status");
         return;
     }
-    respond_all(game, "status");
     if (enemy->role->type == Deputy && me->role->type == Sheriff) {
         // Sheriff discards all cards
         DEBUG_PRINT("Penalty: discard all cards\n");
-        respond_all(game, "status");
         respond_all_chat(
             $(String.format("Sherif killed Deputy! He lose his all cards!", me->name)));
         discard_card = game->discard;
@@ -181,14 +170,11 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
             discard_card->push(discard_card, me->dynamite);
             me->dynamite = NULL;
         }
-        respond_all(game, "status");
     } else if (enemy->role->type == Criminal) {
         DEBUG_PRINT("Reward: draw 3 cards\n");
-        respond_all(game, "status");
         respond_all_chat(
             $(String.format("%s kill Criminal, he get three cards for reward", me->name)));
         player_draw_deck(game, me_id, 3);
-        respond_all(game, "status");
     }
     respond_all(game, "status");
     return;
@@ -196,16 +182,17 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
 
 // If no me_id, me_id = player_id
 void attack_player(Game* game, i32 me_id, i32 enemy_id) {
-    DEBUG_PRINT("%d attack %d\n", me_id, enemy_id);
     respond_all(game, "status");
+    DEBUG_PRINT("%d attack %d\n", me_id, enemy_id);
     if (get_player_hp(game, enemy_id) <= 0) return;  // avoid dynamaite_judge error
+
+    // decrease player's hp
+    game->players->data[enemy_id]->hp--;
     respond_all_chat(
         $(String.format("%s attack %s", me_id != -1 ? game->players->data[me_id]->name : "Dynamite",
                         game->players->data[enemy_id]->name)));
-    // decrease player's hp
     respond_all(game, "status");
-    game->players->data[enemy_id]->hp--;
-    respond_all(game, "status");
+
     // use character ablity(if valid)
     CharacterType enemy_type = game->players->data[enemy_id]->character->type;
     if (enemy_type == Bart_Cassidy || enemy_type == El_Gringo) {
@@ -213,27 +200,23 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             respond_all_chat($(
                 String.format("%s: Use Bart Cassidy's skill! I can get one card when I'm attacked",
                               game->players->data[enemy_id]->name)));
-            respond_all(game, "status");
             Card* card = get_deck_top(game);
             game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands, card);
-            respond_all(game, "status");
         }
         if (enemy_type == El_Gringo && me_id != -1) {
             respond_all_chat($(
                 String.format("%s: Use El Gringo's skill! I can get one card from attacking people",
                               game->players->data[enemy_id]->name)));
-            respond_all(game, "status");
             draw_from_player(game, enemy_id, me_id);
-            respond_all(game, "status");
         }
     }
     respond_all(game, "status");
 
     // determine AI hate value
     ai_hate_change(game, me_id, enemy_id, 1);
-    respond_all(game, "status");
     // dead
     // died_player(game, me_id, enemy_id);
+    respond_all(game, "status");
     return;
 }
 
@@ -246,18 +229,14 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     Player* enemy = game->players->data[enemy_id];
     if (enemy->barrel != NULL) {
         respond_all_chat($(String.format("%s: The barrel judge work!", enemy->name)));
-        respond_all(game, "status");
         if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
-        respond_all(game, "status");
     }
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
     if (enemy->character->type == Jourdonnais) {
         respond_all_chat($(String.format(
             "%s: Use Jourdonnais's skill! I have another chance to barrel judge!", enemy->name)));
-        respond_all(game, "status");
         if (judge(game, enemy_id, 201, 213, Barrel)) missed_total++;
-        respond_all(game, "status");
     }
     if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
         return;
@@ -268,14 +247,12 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     i32   card_amount = 0;
     respond_chat(find_client_by_id(enemy->id), "You can use missed to avoid attack");
 
-    respond_all(game, "status");
     while (1) {
         respond_error(
             find_client_by_id(enemy->id),
             $(String.format("You still need %d missed to avoid attack",
                             1 + (game->players->data[me_id]->character->type == Slab_the_Killer) -
                                 missed_total)));
-        respond_all(game, "status");
         ai_request_setting(AI_SPECIFY, Missed);  // ai no use bang
         card[card_amount] = enemy->request(game, enemy_id);
         respond_all(game, "status");
@@ -283,23 +260,18 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
         //             card[card_amount] == NULL ? "NULL" : card_name[card[card_amount]->type]);
         if (card[card_amount] == NULL) break;
         if (card[card_amount]->type == Missed) {
-            respond_all(game, "status");
             respond_all_chat(
                 $(String.format("%s use missed to avoid one attack point", enemy->name)));
             // card_amount++;
             missed_total++;
-            respond_all(game, "status");
         }
         if (card[card_amount]->type == Bang && enemy->character->type == Calamity_Janet) {
-            respond_all(game, "status");
             respond_all_chat($(String.format(
                 "%s: Use Calamity Janet's skill! My Bang can be used as Missed!", enemy->name)));
             // card_amount++;
             missed_total++;
-            respond_all(game, "status");
         }
         if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer)) {
-            respond_all(game, "status");
             pass = true;
             break;
         }
@@ -307,15 +279,11 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
         if (enemy->character->type == Calamity_Janet) {
             if (card[card_amount]->type != Bang && card[card_amount]->type != Missed) {
                 respond_error(find_client_by_id(enemy_id), "You can't use this card");
-                respond_all(game, "status");
                 enemy->hands->push(enemy->hands, card[card_amount]);
-                respond_all(game, "status");
             }
         } else if (card[card_amount]->type != Missed) {
-            respond_all(game, "status");
             respond_error(find_client_by_id(enemy_id), "You can't use this card");
             enemy->hands->push(enemy->hands, card[card_amount]);
-            respond_all(game, "status");
         }
         respond_all(game, "status");
     }
@@ -329,46 +297,38 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     }
     respond_all_chat(
         $(String.format("%s avoid %s attack ", enemy->name, game->players->data[me_id]->name)));
-    respond_all(game, "status");
     attack_player(game, me_id, enemy_id);
     respond_all(game, "status");
     return;
 }
 
 void dynamite_judge(Game* game, i32 me_id) {
+    respond_all(game, "status");
     Player* me = game->players->data[me_id];
     bool    dynamite_judge_result = judge(game, me_id, 102, 109, Dynamite);
     respond_all_chat($(String.format("The dynamite_judge result is ... %s",
                                      dynamite_judge_result ? "EXPLOSION!!!" : "SAFTY!!!")));
-    respond_all(game, "status");
     if (dynamite_judge_result) {
         game->discard->push(game->discard, me->dynamite);
         me->dynamite = NULL;
-        respond_all(game, "status");
         attack_player(game, me_id, me_id);
-        respond_all(game, "status");
         attack_player(game, me_id, me_id);
-        respond_all(game, "status");
         attack_player(game, me_id, me_id);
-        respond_all(game, "status");
     } else {
         i32 left_player_id = (me_id + 1) % game->players->size;
-        respond_all(game, "status");
         while (game->players->data[left_player_id]->hp <= 0) {
             left_player_id = (left_player_id + 1) % game->players->size;
         }
-        respond_all(game, "status");
         game->players->data[left_player_id]->dynamite = me->dynamite;
         me->dynamite = NULL;
-        respond_all(game, "status");
     }
+    respond_all(game, "status");
 }
 
 bool jail_judge(Game* game, i32 me_id) {
     respond_all(game, "status");
     game->discard->push(game->discard, game->players->data[me_id]->jail);
     game->players->data[me_id]->jail = NULL;
-    respond_all(game, "status");
     bool jail_judge_result = judge(game, me_id, 201, 213, Jail);
     respond_all_chat($(String.format("The jail_judge result is ... %s",
                                      jail_judge_result ? "SUCCESS!!!" : "FAIL!!!")));
@@ -378,6 +338,7 @@ bool jail_judge(Game* game, i32 me_id) {
 }
 
 bool bang(Game* game, i32 me_id) {
+    respond_all(game, "status");
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
     if (enemy_id < 0) return FAIL;
 
@@ -396,13 +357,10 @@ bool bang(Game* game, i32 me_id) {
         return FAIL;
     }
 
-    respond_all(game, "status");
     respond_all_chat(
         $(String.format("%s: I use Bang to attack %s!", game->players->data[me_id]->name,
                         game->players->data[enemy_id]->name)));
     respond_all(game, "show bang");
-
-    respond_all(game, "status");
     bang_no_distance(game, me_id, enemy_id);
     respond_all(game, "status");
     return SUCCESS;
@@ -418,11 +376,10 @@ bool gatling(Game* game, i32 me_id) {
     respond_all(game, "show gatling");
     for (int i = 0; i < game->players->size; i++) {
         if (get_player_hp(game, i) <= 0 || me_id == i) continue;
-        respond_all(game, "status");
         respond_error(find_client_by_id(i), "You need to use a Missed to avoid Gatling card");
         bang_no_distance(game, me_id, i);
-        respond_all(game, "status");
     }
+    respond_all(game, "status");
     return SUCCESS;
 }
 
@@ -434,7 +391,6 @@ bool indians(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
         if (get_player_hp(game, i) <= 0 || me_id == i) continue;
         while (1) {
-            respond_all(game, "status");
             respond_error(find_client_by_id(i), "You need to use a Bang to avoid Indians card");
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[i]->request(game, i);
@@ -459,30 +415,31 @@ bool indians(Game* game, i32 me_id) {
             }
         }
     }
+    respond_all(game, "status");
     return SUCCESS;
 }
 
 bool panic(Game* game, i32 me_id) {
+    respond_all(game, "status");
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
     if (enemy_id < 0) return FAIL;
 
     // calculate distance between me and enemy
     if (distance(game, me_id, enemy_id) > 1) return FAIL;
 
-    respond_all(game, "status");
     respond_all_chat($(String.format("%s: I use Panic to %s!", game->players->data[me_id]->name,
                                      game->players->data[enemy_id]->name)));
     respond_error(find_client_by_id(enemy_id),
                   $(String.format("You're used Panic by %s", game->players->data[me_id]->name)));
     respond_all(game, "show panic");
 
-    respond_all(game, "status");
     draw_from_player(game, me_id, enemy_id);
     respond_all(game, "status");
     return SUCCESS;
 }
 
 bool cat_balou(Game* game, i32 me_id) {
+    respond_all(game, "status");
     Player* player = game->players->data[me_id];
     i32     enemy_id = player->choose_enemy(game, player->id);
 
@@ -493,8 +450,6 @@ bool cat_balou(Game* game, i32 me_id) {
     respond_error(find_client_by_id(enemy_id), $(String.format("You're used Cat_balou by %s",
                                                                game->players->data[me_id]->name)));
     respond_all(game, "show cat_balou");
-
-    respond_all(game, "status");
 
     discard_from_enemy(game, me_id, enemy_id);
     respond_all(game, "status");
@@ -507,17 +462,16 @@ bool stagecoach(Game* game, i32 me_id) {
     respond_all_chat($(String.format("%s: I use Stagecoach!", game->players->data[me_id]->name)));
     respond_all(game, "show stagecoach");
 
-    respond_all(game, "status");
     player_draw_deck(game, me_id, 2);
     respond_all(game, "status");
     return SUCCESS;
 }
 
 bool wells_fargo(Game* game, i32 me_id) {
+    respond_all(game, "status");
     respond_all_chat($(String.format("%s: I use Wells_fargo!", game->players->data[me_id]->name)));
     respond_all(game, "show wells_fargo");
 
-    respond_all(game, "status");
     player_draw_deck(game, me_id, 3);
     respond_all(game, "status");
     return SUCCESS;
@@ -556,23 +510,21 @@ bool saloon(Game* game, i32 me_id) {
 }
 
 bool duel(Game* game, i32 me_id) {
+    respond_all(game, "status");
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
     if (enemy_id < 0) return FAIL;
 
-    respond_all(game, "status");
     respond_all_chat($(String.format("%s: I use Duel to %s!", game->players->data[me_id]->name,
                                      game->players->data[enemy_id]->name)));
     respond_error(find_client_by_id(enemy_id),
                   $(String.format("You're used Duel by %s", game->players->data[me_id]->name)));
     respond_all(game, "show duel");
-    respond_all(game, "status");
 
     // duel
     bool duel_finish = false;
     while (1) {
         respond_all(game, "status");
         while (1) {
-            respond_all(game, "status");
             respond_error(find_client_by_id(enemy_id),
                           "You need to use Bang to avoid attack from duel!");
             ai_request_setting(AI_SPECIFY, Bang);
@@ -583,14 +535,12 @@ bool duel(Game* game, i32 me_id) {
                     $(String.format("%s loses the duel", game->players->data[enemy_id]->name)));
                 attack_player(game, me_id, enemy_id);
                 duel_finish = true;
-                respond_all(game, "status");
                 break;
             }
             if (card->type == Bang) {
                 respond_all_chat($(
                     String.format("%s use a bang for duel", game->players->data[enemy_id]->name)));
                 game->discard->push(game->discard, card);
-                respond_all(game, "status");
                 break;
             } else if (card->type == Missed &&
                        game->players->data[enemy_id]->character->type == Calamity_Janet) {
@@ -598,21 +548,20 @@ bool duel(Game* game, i32 me_id) {
                     String.format("%s: Use Calamity Janet's skill! My Bang can be used as Missed!",
                                   game->players->data[enemy_id]->name)));
                 game->discard->push(game->discard, card);
-                respond_all(game, "status");
                 break;
             } else {
                 respond_error(find_client_by_id(enemy_id), "You can't use this card");
                 game->players->data[enemy_id]->hands->push(game->players->data[enemy_id]->hands,
                                                            card);
-                respond_all(game, "status");
             }
+            respond_all(game, "status");
         }
         respond_all(game, "status");
         if (duel_finish) break;
         while (1) {
+            respond_all(game, "status");
             respond_error(find_client_by_id(enemy_id),
                           "You need to use Bang to avoid attack from duel!");
-            respond_all(game, "status");
             ai_request_setting(AI_SPECIFY, Bang);
             Card* card = game->players->data[me_id]->request(game, me_id);
             respond_all(game, "status");
@@ -621,14 +570,12 @@ bool duel(Game* game, i32 me_id) {
                     $(String.format("%s loses the duel", game->players->data[me_id]->name)));
                 attack_player(game, enemy_id, me_id);
                 duel_finish = true;
-                respond_all(game, "status");
                 break;
             }
             if (card->type == Bang) {
                 respond_all_chat(
                     $(String.format("%s use a bang for duel", game->players->data[me_id]->name)));
                 game->discard->push(game->discard, card);
-                respond_all(game, "status");
                 break;
             } else if (card->type == Missed &&
                        game->players->data[me_id]->character->type == Calamity_Janet) {
@@ -636,13 +583,12 @@ bool duel(Game* game, i32 me_id) {
                     String.format("%s: Use Calamity Janet's skill! My Bang can be used as Missed!",
                                   game->players->data[me_id]->name)));
                 game->discard->push(game->discard, card);
-                respond_all(game, "status");
                 break;
             } else {
                 respond_error(find_client_by_id(me_id), "You can't use this card");
                 game->players->data[me_id]->hands->push(game->players->data[me_id]->hands, card);
-                respond_all(game, "status");
             }
+            respond_all(game, "status");
         }
         if (duel_finish) break;
     }
@@ -721,8 +667,7 @@ bool general_store(Game* game, i32 me_id) {
     respond_all(game, "status");
 
     for (int i = 0; i < game->players->size; i++) {
-        int id = (me_id + i) % game->players->size;
-        respond_all(game, "status");
+        int     id = (me_id + i) % game->players->size;
         Player* player = game->players->get(game->players, id);
         ai_request_setting(AI_FORCE_PLAY, 0);
         respond_all(game, "status");
@@ -733,7 +678,6 @@ bool general_store(Game* game, i32 me_id) {
         respond_all(game, "status");
     }
     set->free(set);
-
     return SUCCESS;
 }
 
@@ -807,7 +751,7 @@ Card decks[] = {{.type = Bang, .priority = 101, .use = bang},  // Done, Todo: re
                 {.type = Beer, .priority = 210, .use = beer},
                 {.type = Beer, .priority = 211, .use = beer},
                 {.type = Saloon, .priority = 205, .use = saloon},
-                {.type = Duel, .priority = 111, .use = duel},  // Done, Todo: request,choose_enemy
+                {.type = Duel, .priority = 111, .use = duel},
                 {.type = Duel, .priority = 312, .use = duel},
                 {.type = Duel, .priority = 408, .use = duel},
                 {.type = Barrel, .priority = 112, .use = barrel},
