@@ -126,7 +126,9 @@ bool player_draw_deck(Game* game, i32 me_id, i32 count) {
  */
 bool judge(Game* game, i32 me_id, i32 lower, i32 higher, CardType type) {
     Card* top_card = get_deck_top(game);
-    respond_all(game, "status");
+    respond_all_with_card(game, "show card", top_card);
+    respond_all_chat($(String.format("The judge card is...%s of %d", suit[top_card->priority / 100],
+                                     top_card->priority % 100)));
     CharacterType char_type = game->players->data[me_id]->character->type;
     DEBUG_PRINT("result: %u,", top_card->priority);
     if (lower <= top_card->priority && top_card->priority <= higher) {
@@ -150,7 +152,9 @@ bool judge(Game* game, i32 me_id, i32 lower, i32 higher, CardType type) {
     game->discard->push(game->discard, top_card);
     if (char_type == Lucky_Duke) {
         top_card = get_deck_top(game);
-        respond_all(game, "status");
+        respond_all_chat(
+            $(String.format("The judge card is...%s of %d", suit[top_card->priority / 100],
+                            top_card->priority % 100)));
         if (lower <= top_card->priority && top_card->priority <= higher) {
             game->discard->push(game->discard, top_card);
             respond_all(game, "status");
