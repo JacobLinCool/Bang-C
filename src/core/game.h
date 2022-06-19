@@ -121,7 +121,7 @@ void game_next(Game *game) {
         DEBUG_PRINT("judge: dynamite\n");
         respond_all_chat("Will the dynamite explode?");
         dynamite_judge(game, player->id);
-        died_player(game, player->id, player->id);
+        died_player(game, -1, player->id);
     }
     if (player->hp <= 0) {
         died_player(game, -1, player->id);
@@ -341,7 +341,6 @@ void game_next(Game *game) {
         }
         // respond_all(game, "status");
     }
-    respond_all_chat($(String.format("%s round end", player->name)));
 #if (DEBUG)
     fprintf(fp, "after discard card:\n");
     print_status(game, fp);

@@ -21,6 +21,7 @@ void died_player(Game* game, i32 me_id, i32 enemy_id) {
         if (card == NULL) break;
         if (card->type == Beer) {
             game->discard->push(game->discard, card);
+            enemy->hp++;
             respond_all(game, "status");
             respond_all_chat($(String.format("%s: I use BEER avoid died!", enemy->name)));
             return;
@@ -217,12 +218,12 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
             respond_all_chat($(
                 String.format("%s: Use El Gringo's skill! I can get one card from attacking people",
                               game->players->data[enemy_id]->name)));
-            if (game->players->data[me_id]->hands->size == 0) {
+            if (me_id != -1 && game->players->data[me_id]->hands->size == 0) {
                 respond_error(find_client_by_id(enemy_id),
                               "Sadly, there are no any card can draw from enemy");
             } else {
                 El_Gringo_active = true;
-                while (1) {
+                while (me_id != -1) {
                     Player* enemy = game->players->get(game->players, enemy_id);
                     Card*   card = enemy->take(game, enemy_id, me_id);
                     if (card != NULL) {
@@ -244,7 +245,7 @@ void attack_player(Game* game, i32 me_id, i32 enemy_id) {
     return;
 }
 
-void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
+void bang_no_distance(Game* game, i32 me_id, i32 enemy_id, bool isBANG) {
     respond_all(game, "status");
     respond_error(find_client_by_id(enemy_id),
                   $(String.format("You're attacked by %s!", game->players->data[me_id]->name)));
@@ -260,7 +261,8 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
                 $(String.format("%s: The bullet run through the barrel!", enemy->name)));
         }
     }
-    if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
+    if (missed_total >=
+        1 + (game->players->data[me_id]->character->type == Slab_the_Killer && isBANG))
         return;
     if (enemy->character->type == Jourdonnais) {
         respond_all_chat($(String.format(
@@ -273,7 +275,8 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
                 $(String.format("%s: The bullet run through the barrel!", enemy->name)));
         }
     }
-    if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer))
+    if (missed_total >=
+        1 + (game->players->data[me_id]->character->type == Slab_the_Killer && isBANG))
         return;
 
     // respond_all(game, "status");
@@ -285,9 +288,10 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     while (1) {
         respond_error(
             find_client_by_id(enemy->id),
-            $(String.format("You still need %d MISSED to avoid attack",
-                            1 + (game->players->data[me_id]->character->type == Slab_the_Killer) -
-                                missed_total)));
+            $(String.format(
+                "You still need %d MISSED to avoid attack",
+                1 + (game->players->data[me_id]->character->type == Slab_the_Killer && isBANG) -
+                    missed_total)));
         ai_request_setting(AI_SPECIFY, Missed);  // ai no use bang
         card[card_amount] = enemy->request(game, enemy_id);
         // respond_all(game, "status");
@@ -306,7 +310,8 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
             // card_amount++;
             missed_total++;
         }
-        if (missed_total >= 1 + (game->players->data[me_id]->character->type == Slab_the_Killer)) {
+        if (missed_total >=
+            1 + (game->players->data[me_id]->character->type == Slab_the_Killer && isBANG)) {
             pass = true;
             break;
         }
@@ -327,11 +332,12 @@ void bang_no_distance(Game* game, i32 me_id, i32 enemy_id) {
     if (pass) {
         if (card[0]) game->discard->push(game->discard, card[0]);
         if (card[1]) game->discard->push(game->discard, card[1]);
+        respond_all_chat(
+            $(String.format("%s avoid %s attack ", enemy->name, game->players->data[me_id]->name)));
         respond_all(game, "status");
         return;
     }
-    respond_all_chat(
-        $(String.format("%s avoid %s attack ", enemy->name, game->players->data[me_id]->name)));
+
     attack_player(game, me_id, enemy_id);
     // respond_all(game, "status");
     return;
@@ -346,9 +352,9 @@ void dynamite_judge(Game* game, i32 me_id) {
     if (dynamite_judge_result) {
         game->discard->push(game->discard, me->dynamite);
         me->dynamite = NULL;
-        attack_player(game, me_id, me_id);
-        attack_player(game, me_id, me_id);
-        attack_player(game, me_id, me_id);
+        attack_player(game, -1, me_id);
+        attack_player(game, -1, me_id);
+        attack_player(game, -1, me_id);
     } else {
         i32 left_player_id = (me_id + 1) % game->players->size;
         while (game->players->data[left_player_id]->hp <= 0) {
@@ -396,7 +402,7 @@ bool bang(Game* game, i32 me_id) {
         $(String.format("%s: I use BANG to attack %s!", game->players->data[me_id]->name,
                         game->players->data[enemy_id]->name)));
     respond_all(game, "show bang");
-    bang_no_distance(game, me_id, enemy_id);
+    bang_no_distance(game, me_id, enemy_id, true);
     // respond_all(game, "status");
     return SUCCESS;
 }
@@ -412,7 +418,7 @@ bool gatling(Game* game, i32 me_id) {
     for (int i = 0; i < game->players->size; i++) {
         if (get_player_hp(game, i) <= 0 || me_id == i) continue;
         respond_error(find_client_by_id(i), "You need to use a MISSED to avoid GATLING card");
-        bang_no_distance(game, me_id, i);
+        bang_no_distance(game, me_id, i, false);
     }
     // respond_all(game, "status");
     return SUCCESS;
@@ -689,6 +695,9 @@ bool general_store(Game* game, i32 me_id) {
         set->push(set, get_deck_top(game));
     }
     respond_all(game, "status");
+    respond_all_chat(
+        $(String.format("%s: I use GENERAL STORE to %s!", game->players->data[me_id]->name)));
+    respond_all(game, "show general_store");
 
     for (int i = 0; i < game->players->size; i++) {
         int     id = (me_id + i) % game->players->size;
