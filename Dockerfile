@@ -7,7 +7,8 @@ RUN apt update && \
         zip \
         unzip \
         curl \
-        cmake
+        cmake \
+        valgrind
 
 COPY . /app
 
