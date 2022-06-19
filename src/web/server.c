@@ -458,7 +458,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
 
             Console.blue("[%p] Sending %s", instance, msg);
             size_t         len = strlen(msg);
-            unsigned char *payload = $(calloc(len + 1 + LWS_PRE, sizeof(char)));
+            unsigned char *payload = $(calloc(len + 1 + LWS_PRE + 4, sizeof(char)));
             memcpy(payload + LWS_PRE, msg, len + 1);
             lws_write(instance, payload + LWS_PRE, len, LWS_WRITE_TEXT);
             Console.green("[%p] Message sent, queueing: %zu", instance, client->msg_queue->size);
@@ -496,7 +496,7 @@ static int event_handler(struct lws *instance, enum lws_callback_reasons reason,
             }
             cJSON_Delete(list);
 
-            if (game != NULL && client->player_id != -1 && waiting_for_player != -1) {
+            if (game != NULL && client->player_id != -1) {
                 Console.info("[%p] %s leave the game, computer is now taking over", instance,
                              client->name);
                 Player *player = game->players->get(game->players, client->player_id);
