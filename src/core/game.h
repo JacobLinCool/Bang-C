@@ -120,7 +120,10 @@ void game_next(Game *game) {
         respond_all_chat("Will the dynamite explode?");
         dynamite_judge(game, player->id);
     }
-    if (player->hp <= 0) return;
+    if (player->hp <= 0) {
+        died_player(game, -1, player->id);
+        return;
+    }
     if (player->jail != NULL) {
         DEBUG_PRINT("judge: jail\n");
         respond_all_chat($(String.format("Will %s escapes from the jail?", player->name)));
