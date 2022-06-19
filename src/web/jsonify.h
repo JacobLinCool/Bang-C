@@ -49,6 +49,12 @@ cJSON *player_jsonify(Player *player, bool itself) {
     cJSON *dynamite = card_jsonify(player->dynamite, true);
     cJSON *hands = cJSON_CreateArray();
 
+    for (i32 i = 0; i < player->hands->size; i++) {
+        Card  *cur_card = player->hands->get(player->hands, i);
+        cJSON *json_card = card_jsonify(cur_card, itself);
+        cJSON_AddItemToArray(hands, json_card);
+    }
+
     cJSON_AddItemToObject(root, "name", name);
     cJSON_AddItemToObject(root, "id", id);
     cJSON_AddItemToObject(root, "dead", dead);
@@ -63,12 +69,6 @@ cJSON *player_jsonify(Player *player, bool itself) {
     cJSON_AddItemToObject(root, "dynamite", dynamite);
     cJSON_AddItemToObject(root, "hands", hands);
 
-    for (i32 i = 0; i < player->hands->size; i++) {
-        Card  *cur_card = player->hands->get(player->hands, i);
-        cJSON *json_card = card_jsonify(cur_card, itself);
-        cJSON_AddItemToArray(hands, json_card);
-    }
-
     return root;
 }
 
@@ -82,10 +82,7 @@ Client *find_client_by_id(int id) {
     return NULL;
 }
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-
 cJSON *game_jsonify(Game *game, i32 player_id) {
-    pthread_mutex_lock(&mutex);
     if (!game) {
         return NULL;
     }
@@ -97,12 +94,6 @@ cJSON *game_jsonify(Game *game, i32 player_id) {
     cJSON *finished = cJSON_CreateBool(game->finished);
     cJSON *deck_size = cJSON_CreateNumber(game->deck->size);
     cJSON *discards = cJSON_CreateArray();
-
-    cJSON_AddItemToObject(root, "players", players);
-    cJSON_AddItemToObject(root, "turn", turn);
-    cJSON_AddItemToObject(root, "finished", finished);
-    cJSON_AddItemToObject(root, "deck_size", deck_size);
-    cJSON_AddItemToObject(root, "discards", discards);
 
     for (i32 i = 0; i < game->players->size; i++) {
         Player *cur_player = game->players->get(game->players, i);
@@ -117,7 +108,12 @@ cJSON *game_jsonify(Game *game, i32 player_id) {
         cJSON_AddItemToArray(discards, json_discard);
     }
 
-    pthread_mutex_unlock(&mutex);
+    cJSON_AddItemToObject(root, "players", players);
+    cJSON_AddItemToObject(root, "turn", turn);
+    cJSON_AddItemToObject(root, "finished", finished);
+    cJSON_AddItemToObject(root, "deck_size", deck_size);
+    cJSON_AddItemToObject(root, "discards", discards);
+
     return root;
 }
 
@@ -126,13 +122,13 @@ cJSON *cards_jsonify(Game *game, i32 player_id, Cards *pool) {
 
     cJSON *cards = cJSON_CreateArray();
 
-    cJSON_AddItemToObject(root, "cards", cards);
-
     for (i32 i = 0; i < pool->size; i++) {
         Card  *cur_card = pool->get(pool, i);
         cJSON *json_card = card_jsonify(cur_card, true);
         cJSON_AddItemToArray(cards, json_card);
     }
+
+    cJSON_AddItemToObject(root, "cards", cards);
 
     return root;
 }

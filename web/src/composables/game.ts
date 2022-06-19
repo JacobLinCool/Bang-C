@@ -20,7 +20,10 @@ export const requesting = ref(false);
 export const choosing = ref(false);
 export const timer = ref(0);
 export const winner = ref(-1);
+export const showing = ref<Card | null>(null);
+export const ramirezing = ref(false);
 let timer_id: number;
+let show_timer_id: number;
 
 ws.addEventListener("open", () => {
     state.value = 0;
@@ -88,6 +91,17 @@ ws.addEventListener("message", (event) => {
             timer_start();
             break;
 
+        case "show card":
+            Object.assign(game, message.payload.game);
+            show_card(message.payload.card);
+            break;
+
+        case "ramirez":
+            Object.assign(game, message.payload.game);
+            logs.push({ type: "chat", message: "Do you want to use Ramirez's skill?" });
+            ramirezing.value = true;
+            break;
+
         case "end":
             Object.assign(game, message.payload.game);
             winner.value = message.payload.winner;
@@ -122,4 +136,12 @@ function timer_interval() {
     if (timer.value <= 0) {
         clearInterval(timer_id);
     }
+}
+
+export function show_card(card: Card) {
+    show_timer_id && clearInterval(show_timer_id);
+    show_timer_id = window.setInterval(() => {
+        showing.value = null;
+    }, 3_000);
+    showing.value = card;
 }

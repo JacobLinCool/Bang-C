@@ -3,7 +3,7 @@ src_dir = src
 test_dir = tests
 third_dir = $(src_dir)/third
 
-test_files = $(wildcard $(test_dir)/**/*.c)
+test_files = $(wildcard $(test_dir)/*.c)
 
 all: server
 
@@ -14,6 +14,9 @@ server: force
 server-debug: force
 	@$(cc) -pthread -D DEBUG -o server $(src_dir)/web/server.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
 	@echo "Build complete"
+
+valgrind: force
+	@valgrind --leak-check=full --show-reachable=yes --track-origins=yes --log-file=valgrind.log ./server
 
 build:
 	@$(cc) -o main $(src_dir)/main.c $(third_dir)/cJSON/libcjson.a $(third_dir)/libwebsockets/build/lib/libwebsockets.a
@@ -26,6 +29,8 @@ debug:
 mdebug:
 	@$(cc) -o main $(src_dir)/main.c -fsanitize=address -D DEBUG
 	@echo "Build complete"
+
+.PRECIOUS: test_files
 
 test: $(test_files)
 	@echo "Tests Passed"
