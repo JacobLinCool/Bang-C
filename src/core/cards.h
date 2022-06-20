@@ -4,6 +4,8 @@
 #include "../utils/all.h"
 #include "ai.h"
 
+bool has_weapon(Game* game, i32 player_id);
+
 void died_player(Game* game, i32 me_id, i32 enemy_id) {
     Player* me = NULL;
     Player* enemy = NULL;
@@ -460,7 +462,9 @@ bool indians(Game* game, i32 me_id) {
 
 bool panic(Game* game, i32 me_id) {
     i32 enemy_id = game->players->data[me_id]->choose_enemy(game, me_id);
-    if (enemy_id < 0) return FAIL;
+    if (enemy_id < 0 ||
+        has_weapon(game, enemy_id) + game->players->get(game->players, enemy_id)->hands->size == 0)
+        return FAIL;
 
     // calculate distance between me and enemy
     if (distance(game, me_id, enemy_id) > 1) return FAIL;
@@ -480,7 +484,9 @@ bool cat_balou(Game* game, i32 me_id) {
     Player* player = game->players->data[me_id];
     i32     enemy_id = player->choose_enemy(game, player->id);
 
-    if (enemy_id < 0 || game->players->get(game->players, enemy_id)->hands->size == 0) return FAIL;
+    if (enemy_id < 0 ||
+        has_weapon(game, enemy_id) + game->players->get(game->players, enemy_id)->hands->size == 0)
+        return FAIL;
 
     respond_all_chat($(String.format("%s: I use CAT BALOU to %s!", game->players->data[me_id]->name,
                                      game->players->data[enemy_id]->name)));
@@ -719,6 +725,15 @@ bool is_weapon(Card* card) {
         card->type == Rev_Carabine || card->type == Remington || card->type == Barrel ||
         card->type == Winchester || card->type == Mustang || card->type == Scope ||
         card->type == Dynamite || card->type == Jail) {
+        return true;
+    }
+    return false;
+}
+
+bool has_weapon(Game* game, i32 player_id) {
+    Player* player = game->players->get(game->players, player_id);
+    if (player->barrel != NULL || player->dynamite != NULL || player->jail != NULL ||
+        player->mustang != NULL || player->scope != NULL || player->weapon != NULL) {
         return true;
     }
     return false;
