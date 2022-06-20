@@ -411,6 +411,20 @@ Game *new_game() {
     return game;
 }
 
+void game_destroy(Game *game) {
+    for (size_t i = 0; i < game->players->size; i++) {
+        Player *player = game->players->get(game->players, i);
+        player->hands->free(player->hands);
+    }
+    game->players->free(game->players);
+    game->characters->free(game->characters);
+    game->roles->free(game->roles);
+    game->deck->free(game->deck);
+    game->discard->free(game->discard);
+
+    return;
+}
+
 bool equip_weapon(Game *game, i32 player_id, Card *card) {
     respond_all(game, "status");
     Player *player = game->players->data[player_id];

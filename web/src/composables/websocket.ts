@@ -1,10 +1,10 @@
-export function WSClient(verbose = true) {
-    const server =
-        window.location.hostname === "localhost"
-            ? "ws://localhost:8080/"
-            : "wss://bang-ws.jacoblin.cool";
+const default_server =
+    window.location.hostname === "localhost"
+        ? "ws://localhost:8080/"
+        : "wss://bang-ws.jacoblin.cool";
 
-    const ws = new WebSocket(server);
+export function WSClient(verbose = true, server = default_server) {
+    const ws = new WebSocket(server, "bang-gaming");
 
     ws.addEventListener("open", () => {
         verbose && console.log(`[WS] Connected to ${server}`);
