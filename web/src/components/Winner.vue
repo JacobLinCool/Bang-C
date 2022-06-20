@@ -15,9 +15,19 @@ const title = computed(() => {
     }
 });
 
-const winners = computed(() =>
-    game.players ? game.players.filter((p) => p.role === winner.value) : [],
-);
+const winners = computed(() => {
+    if (game.players) {
+        if (winner.value === RoleType.Sheriff) {
+            return game.players.filter(
+                (p) => p.role === RoleType.Sheriff || p.role === RoleType.Deputy,
+            );
+        } else {
+            return game.players.filter((p) => p.role === winner.value);
+        }
+    } else {
+        return [];
+    }
+});
 </script>
 
 <template>
