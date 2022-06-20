@@ -26,6 +26,12 @@ sem_t waiting_for_input;
 int   share_num;     // pthread
 i32   share_offset;  // pthread
 
+bool  game_started = false;
+bool  stop_server = false;
+sem_t gm_created;
+
+pthread_t gm, sv;
+
 StructDeque(Messages, char *, NULL);
 
 typedef struct Client {

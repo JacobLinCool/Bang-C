@@ -6,6 +6,7 @@
 
 typedef struct Game Game;
 typedef void (*CharacterSkill)(Game* game, i32 player_id);
+Game* game;
 
 typedef enum RoleType {
     ROLE_LOW_BOUND,
