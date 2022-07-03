@@ -11,7 +11,7 @@ void bang_action(Client *sender, char *action, cJSON *payload) {
     if (strcmp("join", action) == 0) {
         cJSON *list = create_player_list();
         for (size_t i = 0; i < clients->size; i++) {
-            if (computer_count + clients->size <= 7) {
+            if (computer_count + clients->size <= 7 && game_started == false) {
                 respond_chat(clients->get(clients, i),
                              $(String.format("%s join the game as a player.", sender->name)));
             } else {
