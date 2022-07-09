@@ -122,7 +122,7 @@ void game_next(Game *game) {
         respond_all_chat("Will the dynamite explode?");
         dynamite_judge(game, player->id);
         died_player(game, -1, player->id);
-        if (game->finished) return;
+        if (game->finished || player->hp <= 0) return;
     }
     if (player->jail != NULL) {
         DEBUG_PRINT("judge: jail\n");
