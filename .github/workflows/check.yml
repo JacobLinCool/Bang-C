@@ -22,7 +22,7 @@ jobs:
                   run_install: true
 
             - name: Lint
-              uses: DoozyX/clang-format-lint-action@v0.13
+              uses: DoozyX/clang-format-lint-action@v0.15
               with:
                   clangFormatVersion: 13
                   exclude: ./src/third/*
