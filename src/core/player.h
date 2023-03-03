@@ -282,6 +282,18 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
             Card* x = target->weapon;
             target->weapon = NULL;
             return x;
+        } else if (target->scope != NULL) {
+            Card* x = target->scope;
+            target->scope = NULL;
+            return x;
+        } else if (target->dynamite != NULL) {
+            Card* x = target->dynamite;
+            target->dynamite = NULL;
+            return x;
+        } else if (target->jail != NULL) {
+            Card* x = target->jail;
+            target->jail = NULL;
+            return x;
         }
     }
     if (target->hands->size == 1 && target->character->type == Suzy_Lafayette) {
