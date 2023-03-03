@@ -270,11 +270,11 @@ Card* computer_player_take(Game* game, i32 player_id, i32 target_id) {
     Player* target = game->players->get(game->players, target_id);
     usleep(1000 * 1000 / speed);
     if (El_Gringo_active != true) {
-        if (target->barrel && !player->barrel) {
+        if (target->barrel != NULL) {
             Card* x = target->barrel;
             target->barrel = NULL;
             return x;
-        } else if (target->mustang && !player->mustang) {
+        } else if (target->mustang != NULL) {
             Card* x = target->mustang;
             target->mustang = NULL;
             return x;
