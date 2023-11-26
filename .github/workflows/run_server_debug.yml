@@ -14,7 +14,7 @@ jobs:
         timeout-minutes: 1440 # maximum duration is 24 hours
         steps:
             - name: Checkout
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Install Valgrind
               run: sudo apt update && sudo apt install valgrind -y
