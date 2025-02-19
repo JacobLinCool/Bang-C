@@ -1,4 +1,4 @@
-# Bang! C
+jodi kalin
 
 Bang! the board game C implementation, including game manager, computer player, backend websocket server, and frontend web client.
 
