@@ -1,5 +1,5 @@
-# Bang! C
-
+#Ovfezssh@gmail.com
+Osama Atef
 Bang! the board game C implementation, including game manager, computer player, backend websocket server, and frontend web client.
 
 [Docker image is avaliable on Docker Hub](https://hub.docker.com/repository/docker/jacoblincool/bang-dev)
