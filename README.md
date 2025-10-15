@@ -1,4 +1,4 @@
-# Bang! C
+rhmhsydjabr0-ctrl:patch-2# Bang! C
 
 Bang! the board game C implementation, including game manager, computer player, backend websocket server, and frontend web client.
 
