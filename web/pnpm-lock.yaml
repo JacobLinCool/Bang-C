@@ -24,7 +24,7 @@ devDependencies:
   vite: 2.9.12
   vite-plugin-windicss: 1.8.4_vite@2.9.12
   vue-tsc: 0.37.7_typescript@4.7.3
-  windicss: 3.5.4
+  windicss: 3.5.6
 
 packages:
 
@@ -360,7 +360,7 @@ packages:
     dependencies:
       debug: 4.3.4
       jiti: 1.13.0
-      windicss: 3.5.4
+      windicss: 3.5.6
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -374,7 +374,7 @@ packages:
       fast-glob: 3.2.11
       magic-string: 0.26.2
       micromatch: 4.0.5
-      windicss: 3.5.4
+      windicss: 3.5.6
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -416,7 +416,7 @@ packages:
       normalize-path: 3.0.0
       readdirp: 3.6.0
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /colorette/2.0.17:
@@ -729,8 +729,8 @@ packages:
       path-exists: 4.0.0
     dev: true
 
-  /fsevents/2.3.2:
-    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+  /fsevents/2.3.3:
+    resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
     requiresBuild: true
@@ -1013,7 +1013,7 @@ packages:
     engines: {node: '>=10.0.0'}
     hasBin: true
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /run-parallel/1.2.0:
@@ -1145,7 +1145,7 @@ packages:
       debug: 4.3.4
       kolorist: 1.5.1
       vite: 2.9.12
-      windicss: 3.5.4
+      windicss: 3.5.6
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1171,7 +1171,7 @@ packages:
       resolve: 1.22.0
       rollup: 2.75.6
     optionalDependencies:
-      fsevents: 2.3.2
+      fsevents: 2.3.3
     dev: true
 
   /vue-tsc/0.37.7_typescript@4.7.3:
@@ -1201,8 +1201,8 @@ packages:
       isexe: 2.0.0
     dev: true
 
-  /windicss/3.5.4:
-    resolution: {integrity: sha512-x2Iu0a69dtNiKHMkR886lx0WKbZI5GqvXyvGBCJ2VA6rcjKYjnzCA/Ljd6hNQBfqlkSum8J+qAVcCfLzQFI4rQ==}
+  /windicss/3.5.6:
+    resolution: {integrity: sha512-P1mzPEjgFMZLX0ZqfFht4fhV/FX8DTG7ERG1fBLiWvd34pTLVReS5CVsewKn9PApSgXnVfPWwvq+qUsRwpnwFA==}
     engines: {node: '>= 12'}
     hasBin: true
     dev: true
